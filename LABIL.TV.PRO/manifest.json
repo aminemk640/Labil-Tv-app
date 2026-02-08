@@ -1,7 +1,7 @@
 {
   "name": "LABIL TV PRO",
   "short_name": "LABIL TV",
-  "start_url": "index.html",
+  "start_url": "Labil.TV.V1-%20Pro.html",
   "display": "standalone",
   "background_color": "#020617",
   "theme_color": "#020617",
@@ -19,4 +19,5 @@
       "purpose": "any"
     }
   ]
+
 }
