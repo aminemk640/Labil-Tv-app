@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحميل مشغل Wuffy Player - سيف النار 2</title>
+    <meta name="theme-color" content="#020617">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-pink: #ed1b76;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #020617 0%, #0f172a 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            user-select: none;
+            padding: 20px;
+        }
+
+        .install-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid var(--glass-border);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 30px;
+            text-decoration: none;
+        }
+        
+        .back-btn:hover, .back-btn:focus {
+            background: var(--primary-pink);
+            transform: scale(1.05);
+            outline: none;
+        }
+
+        .install-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+        }
+        
+        .install-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, var(--primary-pink), #ff4d97);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .install-subtitle {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .device-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .device-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .device-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-pink);
+        }
+        
+        .device-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: var(--primary-pink);
+        }
+        
+        .device-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .device-desc {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .download-btn {
+            background: linear-gradient(135deg, var(--primary-pink), #ff4d97);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .download-btn:hover, .download-btn:focus {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(237, 27, 118, 0.4);
+            outline: none;
+        }
+        
+        .steps-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid var(--glass-border);
+            margin-bottom: 40px;
+        }
+        
+        .steps-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+            color: var(--primary-pink);
+        }
+        
+        .step-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+        }
+        
+        .step-number {
+            background: var(--primary-pink);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-left: 15px;
+            flex-shrink: 0;
+        }
+        
+        .step-text {
+            flex: 1;
+        }
+        
+        .step-text strong {
+            color: #f1f5f9;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .step-text p {
+            color: #94a3b8;
+            margin: 0;
+        }
+
+        .info-box {
+            background: rgba(237, 27, 118, 0.1);
+            border-right: 4px solid var(--primary-pink);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .info-box p {
+            margin: 0;
+            color: #f1f5f9;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .info-box i {
+            color: var(--primary-pink);
+        }
+
+        @media (max-width: 768px) {
+            .device-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .install-title {
+                font-size: 1.5rem;
+            }
+            
+            .step-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .step-number {
+                margin-left: 0;
+                margin-bottom: 10px;
+            }
+            
+            .install-container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="install-container">
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-right"></i> العودة إلى الحلقات
+        </a>
+        
+        <div class="install-header">
+            <h1 class="install-title">تثبيت مشغل Wuffy Player</h1>
+            <p class="install-subtitle">اختر جهازك وقم بتنزيل المشغل المناسب لمشاهدة جميع حلقات سيف النار 2 بدون مشاكل</p>
+        </div>
+        
+        <div class="info-box">
+            <p>
+                <i class="fas fa-info-circle"></i>
+                المشغل ضروري لمشاهدة جميع الحلقات. اختر النسخة المناسبة لجهازك
+            </p>
+        </div>
+        
+        <div class="device-grid">
+            <!-- للأندرويد العادي -->
+            <div class="device-card">
+                <div class="device-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <h3 class="device-name">هواتف الأندرويد</h3>
+                <p class="device-desc">تنزيل مباشر لهواتف أندرويد الذكية (APK) - الإصدار العادي</p>
+                <button class="download-btn" onclick="downloadForDevice('android')">
+                    <i class="fas fa-download"></i> تحميل لـ Android
+                </button>
+            </div>
+            
+            <!-- للأندرويد TV -->
+            <div class="device-card">
+                <div class="device-icon">
+                    <i class="fas fa-tv"></i>
+                </div>
+                <h3 class="device-name">أندرويد TV / BOX</h3>
+                <p class="device-desc">إصدار خاص لأجهزة التلفزيون الذكية وأجهزة البوكس والتحكم عن بعد</p>
+                <button class="download-btn" onclick="downloadForDevice('android-tv')">
+                    <i class="fas fa-download"></i> تحميل لـ Android TV
+                </button>
+            </div>
+            
+            <!-- للتحميل من موقع خارجي -->
+            <div class="device-card">
+                <div class="device-icon">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <h3 class="device-name">الموقع الرسمي</h3>
+                <p class="device-desc">زيارة موقع المطور الرسمي لتحميل أحدث إصدار مع الدعم الفني</p>
+                <button class="download-btn" onclick="downloadForDevice('direct')">
+                    <i class="fas fa-external-link-alt"></i> الموقع الرسمي
+                </button>
+            </div>
+        </div>
+        
+        <div class="steps-section">
+            <h3 class="steps-title">📋 خطوات التثبيت المفصلة</h3>
+            
+            <div class="step-item">
+                <div class="step-number">1</div>
+                <div class="step-text">
+                    <strong>قم بتحميل الملف المناسب لجهازك</strong>
+                    <p>اختر الزر المناسب أعلى حسب نوع جهازك (هاتف، تلفاز، أو الموقع الرسمي)</p>
+                </div>
+            </div>
+            
+            <div class="step-item">
+                <div class="step-number">2</div>
+                <div class="step-text">
+                    <strong>تفعيل المصادر غير المعروفة (لأجهزة الأندرويد)</strong>
+                    <p>اذهب إلى: الإعدادات → الأمان → فعّل "المصادر غير المعروفة" أو "السماح بالتثبيت من مصادر غير معروفة"</p>
+                </div>
+            </div>
+            
+            <div class="step-item">
+                <div class="step-number">3</div>
+                <div class="step-text">
+                    <strong>تثبيت المشغل</strong>
+                    <p>افتح الملف الذي تم تحميله واضغط على "تثبيت Install" وانتظر حتى انتهاء التثبيت</p>
+                </div>
+            </div>
+            
+            <div class="step-item">
+                <div class="step-number">4</div>
+                <div class="step-text">
+                    <strong>فتح المشغل مرة واحدة</strong>
+                    <p>بعد التثبيت، افتح المشغل مرة واحدة للتفعيل ثم أغلق</p>
+                </div>
+            </div>
+            
+            <div class="step-item">
+                <div class="step-number">5</div>
+                <div class="step-text">
+                    <strong>العودة للمشاهدة</strong>
+                    <p>ارجع إلى تطبيق سيف النار 2 واختبر فتح أي حلقة للتأكد من عمل المشغل</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-box">
+            <p>
+                <i class="fas fa-question-circle"></i>
+                في حال وجود أي مشكلة، قم بزيارة الموقع الرسمي أو تواصل مع الدعم الفني
+            </p>
+        </div>
+        
+        <a href="index.html" class="back-btn" style="display: block; text-align: center; margin-top: 30px;">
+            <i class="fas fa-play-circle"></i> لمشاهدة الحلقات
+        </a>
+    </div>
+
+    <script>
+        // روابط التحميل
+        const DOWNLOAD_LINKS = {
+            'android': 'https://aminemk640.github.io/tvapp/STORE/apk/Wuffy.%20Player_3.5.7%20.apk',
+            'android-tv': 'https://aminemk640.github.io/tvapp/STORE/apk/Wuffy.%20Player_3.5.7%20.apk',
+            'direct': 'https://aminemk640.github.io/tvapp/STORE/apk/Wuffy.%20Player_3.5.7%20.apk'
+        };
+
+        function downloadForDevice(deviceType) {
+            const link = DOWNLOAD_LINKS[deviceType];
+            if (link) {
+                window.open(link, '_blank');
+                showToast('جاري التوجيه لصفحة التحميل...');
+            }
+        }
+
+        function showToast(message) {
+            // إنشاء عنصر toast
+            const toast = document.createElement('div');
+            toast.textContent = message;
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 30px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #ed1b76;
+                color: white;
+                padding: 12px 25px;
+                border-radius: 50px;
+                font-weight: 700;
+                z-index: 5000;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+                animation: fadeIn 0.3s ease;
+            `;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // دعم الأزرار للتحكم عن بعد
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' || e.key === 'Backspace') {
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
+</body>
+</html>
