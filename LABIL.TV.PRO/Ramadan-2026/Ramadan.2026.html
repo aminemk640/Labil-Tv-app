@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="theme-color" content="#020617">
+    <title>بوابة مسلسلات رمضان 2025</title>
+    <link rel="icon" type="image/png" href="Series/poster/logo.jpg">
+    <link href="https://aminemk640.github.io/Labil-Tv-app/LABIL.TV.PRO/manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-pink: #ed1b76;
+            --primary-teal: #339a8a;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --focus-glow: 0 0 15px 2px rgba(237, 27, 118, 0.4);
+            --card-width: 110px;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Tajawal', sans-serif;
+            background: #020617;
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            user-select: none;
+        }
+
+        /* Header Style */
+        .sg-app-header {
+            height: 70px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 5%; position: fixed; top: 0; width: 100%; z-index: 2000;
+            border-bottom: 1px solid var(--glass-border); box-sizing: border-box;
+        }
+
+        #search-container {
+            position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+            background: #0f172a; display: none; align-items: center;
+            padding: 0 5%; box-sizing: border-box; z-index: 2100;
+        }
+
+        #search-container.active { display: flex; animation: fadeIn 0.3s ease; }
+
+        #search-input {
+            flex: 1; background: transparent; border: none; color: white;
+            font-family: 'Tajawal'; font-size: 1.1rem; padding: 10px; outline: none;
+        }
+
+        .sg-nav-icon {
+            font-size: 1.2rem; width: 42px; height: 42px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 12px; cursor: pointer;
+            background: rgba(255,255,255,0.05); color: white; border: none;
+            transition: 0.2s;
+        }
+
+        .sg-nav-icon:focus { background: var(--primary-pink); transform: scale(1.1); outline: none; }
+
+        /* Section Header */
+        .section-header { margin-top: 90px; padding: 15px 6%; display: flex; align-items: center; justify-content: space-between; }
+        .section-title { display: flex; align-items: center; gap: 10px; font-size: 1.2rem; font-weight: 800; opacity: 0.9; }
+        .section-title i { color: var(--primary-pink); }
+
+        /* Cinema Grid */
+        .sg-episodes-grid {
+            padding: 10px 5% 40px; display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(var(--card-width), 1fr));
+            gap: 15px; max-width: 1400px; margin: 0 auto;
+        }
+
+        .sg-card-item {
+            background: var(--glass-bg); border-radius: 12px; overflow: hidden;
+            border: 1px solid var(--glass-border); transition: 0.3s ease; 
+            cursor: pointer; position: relative; outline: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .sg-card-item:focus, .sg-card-item:hover { 
+            transform: translateY(-5px); 
+            border: 2px solid var(--primary-pink); 
+            box-shadow: var(--focus-glow); 
+            z-index: 10; 
+        }
+
+        .sg-poster-box { 
+            position: relative; 
+            width: 100%; 
+            aspect-ratio: 2 / 3; 
+            background: #1e293b; 
+            overflow: hidden;
+        }
+
+        /* Skeleton Loading Effect */
+        .skeleton {
+            background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .sg-poster-box img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            transition: opacity 0.4s ease;
+            opacity: 0; 
+        }
+
+        .sg-poster-box img.loaded {
+            opacity: 1;
+        }
+
+        /* Meta Content */
+        .sg-card-meta { 
+            padding: 8px 6px; 
+            background: linear-gradient(to top, #0f172a, rgba(15, 23, 42, 0.9)); 
+            min-height: 48px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .sg-episode-label { 
+            font-size: 0.85rem; 
+            font-weight: 600; 
+            color: #e2e8f0; 
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        /* No Results Box */
+        .no-results {
+            grid-column: 1 / -1; text-align: center; padding: 60px 20px;
+            display: flex; flex-direction: column; align-items: center; gap: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+        .no-results i { font-size: 4rem; color: rgba(255,255,255,0.05); }
+        .back-home-btn {
+            background: var(--primary-pink); color: white; border: none;
+            padding: 12px 30px; border-radius: 10px; font-weight: 700;
+            cursor: pointer; transition: 0.3s; font-family: 'Tajawal';
+        }
+
+        /* Modal/Toast Notification */
+        #status-toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+            background: #1e293b; color: white; padding: 12px 25px; border-radius: 50px;
+            border: 1px solid var(--primary-pink); box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            display: flex; align-items: center; gap: 10px; z-index: 3000;
+            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); opacity: 0;
+            pointer-events: none;
+        }
+        #status-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        #status-toast i { color: var(--primary-pink); }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        @media (max-width: 480px) {
+            .sg-episodes-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+            :root { --card-width: 90px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="sg-app-header">
+        <button class="sg-nav-icon" onclick="history.back()" tabindex="0" title="الرجوع" role="button"><i class="fas fa-chevron-right"></i></button>
+        <div style="font-weight: 800; letter-spacing: 0.5px;">رمضان <span style="color:var(--primary-pink);">2026</span></div>
+        <button class="sg-nav-icon" onclick="toggleSearchBar(true)"><i class="fas fa-search"></i></button>
+
+        <div id="search-container">
+            <button class="sg-nav-icon" onclick="toggleSearchBar(false)"><i class="fas fa-times"></i></button>
+            <input type="text" id="search-input" placeholder="بحث عن مسلسل..." oninput="handleSearch(this.value)">
+            <button class="sg-nav-icon" onclick="clearSearchField()"><i class="fas fa-backspace"></i></button>
+        </div>
+    </header>
+
+    <div class="section-header">
+        <div class="section-title"><i class="fas fa-film"></i> <span>المسلسلات المتاحة</span></div>
+    </div>
+
+    <main class="sg-episodes-grid" id="sg-grid-root"></main>
+
+    <div id="status-toast">
+        <i class="fas fa-clock"></i>
+        <span>سنضيف هذا المسلسل قريباً...</span>
+    </div>
+
+    <audio id="hoverSound" src="https://github.com/ahmadmk2023/Movies-free1/raw/refs/heads/main/mp3/btn-hover01.mp3" preload="auto"></audio>
+
+    <script>
+        const FALLBACK_IMG = "Series/poster/logo.jpg";
+        const hoverSound = document.getElementById('hoverSound');
+
+        const seriesData = [
+            { id: 1, title: " - المداح ج6: أسطورة النهاية",
+			poster: "Series/poster/Maddah-S6.jpg",
+			url: "Series/Maddah-S6.html" },
+            
+            { id: 2, title: "مسلسل - درش ", 
+			poster: "Series/poster/Darsh.jpg",
+			url: "Series/Darsh.html" },
+            
+            { id: 3, title: "مسلسل علي كلاي",
+			poster: "Series/poster/Ali-Klay.jpg",
+            url: "Series/Ali-Klay.html" },
+            
+            { id: 4, title: " مسلسل إفراج",
+            poster: "Series/poster/Efrag0.jpg", 
+            url: "Series/Efrag.html" },
+            
+            { id: 5, title: " مسلسل رأس الأفعى",
+            poster: "Series/poster/Ras-Al-Afaa.jpg", 
+            url: "Series/Ras-Al-Afaa.html" },
+            
+            { id: 6, title: "مسلسل فن الحرب ",
+            poster: "Series/poster/Fan-Al-Harb.jpg",
+            url: "Series/Fan-Al-Harb.html" },
+			
+            { id: 7, title: "مسلسل الكينج", 
+			poster: "Series/poster/El-King.jpg", 
+			url: "Series/El-King.html" },
+			
+            { id: 8, title: "مسلسل اهي كيميا ؟!", 
+			poster: "Series/poster/Heya-Kemya.jpg",
+			url: "Series/Heya-Kemya.html" },
+						
+            { id: 9, title: "كلهم بيحبوا مودي", 
+			poster: "Series/poster/Kolohom-Beyhebo-Moody.jpg",
+			url: "Series/Kolohom-Beyhebo-Moody.html" },
+						
+            { id: 10, title: "مسلسل قطر صغنطوط", 
+			poster: "Series/poster/Atr-Soghantoot.jpg",
+			url: "Series/Atr-Soghantoot.html" }
+			
+
+        ];
+
+        function playSound() {
+            hoverSound.currentTime = 0;
+            hoverSound.play().catch(() => {});
+        }
+
+        function handleCardClick(url) {
+            if (url === "#" || url === "") {
+                const toast = document.getElementById('status-toast');
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 3000);
+            } else {
+                window.open(url);
+            }
+        }
+
+        function onImageLoad(img) {
+            img.classList.add('loaded');
+            img.parentElement.classList.remove('skeleton');
+        }
+
+        function renderGrid(data = seriesData) {
+            const grid = document.getElementById('sg-grid-root');
+            if (data.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-search"></i>
+                        <h3>لا توجد نتائج بحث</h3>
+                        <button class="back-home-btn" onclick="clearSearchField()">العودة للكل</button>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = data.map(item => `
+                <div class="sg-card-item" tabindex="0" 
+                     onclick="handleCardClick('${item.url}')"
+                     onmouseenter="playSound()"
+                     onfocus="playSound()">
+                    <div class="sg-poster-box skeleton">
+                        <img src="${item.poster}" 
+                             loading="lazy"
+                             onload="onImageLoad(this)"
+                             onerror="this.src='${FALLBACK_IMG}'; onImageLoad(this);">
+                    </div>
+                    <div class="sg-card-meta">
+                        <div class="sg-episode-label">${item.title}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleSearchBar(show) {
+            const bar = document.getElementById('search-container');
+            bar.classList.toggle('active', show);
+            if(show) document.getElementById('search-input').focus();
+        }
+
+        function handleSearch(q) {
+            const query = (q || "").toLowerCase().trim();
+            const filtered = seriesData.filter(item => item.title.toLowerCase().includes(query));
+            renderGrid(filtered);
+        }
+
+        function clearSearchField() {
+            document.getElementById('search-input').value = '';
+            toggleSearchBar(false);
+            renderGrid(seriesData);
+        }
+
+        window.addEventListener('load', () => renderGrid(seriesData));
+    </script>
+	 <script> 
+// يفضل وضعه بعد إغلاق $(document).ready(...)
+
+$(document).on('keydown', function(event) {
+    // التحقق من زر "X" أو "الرجوع" في جهاز التحكم (عادةً Backspace أو Escape)
+    if (event.key === 'Backspace' || event.key === 'Escape' || event.keyCode === 461) {
+        // keyCode 461 هو رمز شائع لزر العودة في Android TV
+        history.back(); // العودة إلى الصفحة السابقة في السجل
+        event.preventDefault(); // منع السلوك الافتراضي للمتصفح (لتجنب الرجوع المزدوج أو إغلاق التطبيق)
+    }
+});
+ </script>
+</body>
+</html>
