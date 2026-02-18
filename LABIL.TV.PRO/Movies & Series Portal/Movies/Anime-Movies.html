@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الافلام الانمي مدبلجة</title>
+    <link rel="icon" type="image/png" href="poster/logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="rgba(255,255,255,0.75)">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="msapplication-navbutton-color" content="rgba(255,255,255,0.75)">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <style>
+        :root {
+            --primary-pink: #ed1b76;
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --modal-bg: rgba(7, 10, 25, 0.98);
+            --focus-glow: 0 0 20px 5px rgba(237, 27, 118, 0.6);
+            --watched-bg: rgba(237, 27, 118, 0.9);
+            --card-width: 130px;
+            --glass-blur: blur(12px);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Tajawal', sans-serif;
+            background: #020617;
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            user-select: none;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .glass-top, .glass-bottom {
+            position: fixed;
+            left: 0; right: 0;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            z-index: 9999;
+        }
+        .glass-top { top:0; height:56px; border-bottom: 1px solid rgba(0,0,0,0.08); }
+        .glass-bottom { bottom:0; height:64px; border-top:1px solid rgba(0,0,0,0.08); }
+
+        #android14-fix-frame { position:absolute; width:1px; height:1px; opacity:0.01; pointer-events:none; top:0; left:0; }
+
+        .sg-app-header {
+            height: 70px; background: rgba(15,23,42,0.9); backdrop-filter: blur(15px);
+            display:flex; align-items:center; justify-content:space-between;
+            padding:0 5%; position: fixed; top:0; width:100%; z-index:2000;
+            border-bottom:2px solid var(--primary-pink); box-sizing:border-box;
+        }
+
+        #search-container {
+            position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+            background: #0f172a; display: none; align-items: center;
+            padding: 0 5%; box-sizing: border-box; z-index: 2100;
+        }
+
+        #search-container.active { display: flex; animation: slideIn 0.3s ease; }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        #search-input {
+            flex: 1; background: transparent; border: none; color: white;
+            font-family: 'Tajawal'; font-size: 1.1rem; padding: 10px; outline: none;
+        }
+
+        .sg-nav-icon {
+            font-size: 1.2rem; width: 42px; height: 42px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 12px; cursor: pointer;
+            background: rgba(255,255,255,0.05); color: white; border: none;
+            transition: 0.2s;
+        }
+
+        .sg-nav-icon:focus { 
+            background: var(--primary-pink); outline: none; 
+            transform: scale(1.1); box-shadow: var(--focus-glow);
+        }
+
+        /* Section Header */
+        .section-header { margin-top: 90px; padding: 15px 6%; display: flex; align-items: center; justify-content: space-between; }
+        .section-title { display: flex; align-items: center; gap: 12px; font-size: 1.2rem; font-weight: 800; }
+        .section-title i { color: var(--primary-pink); font-size: 1.4rem; }
+        .reset-history-btn {
+            background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border);
+            color: #94a3b8; display: flex; align-items: center; gap: 8px;
+            cursor: pointer; font-family: 'Tajawal'; padding: 8px 15px; border-radius: 10px;
+            transition: 0.3s;
+        }
+        .reset-history-btn:focus { color:white; background:var(--primary-pink); border-color:white; outline:none; transform:scale(1.05); }
+
+        .sg-movies-grid {
+            padding:10px 5% 40px; display:grid;
+            grid-template-columns:repeat(auto-fill,minmax(var(--card-width),1fr));
+            gap:15px; max-width:1300px; margin:0 auto;
+        }
+
+        .sg-card-item {
+            background:var(--glass-bg); border-radius:15px; overflow:hidden;
+            border:1px solid var(--glass-border); transition:0.3s;
+            cursor:pointer; position:relative; outline:none;
+            height: fit-content;
+        }
+        .sg-card-item:focus { transform:scale(1.1); border:3px solid white; box-shadow:var(--focus-glow); z-index:50; }
+
+        .sg-poster-box { 
+            position:relative; 
+            width:100%; 
+            aspect-ratio:2/3; 
+            background:#0f172a; 
+        }
+        .sg-poster-box img { 
+            width:100%; 
+            height:100%; 
+            object-fit:cover; 
+            display: block;
+        }
+
+        .sg-watched-eye { 
+            position:absolute; 
+            top:8px; 
+            left:8px;  /* يسار الصورة (عكس السنة) */
+            background:var(--watched-bg); 
+            width:28px; 
+            height:28px; 
+            border-radius:8px; 
+            display:none; 
+            align-items:center; 
+            justify-content:center; 
+            z-index:15; 
+            color:white; 
+        }
+        .is-watched .sg-watched-eye { display:flex; }
+        .is-watched .sg-poster-box img { opacity:0.5; }
+
+        /* عنصر السنة في الجهة اليسرى (يمين الصورة) */
+        .sg-year-badge {
+            position:absolute;
+            top:8px;
+            right:8px;  /* يمين الصورة (يسار الشاشة في RTL) */
+            background: rgba(237, 27, 118, 0.9);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            z-index:15;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .sg-card-meta { 
+            padding:10px 5px; 
+            background: rgba(15,23,42,0.8); 
+            text-align:center;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .sg-movie-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            line-height: 1.4;
+            max-width: 100%;
+            word-break: break-word;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: font-size 0.2s ease;
+        }
+        
+        /* تصغير الخط للعناوين الطويلة */
+        .sg-movie-title.long-title {
+            font-size: 0.75rem;
+        }
+        
+        .sg-movie-title.very-long-title {
+            font-size: 0.65rem;
+        }
+
+        .no-results { grid-column:1/-1; text-align:center; padding:60px 20px; display:flex; flex-direction:column; align-items:center; gap:20px; }
+        .no-results i { font-size:4rem; color:rgba(255,255,255,0.1); }
+        .back-home-btn { background:var(--primary-pink); color:white; border:none; padding:12px 30px; border-radius:12px; font-weight:700; cursor:pointer; transition:0.3s; }
+        .back-home-btn:focus { transform:scale(1.1); box-shadow:var(--focus-glow); }
+
+        /* أزرار السيرفرات الجميلة - مأخوذة من الكود الثاني */
+        .sg-server-btn {
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between;
+            background: rgba(255,255,255,0.05);
+            padding: 12px 15px;
+            border-radius: 10px; 
+            margin-bottom: 10px;
+            cursor: pointer; 
+            border: 2px solid transparent; 
+            color: white;
+            font-family: 'Tajawal'; 
+            width: 100%;
+            height: 52px;
+            box-sizing: border-box;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .sg-server-btn:hover {
+            background: rgba(237, 27, 118, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .sg-server-btn:focus { 
+            border-color: var(--primary-pink); 
+            background: rgba(237, 27, 118, 0.2); 
+            outline: none;
+            transform: scale(1.02);
+            box-shadow: 0 0 10px rgba(237, 27, 118, 0.4);
+        }
+
+        .sg-quality { 
+            padding: 4px 10px; 
+            border-radius: 6px; 
+            font-size: 0.75rem; 
+            font-weight: bold;
+            min-width: 45px;
+            text-align: center;
+        }
+        
+        .q-fhd { background: #ed1b76; }
+        .q-hd { background: #249f9c; }
+        .q-sd { background: #fbbf24; color: #000; }
+        .q-4k { background: #7c3aed; }
+
+        .btn-confirm-delete { 
+            background: linear-gradient(90deg, #ef4444, #dc2626); 
+            color: white; 
+            border: none; 
+            font-weight: bold; 
+        }
+        
+        .btn-confirm-delete:hover {
+            background: linear-gradient(90deg, #dc2626, #b91c1c);
+        }
+        
+        .btn-confirm-delete:focus { 
+            background: #b91c1c; 
+            border-color: white; 
+            box-shadow: 0 0 10px rgba(220, 38, 38, 0.6);
+        }
+
+        .sg-modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.92); display:none; justify-content:center; align-items:center; z-index:3000; backdrop-filter:blur(10px); }
+        .sg-modal-overlay.active { display:flex; }
+        .sg-server-panel { background:var(--modal-bg); padding:25px; border-radius:24px; border:1px solid var(--glass-border); width:90%; max-width:360px; text-align:center; animation:slideUp 0.4s ease; }
+        @keyframes slideUp { from {transform:translateY(20px); opacity:0;} to {transform:translateY(0); opacity:1;} }
+
+        #toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:#ed1b76; color:white; padding:12px 25px; border-radius:50px; font-weight:700; z-index:5000; display:none; box-shadow:0 10px 20px rgba(0,0,0,0.5); animation:fadeIn 0.3s ease; }
+        @keyframes fadeIn { from{opacity:0; bottom:10px;} to{opacity:1; bottom:30px;} }
+
+        .sg-close-btn { width:100%; background: rgba(255,255,255,0.1); color:white; border:none; padding:12px; border-radius:10px; cursor:pointer; font-weight:600; margin-top:8px; font-size:0.9rem; transition:all 0.2s; }
+        .sg-close-btn:hover { background: rgba(255,255,255,0.15); }
+        .sg-close-btn:focus { background: rgba(255,255,255,0.2); outline:none; transform:scale(1.02); }
+
+        /* تحسينات للشاشات الصغيرة */
+        @media(max-width:480px){ 
+            .sg-movies-grid{
+                grid-template-columns:repeat(3,1fr); 
+                gap:10px;
+            }
+            .sg-movie-title {
+                font-size: 0.75rem;
+            }
+            .sg-movie-title.long-title {
+                font-size: 0.7rem;
+            }
+            .sg-movie-title.very-long-title {
+                font-size: 0.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <iframe id="android14-fix-frame" src="about:blank"></iframe>
+
+    <header class="sg-app-header">
+        <button class="sg-nav-icon" onclick="handleExit()" tabindex="0"><i class="fas fa-chevron-right"></i></button>
+        <div style="font-weight:800; font-size:1.2rem;">الافلام<span style="color:var(--primary-pink)">  الانمي</span></div>
+        <button class="sg-nav-icon" onclick="toggleSearchBar(true)"><i class="fas fa-search"></i></button>
+
+        <div id="search-container">
+            <button class="sg-nav-icon" onclick="toggleSearchBar(false)"><i class="fas fa-times"></i></button>
+            <input type="text" id="search-input" placeholder="ابحث عن فيلم..." oninput="handleSearch(this.value)">
+            <button class="sg-nav-icon" onclick="clearSearchField()"><i class="fas fa-eraser"></i></button>
+        </div>
+    </header>
+
+    <div class="section-header">
+        <div class="section-title"><i class="fas fa-film"></i> <span>مدبلجة</span></div>
+        <button class="reset-history-btn" onclick="openResetModal()" tabindex="0">
+            <i class="fas fa-eye-slash"></i> حذف مشاهدة
+        </button>
+    </div>
+
+    <main class="sg-movies-grid" id="sg-grid-root"></main>
+
+    <div id="toast">جاري رفع الفيلم حالياً...</div>
+
+    <!-- Modal اختيار السيرفرات -->
+    <div class="sg-modal-overlay" id="quality-modal">
+        <div class="sg-server-panel">
+            <h3 id="modal-title" style="margin-bottom:20px; color: var(--primary-pink);"></h3>
+            <div id="servers-list"></div>
+            <button class="sg-close-btn" onclick="closeModal('quality-modal')">إلغاء</button>
+        </div>
+    </div>
+
+    <!-- Install Modal -->
+    <div class="sg-modal-overlay" id="install-modal">
+        <div class="sg-server-panel">
+            <i class="fas fa-download" style="font-size:3rem; color:var(--primary-pink); margin-bottom:20px;"></i>
+            <h3 style="font-weight:800;">المشغل غير مثبت</h3>
+            <p style="font-size:0.9rem; color:#94a3b8; margin-bottom:25px;">لم نتمكن من فتح الفيلم. يبدو أن مشغل Wuffy Player غير مثبت على جهازك.</p>
+            <button class="sg-server-btn" onclick="goToInstallPage()" style="justify-content:center; background: linear-gradient(90deg, #3b82f6, #60a5fa);">
+                <i class="fas fa-download"></i> صفحة التحميل
+            </button>
+            <button class="sg-close-btn" onclick="closeModal('install-modal')">تراجع</button>
+        </div>
+    </div>
+
+    <!-- Reset Modal -->
+    <div class="sg-modal-overlay" id="reset-modal">
+        <div class="sg-server-panel">
+            <i class="fas fa-eye-slash" style="font-size:3rem; color:var(--primary-pink); margin-bottom:20px;"></i>
+            <h3 style="font-weight:800;">حذف علامات المشاهدة؟</h3>
+            <p style="font-size:0.9rem; color:#94a3b8; margin-bottom:25px;">سيتم إخفاء أيقونات العين من الأفلام التي شاهدتها سابقاً.</p>
+            <button class="sg-server-btn btn-confirm-delete" onclick="executeReset()" style="justify-content:center;">
+                <span>تأكيد الحذف</span> <i class="fas fa-trash"></i>
+            </button>
+            <button class="sg-close-btn" onclick="closeModal('reset-modal')">تراجع</button>
+        </div>
+    </div>
+
+<script>
+/* ==================================================
+         كود الأفلام الأجنبية - نسخة معدلة
+================================================== */
+const STORAGE_KEY = "Anime-Movies";
+const INSTALL_PAGE_URL = "https://aminemk640.github.io/Labil-Tv-app/LABIL.TV.PRO/install.html";
+const FALLBACK_IMG = "Series/poster/logo.jpg";
+
+// بيانات الأفلام - عناوين إنجليزية فقط (بدون أسماء عربية)
+const movies = [
+
+    {
+        id: 1,
+        title: "Ice Age:6 Adventures of Buck Wild",
+        year: 2022,
+        poster: "https://resizing.flixster.com/Y2jqRbU-nbm5KjyhzH_pxOu9k88=/fit-in/705x460/v2/https://resizing.flixster.com/F9NZjLPuL8JJMVLUR4G6p_WMSQo=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzLzljOTIyNDRjLTlhNjktNGJhMy04YzYyLTgzNzMwMmRkNmI5Yi5qcGc=",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/dxisipcal23ge1nezaj63/The.Ice.Age-6.2022.ts?rlkey=s3lplk42k2f0lrdegza058cpy&st=h5fysic3&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/dxisipcal23ge1nezaj63/The.Ice.Age-6.2022.ts?rlkey=s3lplk42k2f0lrdegza058cpy&st=h5fysic3&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dl.dropbox.com/scl/fi/dxisipcal23ge1nezaj63/The.Ice.Age-6.2022.ts?rlkey=s3lplk42k2f0lrdegza058cpy&st=h5fysic3&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 2,
+        title: "Ice Age:5 Collision Course",
+        year: 2016,
+        poster: "https://resizing.flixster.com/XDJ1BDsvo1GYhKYgj0mkGoSEIaM=/fit-in/705x460/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p12009493_v_v10_aw.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/4vyhshn7vmrt7rbi0lavc/Ice-Age-Collision.Course.2016.mkv?rlkey=i20raz5rq07wywr8ce27iigwf&st=6y7zc1gx&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://so3.downet.net/dl/1752456555/Ice.Age.Collision.Course.2016.720p.BluRay.akoam.net.mkv#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/qgl22uiieuosz71lrb3qe/Ice.Age.5Collision.Course.2016.mp4?rlkey=quhim9a8e2yd7l7lbln4aouiq&st=ia4d9cw4&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 3,
+        title: "Ice Age:4 Continental Drift",
+        year: 2012,
+        poster: "https://resizing.flixster.com/iGhQz7K6nsK6X8-9UCcJRr25OWg=/fit-in/705x460/v2/https://resizing.flixster.com/aP7UFt1Ut7putjLUoFayJu-ikEk=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzL2VjNjgzN2Y4LTU5ZTMtNDkyZS1iYTJiLWYwMmEyNzA0NDVhYS53ZWJw",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/exvs1kuut9oihk1jpreew/Ice-Age-Continental.Drift.2012.ts?rlkey=38l79bw20k00h41hqjccj87jz&st=vjd2c9fl&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/exvs1kuut9oihk1jpreew/Ice-Age-Continental.Drift.2012.ts?rlkey=38l79bw20k00h41hqjccj87jz&st=vjd2c9fl&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/exvs1kuut9oihk1jpreew/Ice-Age-Continental.Drift.2012.ts?rlkey=38l79bw20k00h41hqjccj87jz&st=vjd2c9fl&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 4,
+        title: "Ice Age:3 Dawn of the Dinosaurs",
+        year: 2009,
+        poster: "https://fr.web.img5.acsta.net/c_310_420/medias/nmedia/18/66/21/19/19099924.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/gdmlg7km8chesu734n2mm/KnSgM.mp4?rlkey=vi2knbqn77h1kb26nd2nuydj7&st=7sc2u1pb&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/gdmlg7km8chesu734n2mm/KnSgM.mp4?rlkey=vi2knbqn77h1kb26nd2nuydj7&st=7sc2u1pb&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 5,
+        title: "Ice Age 2: The Meltdown",
+        year: 2006,
+        poster: "https://resizing.flixster.com/242wlFiyRO0LxgBIynrdBwxERgQ=/fit-in/705x460/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p159726_v_v10_ac.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/x2it9jn8lcahd76x3vuuu/Ice.Age-2-The-Meltdown.2006.ts?rlkey=h4uh1wc0uo9yrcugd78b3930d&st=vvd7xlu3&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/x2it9jn8lcahd76x3vuuu/Ice.Age-2-The-Meltdown.2006.ts?rlkey=h4uh1wc0uo9yrcugd78b3930d&st=vvd7xlu3&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 6,
+        title: "Ice Age 1",
+        year: 2002,
+        poster: "https://resizing.flixster.com/tgAAfGR-WMo-cjYcf_BR4s1I6dM=/fit-in/705x460/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p29626_v_v9_au.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/tvg9m4cben8bwy2nfilcb/Ice.Age.2002.ts?rlkey=fem3j2qfm1yb7ns75pwljfas1&st=elblnskq&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 7,
+        title: "How to Train Your Dragon 3",
+        year: 2017,
+        poster: "https://resizing.flixster.com/lv9MUTt-Qo_iaZbXFnk4Ij_ycRI=/fit-in/705x460/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p13022653_v_v8_ac.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/8rp9h8at6lh6gw9i02yty/How.to.Train.Your-Dragon.3.2017.ts?rlkey=6nexv3an0xk8omgykur9oxdan&st=2v0cxlag&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 8,
+        title: "How to Train Your Dragon 2",
+        year: 2014,
+        poster: "https://resizing.flixster.com/agDdiew_iY4Ky5G3mXKvlE4drTA=/fit-in/705x460/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p10099311_v_v13_az.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/82n5soijdqtqu9bfds522/How.to.Train.Your-Dragon.2.2014.ts?rlkey=pzyur13tpk5b7hskfv6hltirn&st=h3xihvgy&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 9,
+        title: "How to Train Your Dragon",
+        year: 2010,
+        poster: "https://resizing.flixster.com/sqL7_b7hYcl-GT1kkcwEfVWsDnA=/fit-in/705x460/v2/https://resizing.flixster.com/UmZcqOorSOcxDkMgTdw7DjhLEp4=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzLzgzYzZmNzRlLTUxNzEtNDhkYi04NjI4LTk5NDVlODRlNmEyMS53ZWJw",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/51go1c618uetcmw0p1k23/How.to.Train.Your.Dragon.2010.ts?rlkey=obpuirv03ok15wt09qpiawm9h&st=hxwtsdap&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 10,
+        title: "Spirit Untamed",
+        year: 2021,
+        poster: "https://animezid.cam/uploads/thumbs/3501a4bea-1.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/k58o8vtrdhw4nfkykzfpz/Spirit.Untamed-.2021.2.ts?rlkey=y3888ym8uk1gpxf751hdp9hz8&st=0kb1hinw&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 11,
+        title: "Spirit Riding Free: Spirit of Christmas",
+        year: 2019,
+        poster: "https://resizing.flixster.com/h4h5iZAIfY8HYmjlmnNUT6xbDCU=/fit-in/705x460/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p17609256_v_v10_ac.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/n84b5jqlc8qvkbqkp3mvz/Spirit.Riding.Free-Spirit.of.Christmas.2019.ts?rlkey=jop12yk4zuplvnaz8wfj7oinx&st=vrhsr90l&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 12,
+        title: "Spirit: Stallion of the Cimarron",
+        year: 2002,
+        poster: "https://resizing.flixster.com/n0RCzEg3U5KzbbDvS86SWhOHATU=/fit-in/705x460/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p29346_p_v8_ae.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/kfobwx36zqmvv8mhl6dtr/Spirit-Stallion-of.the.Cimarron-2002.ts?rlkey=aa53rqiq52uxipodxl5engi8n&st=4on14cg2&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 13,
+        title: "Ratatouille",
+        year: 2007,
+        poster: "https://resizing.flixster.com/sazbD_cC3g_8eH5Yy5MpBzp2Rn4=/fit-in/705x460/v2/https://resizing.flixster.com/ySiX7RlyKRuuxCcAI7SgdkMAZ0U=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzLzc4ZmJhZjZiLTEzNWMtNDIwOC1hYzU1LTgwZjE3ZjQzNTdiNy5qcGc=",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/obhk6g3agu0pzoq2pp036/Ratatouille.2007.ts?rlkey=lf49qefz4m0g9saw40qgbcrou&st=va80lkfa&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 14,
+        title: "Shrek 4 Forever After",
+        year: 2010,
+        poster: "https://resizing.flixster.com/dyS1FcVpWJr5hTDBY6F8uOS9avI=/206x305/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p3546149_p_v8_aq.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/3qsmzjclrr47n8c6ue3vh/Shrek.4Forever.After.2010.ts?rlkey=eyn5y4shetr76kvlumcrt6bx5&st=ivvvykol&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 15,
+        title: "Shrek 3 the Third",
+        year: 2007,
+        poster: "https://resizing.flixster.com/9snRo0VhRXRF4HrwQ4t4UDfaNyg=/206x305/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p159731_p_v10_ag.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/2fyek937r6xtcor2yurzf/Shrek.3.the.Third.2007.ts?rlkey=jlcrjuw7i1c28hsf0z1j092f1&st=ypyzu71i&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 16,
+        title: "Shrek 2",
+        year: 2004,
+        poster: "https://resizing.flixster.com/rO_VwI6uvEts0vyUC7O72vkpWfU=/fit-in/705x460/v2/https://resizing.flixster.com/dAiS2r0bFgqZ7eBWCH_0NuEb0_4=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzLzY0MjE3ZDU3LWFkNzUtNDAxNC04N2I3LWExNWQzNzFlOWEzNC53ZWJw",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/jz0i1z6dxnvptuadvxlqe/Shrek.2.2004.AR.ts?rlkey=2rle0jf363nuubwj3cx4ym13a&st=u2t7xh0f&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 17,
+        title: "Shrek 1",
+        year: 2001,
+        poster: "https://resizing.flixster.com/UIaZ1M6FL_DtZrYsnZsJn2hdaXs=/fit-in/705x460/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p27575_p_v10_ay.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/lkfdu0vawaqjmncnacta7/Shrek.1.2001.mp4?rlkey=ptv4lfqd2n74os38x66pq3bl8&st=rv5v3zni&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 18,
+        title: "فيلم المحقق كونان 27: نجم المليون دولار",
+        year: 2024,
+        poster: "https://raw.githubusercontent.com/ahmadmk2023/Movies-anime/refs/heads/main/BST/Cona-%20Movie-27.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/kow1le0wbfdm2w0xxmd0z/Detective.Conan.Movie.27.Ar.mp4?rlkey=yr31i8kuu3sawenueumq1ppjb&st=jr3mvlk1&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 19,
+        title: "Moana 2",
+        year: 2024,
+        poster: "https://resizing.flixster.com/1MzJzR2AQXjYNrC9VnL7hdTNMVU=/fit-in/705x460/v2/https://resizing.flixster.com/x_IakzZARisLUuL8NZRsXj9lhHQ=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzLzI3OTA0YWVkLTNiYjQtNDJlMi04ZTA5LWEyNTRlNWYyYWU5Yi5qcGc=",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/lltywfs1dsyyqd0vv9ju9/Moana.2.2024.mp4?rlkey=1ajl2gs8bpltx8a1hjlydnc84&st=fb34d4fm&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 20,
+        title: "Moana 1",
+        year: 2016,
+        poster: "https://resizing.flixster.com/fdgrdkkK5IYGx10bmp5RGVUX7Dc=/fit-in/705x460/v2/https://resizing.flixster.com/F_sBk5tMHgElDAE7FymhDvYNAOI=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzLzI3ZTJjMGE4LTQwZTYtNDllOC05OTdlLTBjYTg0MGIzMzIwNy53ZWJw",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/6yno8mq0ujka4yfw1csg0/Moana.1.2016.mp4?rlkey=dfmwffu2lslxftqomw6e343ij&st=sztqtwln&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 21,
+        title: "المحقق كونان 26: الغواصة الحديدية",
+        year: 2023,
+        poster: "https://raw.githubusercontent.com/ahmadmk2023/Movies-anime/refs/heads/main/Cona-%20Movie-26.jpeg",
+        servers: [
+            { name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/u4959pmiih6m6qkwoc3qx/Conan.Movie.26..mp4?rlkey=t4jvnzmy2cqujz2wo5mvtrt3l&st=wf2214ot&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 22,
+        title: "المحقق كونان 25: عروس شيبويا",
+        year: 2022,
+        poster: "https://ufogrendizer.tv/assets/img/posters/1013_cover.webp",
+        servers: [
+            { name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/suc4aopxei23v5rgtkk8u/Detective-Conan-25.ts?rlkey=m4fwwxkppekbx8h7uceicigst&st=0lx44uoa&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 23,
+        title: "المحقق كونان 24: الرصاصة القرمزية",
+        year: 2021,
+        poster: "https://ufogrendizer.tv/assets/img/posters/1009_cover.webp",
+        servers: [
+            { name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/ka31bamopeo7y8woc1n83/Detective-Conan-24.ts?rlkey=edsbs07t2vyyp73ib9cozfuv2&st=yrc8fguy&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 24,
+        title: "المحقق كونان 22: جلاد زيرو",
+        year: 2018,
+        poster: "https://ufogrendizer.tv/assets/img/posters/1005_cover.webp",
+        servers: [
+            { name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/mib7uandl507tg9hp8i0m/Conan.Movie.22.ts?rlkey=6xivkn1lr1k6gzo7tx9skzakl&st=mdtzwtp5&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 25,
+        title: "المحقق كونان 21: لغز الرسائل القرمزية",
+        year: 2017,
+        poster: "https://img.downet.net/uploads/mwflg.jpg",
+        servers: [
+            { name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/au0ugjx4qv00a1c2k82a6/Conan.Movie.21.ts?rlkey=mxx70ss046ahsx80byqln24ms&st=6k21gr0f&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 26,
+        title: "المحقق كونان 20: أطياف ملونة",
+        year: 2016,
+        poster: "https://spacepowerfan.com/wp-content/uploads/2025/02/%D9%85%D8%B4%D8%A7%D9%87%D8%AF%D8%A9-%D9%81%D9%8A%D9%84%D9%85-%D8%A7%D9%84%D9%85%D8%AD%D9%82%D9%82-%D9%83%D9%88%D9%86%D8%A7%D9%86-20-%D8%A3%D8%B7%D9%8A%D8%A7%D9%81-%D9%85%D9%84%D9%88%D9%86%D8%A9-%D9%85%D8%AF%D8%A8%D9%84%D8%AC-%D8%A8%D8%A7%D9%84%D8%B9%D8%B1%D8%A8%D9%8A%D8%A9.jpg",
+        servers: [
+            { name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/36w7cho3m4kj3fpdd9rk9/Conan.Movie.20.ts?rlkey=ji14g86upyycr9aid2ybxuo5k&st=6il29t8t&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 27,
+        title: "المحقق كونان 19: الشمس والرماد",
+        year: 2015,
+        poster: "https://cdn.spacetoongo.com/images/2527d-conan-19-sunflowers-of-inferno-ara-poster.jpg",
+        servers: [
+            { name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/17k68nd514ys3z4anhj4g/Conan.Movie.19.ts?rlkey=mxdhv1f3mwyo1s9092tdc80lv&st=usw7e4bo&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 28,
+        title: "القطار الغامض والمنظمة السوداء",
+        year: 2023,
+        poster: "https://resizing.flixster.com/hVN3kjThDN2ZRSppstul-Cz5xT4=/fit-in/705x460/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p23966484_k_v8_aa.jpg",
+        servers: [
+            { name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/5wzyjhot9srvi15xjrxd1/C.o.n.a.n.Movie.12.ts?rlkey=pur85bu89y1ubptv220936qbi&st=pwp6blm1&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 29,
+        title: "المحقق كونان 10: لحن وداع المتحرين",
+        year: 2006,
+        poster: "https://ufogrendizer.tv/assets/img/posters/882_cover.webp",
+        servers: [
+            { name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/c1ddfhvc125c8rv1vwsjw/C.o.n.a.n.Movie.10.2006..mp4?rlkey=e966c5v1i577nm7a73rbyniy2&st=qx1bwy33&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 30,
+        title: "المحقق كونان 9: استراتيجية ما فوق الأعماق",
+        year: 2005,
+        poster: "https://ufogrendizer.tv/assets/img/posters/878_cover.webp",
+        servers: [
+            { name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/41sy07vkwr2z5ixwvcqb1/Detective-Conan-Film-09.mp4?rlkey=5zhds0q3qjqoix7uiuai2bant&st=s4eophox&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 31,
+        title: "المحقق كونان 8: مخادع السماء الفضية",
+        year: 2004,
+        poster: "https://ufogrendizer.tv/assets/img/posters/813_cover.webp",
+        servers: [
+            { name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/cgibbv34tyc5erzab0ypn/C.o.n.a.n-Film-08.mp4?rlkey=tkg7vrcx5uqe33h955364o73l&st=mhrahwzs&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 32,
+        title: "المحقق كونان 7: تقاطع طرق العاصمة القديمة",
+        year: 2003,
+        poster: "https://ufogrendizer.tv/assets/img/posters/801_cover.webp",
+        servers: [
+            { name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/u9tvvro9vqdt3i3pyyu4i/AnimeZid_net-_Detective_ConanMovie_7_Crossroad_in_the_Ancient_Capital_2003_WEB-DL_1080p_Dubbed_Ar.mp4?rlkey=qnwqg3lelougzlqzvo1o9mzyz&st=fadpfn3f&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 33,
+        title: "المحقق كونان 6: لغز شارع بيكر",
+        year: 2002,
+        poster: "https://ufogrendizer.tv/assets/img/posters/780_cover.webp",
+        servers: [
+            { name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/3ew41clcqqs7s3yesu1ut/Detective-Conan-Film-06.ts?rlkey=s3mbcid4n7bmy4s918nrai83u&st=tvcsr52j&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 34,
+        title: "المحقق كونان 5: العد التنازلي نحو المجهول",
+        year: 2001,
+        poster: "https://stardima.vip/watch/wp-content/uploads/2023/03/photo_2023-03-09_15-58-43.jpg",
+        servers: [
+            { name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/sxvaw2jfs39nwsc1kzxzq/Detective-Conan-Film-05.ts?rlkey=g8vmt1pxxog6di23hj4r4lrri&st=7j47taeq&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 35,
+        title: "المحقق كونان 4: الشاهدة الوحيدة",
+        year: 2000,
+        poster: "https://cdn.spacetoongo.com/images/4c55d-52149-poster.jpg",
+        servers: [
+            { name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/9u9islb6252cwldct2m1l/Detective-Conan-Film-04.mp4?rlkey=khaqk7ugo3beu9qpdi5kxqd3e&st=dky3mkf9&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 36,
+        title: "المحقق كونان 3: الرجل اللغز",
+        year: 1999,
+        poster: "https://cdn.spacetoongo.com/%D8%A7%D9%84%D8%B1%D8%AC%D9%84%20%D8%A7%D9%84%D9%84%D8%BA%D8%B2%20%D8%A8%D9%88%D8%B3%D8%AA%D8%B1.jpg",
+        servers: [
+            { name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/jxvki7z12tbbl1s55gufp/Detective-Conan-Film-03.mp4?rlkey=dsceamoq740d3mg6nuk248guw&st=ikyhscnu&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 37,
+        title: "المحقق كونان 2: الهدف الرابع عشر",
+        year: 1998,
+        poster: "https://ufogrendizer.tv/assets/img/posters/702_cover.webp",
+        servers: [
+            { name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/ul88c5wzppi19ti1dedbk/Detective-Conan-Film-02.mp4?rlkey=d3h2mmiocxjekxl6klye9rmc0&st=g6z11q64&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 38,
+        title: "المحقق كونان 1: اللحظة الأخيرة",
+        year: 1997,
+        poster: "https://raw.githubusercontent.com/ahmadmk2023/Movies-anime/refs/heads/main/BST/Cona-%20Movie-01.jpg",
+        servers: [
+            { name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/emkl4j7pzaiecf5x1g96j/Detective-Conan-Film-01-1997.ts?rlkey=0zbfz71a29fpbbsbzim5asi0m&st=77ngesux&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    }
+];
+    
+
+
+let activeMovieId = null;
+let lastActiveId = null;
+let isAndroid14 = false;
+
+// كشف نسخة أندرويد
+function detectAndroidVersion(){
+    const ua = navigator.userAgent;
+    if(ua.includes("Android 14") || ua.includes("Android14") || ua.includes("API 34")){
+        isAndroid14 = true;
+        console.log("✅ Android 14 detected");
+    }
+}
+
+function handleExit(){
+    window.history.length > 1 ? window.history.back() : window.location.href = "/";
+}
+
+function goToInstallPage(){
+    window.location.href = INSTALL_PAGE_URL;
+}
+
+function toggleSearchBar(show){
+    document.getElementById("search-container").classList.toggle("active", show);
+    if(show){
+        document.getElementById("search-input").focus();
+    }
+}
+
+function handleSearch(val){
+    val = val.trim().toLowerCase();
+    if(val === ""){
+        renderGrid();
+        return;
+    }
+    const filtered = movies.filter(movie => 
+        movie.title.toLowerCase().includes(val) || 
+        movie.year.toString().includes(val)
+    );
+    renderGrid(filtered);
+}
+
+function clearSearchField(){
+    document.getElementById("search-input").value = "";
+    renderGrid();
+    toggleSearchBar(false);
+}
+
+// دالة لتحديد حجم الخط حسب طول العنوان
+function getTitleClass(title) {
+    if (title.length > 30) {
+        return "very-long-title";
+    } else if (title.length > 20) {
+        return "long-title";
+    }
+    return "";
+}
+
+function renderGrid(data = movies){
+    const grid = document.getElementById("sg-grid-root");
+    const history = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    
+    if(data.length === 0){
+        grid.innerHTML = `<div class="no-results">
+            <i class="fas fa-search-minus"></i>
+            <h3>عذراً، لم يتم العثور على فيلم</h3>
+            <button class="back-home-btn" onclick="clearSearchField()">العودة للقائمة</button>
+        </div>`;
+        return;
+    }
+    
+    grid.innerHTML = data.map(movie => {
+        const titleClass = getTitleClass(movie.title);
+        return `<div class="sg-card-item ${history.includes(movie.id) ? "is-watched" : ""}" 
+                    tabindex="0" 
+                    onclick="openServerMenu(${movie.id})" 
+                    onkeydown="if(event.key==='Enter') openServerMenu(${movie.id})">
+            <div class="sg-poster-box">
+                <div class="sg-watched-eye"><i class="fas fa-eye"></i></div>
+                <div class="sg-year-badge">${movie.year}</div>
+                <img src="${movie.poster}" 
+                     onerror="this.onerror=null;this.src='${FALLBACK_IMG}';"
+                     alt="${movie.title}">
+            </div>
+            <div class="sg-card-meta">
+                <div class="sg-movie-title ${titleClass}">
+                    ${movie.title}
+                </div>
+            </div>
+        </div>`;
+    }).join("");
+}
+
+function showToast(){
+    const t = document.getElementById("toast");
+    t.style.display = "block";
+    setTimeout(() => {
+        t.style.display = "none";
+    }, 3000);
+}
+
+function openServerMenu(id){
+    activeMovieId = id;
+    sessionStorage.setItem("lastMovieId", id);
+    const movie = movies.find(m => m.id === id);
+    document.getElementById("modal-title").innerHTML = `<i class="fas fa-film"></i> ${movie.title} (${movie.year})`;
+    
+    const list = document.getElementById("servers-list");
+    
+    // أزرار السيرفرات الجميلة من الكود الثاني
+    list.innerHTML = movie.servers.map(s => 
+        `<button class="sg-server-btn" 
+                  onclick="playVideo('${s.url}')" 
+                  tabindex="0">
+            <span><i class="fas fa-play" style="margin-left: 8px;"></i> ${s.name}</span>
+            <span class="sg-quality q-${s.quality.toLowerCase()}">${s.quality}</span>
+        </button>`
+    ).join("");
+    
+    document.getElementById("quality-modal").classList.add("active");
+    setTimeout(() => list.querySelector("button")?.focus(), 200);
+}
+
+function closeModal(m){
+    document.getElementById(m).classList.remove("active");
+    if(lastActiveId){
+        setTimeout(() => {
+            document.querySelectorAll(".sg-card-item").forEach(card => {
+                if(card.getAttribute("onclick")?.includes(`openServerMenu(${lastActiveId})`)){
+                    card.focus();
+                }
+            });
+        }, 100);
+    }
+}
+
+function restoreLastState(){
+    const lastId = sessionStorage.getItem("lastMovieId");
+    if(lastId){
+        lastActiveId = lastId;
+        setTimeout(() => {
+            document.querySelectorAll(".sg-card-item").forEach(card => {
+                if(card.getAttribute("onclick")?.includes(`openServerMenu(${lastId})`)){
+                    card.focus();
+                    card.scrollIntoView({behavior: "smooth", block: "center"});
+                }
+            });
+        }, 300);
+    }
+}
+
+function playVideo(url){
+    if(!url || url === "#"){
+        showToast();
+        return;
+    }
+    
+    let history = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    if(!history.includes(activeMovieId)){
+        history.push(activeMovieId);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+        renderGrid();
+    }
+    
+    lastActiveId = activeMovieId;
+    sessionStorage.setItem("lastMovieId", activeMovieId);
+    sessionStorage.setItem("lastVisited", Date.now().toString());
+    closeModal("quality-modal");
+    
+    let videoUrl = url;
+    if(url.includes("intent://")){
+        videoUrl = url.replace("intent://", "https://").split("#Intent")[0];
+    }
+    
+    try {
+        if(isAndroid14){
+            const fixFrame = document.getElementById("android14-fix-frame");
+            if(fixFrame){
+                fixFrame.src = "about:blank";
+                setTimeout(() => {
+                    fixFrame.src = videoUrl;
+                }, 50);
+            }
+            setTimeout(() => {
+                window.open(url, "_system");
+            }, 100);
+            setTimeout(() => {
+                window.location.href = url;
+            }, 200);
+        } else {
+            const iframe = document.createElement("iframe");
+            iframe.style.display = "none";
+            iframe.src = url;
+            document.body.appendChild(iframe);
+            setTimeout(() => {
+                document.body.removeChild(iframe);
+            }, 1000);
+        }
+    } catch(e) {
+        console.error("❌ خطأ عند محاولة فتح الفيديو:", e);
+        document.getElementById("install-modal").classList.add("active");
+    }
+    
+    setTimeout(() => {
+        if(document.visibilityState === "visible"){
+            document.getElementById("install-modal").classList.add("active");
+        }
+    }, 2000);
+}
+
+function openResetModal(){
+    document.getElementById("reset-modal").classList.add("active");
+}
+
+function executeReset(){
+    localStorage.removeItem(STORAGE_KEY);
+    renderGrid();
+    closeModal("reset-modal");
+}
+
+window.onload = function(){
+    detectAndroidVersion();
+    renderGrid();
+    restoreLastState();
+    setTimeout(() => {
+        if(!lastActiveId){
+            const firstCard = document.querySelector(".sg-card-item");
+            if(firstCard) firstCard.focus();
+        }
+    }, 500);
+    console.log("✅ تطبيق الأفلام الأجنبية المترجمة جاهز");
+};
+</script>
+
+</body>
+</html>

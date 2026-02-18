@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Labil TV V1</title>
+<link rel="icon" type="image/png" href="poster/logo.jpg">
+	<link rel="manifest"href="https://aminemk640.github.io/Labil-Tv-app/LABIL.TV.PRO/manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="rgba(255,255,255,0.75)">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="msapplication-navbutton-color" content="rgba(255,255,255,0.75)">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+<style>
+:root {
+--primary: #33a08c;
+--dark: #0b1424;
+--gold: #FFD700;
+--glass: rgba(255, 255, 255, 0.07);
+--accent: #ff0066;
+--focus: 0 0 20px rgba(255, 0, 102, 0.7);
+}
+* { ma3rgin: 0; padding: 0; box-sizing: border-box; }
+body {
+font-family: 'Tajawal', sans-serif;
+background: radial-gradient(circle at center, #1e3a44 0%, #0b1424 100%);
+color: #fff;
+overflow-x: hidden;
+user-select: none;
+}
+/* Splash Screen */
+#splash-screen {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: var(--dark);
+z-index: 9999;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+transition: opacity 1s ease;
+}
+.splash-logo {
+width: 120px;
+margin-bottom: 25px;
+filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.4));
+animation: pulse 2.5s infinite;
+}
+@keyframes pulse {
+0%, 100% { transform: scale(1); opacity: 0.9; }
+50% { transform: scale(1.08); opacity: 1; }
+}
+.loader-bar {
+width: 220px;
+height: 3px;
+background: rgba(255,255,255,0.1);
+border-radius: 5px;
+overflow: hidden;
+margin-top: 12px;
+}
+.loader-progress {
+height: 100%;
+width: 0%;
+background: linear-gradient(45deg, #FFD700, #FDB931);
+transition: width 0.3s ease;
+}
+/* Header - تصحيح جذري */
+.header {
+position: fixed;
+top: 0;
+width: 100%;
+height: 60px;
+background: rgba(11, 20, 36, 0.9);
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 0 15px;
+z-index: 1000;
+border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+}
+/* تصحيح جذري: ضمان ظهور الأزرار أفقياً */
+.header-left, .header-right {
+display: flex !important;
+flex-direction: row !important;
+align-items: center !important;
+gap: 10px !important; /* مسافة مناسبة بين الأزرار */
+flex-wrap: nowrap !important;
+}
+.header-center {
+flex: 1;
+text-align: center;
+}
+.header-logo {
+font-size: 1.4rem;
+font-weight: 800;
+background: linear-gradient(45deg, #FFD700, #FDB931);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+letter-spacing: 1px;
+white-space: nowrap;
+}
+/* تصحيح الأزرار */
+.icon-btn {
+background: var(--glass);
+border: 1px solid rgba(255,255,255,0.15);
+color: white;
+width: 42px;
+height: 42px;
+border-radius: 12px;
+display: flex !important;
+align-items: center !important;
+justify-content: center !important;
+cursor: pointer;
+transition: all 0.3s;
+outline: none;
+flex-shrink: 0;
+}
+.icon-btn:focus, .icon-btn:hover {
+background: var(--accent);
+border-color: #fff;
+box-shadow: var(--focus);
+transform: scale(1.1);
+}
+.icon-btn i { font-size: 1.1rem; }
+/* Banner */
+.player-alert {
+margin-top: 65px;
+background: linear-gradient(90deg, #ff0066, #ff0066aa);
+color: white;
+padding: 10px;
+width: 90%;border-radius: 12px;
+text-align: center;
+font-size: 0.85rem;
+font-weight: 700;
+border-bottom: 1px solid rgba(255,255,255,0.3);
+}
+.player-alert a {
+background: #fff;
+color: #ff0066;
+text-decoration: none;
+padding: 4px 10px;
+border-radius: 15px;
+font-size: 0.8rem;
+transition: 0.3s;
+outline: none;
+}
+.player-alert :focus, .player-alert :hover {
+background: #ccc;
+border-color: #000;
+color: #000;
+box-shadow: #000;border-color: var(--accent);
+z-index: 10;
+}
+/* Search */
+.search-container {
+width: 90%;
+max-width: 550px;
+margin: 15px auto;
+position: relative;
+display: none;
+}
+.search-box {
+width: 100%;
+padding: 14px 50px 14px 18px;
+border-radius: 15px;
+border: 2px solid rgba(255, 215, 0, 0.4);
+background: rgba(255, 255, 255, 0.05);
+color: white;
+font-size: 1rem;
+outline: none;
+transition: all 0.3s;
+}
+.search-box:focus {
+border-color: var(--accent);
+background: rgba(255, 255, 255, 0.1);
+box-shadow: var(--focus);
+}
+.search-icon {
+position: absolute;
+right: 18px;
+top: 50%;
+transform: translateY(-50%);
+color: #FFD700;
+font-size: 1.2rem;
+cursor: pointer;
+}
+/* Sidebar */
+.sidebar {
+position: fixed;
+top: 0;
+right: -300px;
+width: 280px;
+height: 100%;
+background: rgba(11, 20, 36, 0.98);
+z-index: 2000;
+transition: 0.4s;
+border-left: 2px solid #FFD700;
+padding: 35px 18px;
+}
+.sidebar.active { right: 0; }
+.sidebar-overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.5);
+z-index: 1999;
+display: none;
+}
+.sidebar-overlay.active { display: block; }
+.sidebar-item {
+display: flex;
+align-items: center;
+padding: 14px 12px;
+margin-bottom: 10px;
+border-radius: 12px;
+color: white;
+text-decoration: none;
+background: rgba(255,255,255,0.03);
+transition: all 0.3s;
+outline: none;
+border: none;
+width: 100%;
+font-family: inherit;
+font-size: 0.95rem;
+cursor: pointer;
+text-align: right;
+}
+.sidebar-item i { margin-left: 15px; font-size: 1.2rem; color: #FFD700; width: 22px; text-align: center; }
+.sidebar-item:focus, .sidebar-item:hover {
+background: linear-gradient(45deg, #FFD700, #FDB931);
+color: #000;
+transform: translateX(-3px);
+}
+/* Grid & Cards */
+.content-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+gap: 20px;
+padding: 20px;
+max-width: 1200px;
+margin: 0 auto 80px auto;
+}
+.card {
+background: var(--glass);
+border: 1px solid rgba(255,255,255,0.1);
+border-radius: 18px;
+padding: 20px 12px;
+text-align: center;
+cursor: pointer;
+transition: all 0.3s;
+outline: none;
+position: relative;
+overflow: hidden;
+}
+.card:focus, .card:hover {
+transform: translateY(-8px) scale(1.05);
+background: rgba(255, 255, 255, 0.12);
+border-color: var(--accent);
+box-shadow: var(--focus);
+z-index: 10;
+}
+.card-img-container {
+width: 80px;
+height: 80px;
+margin: 0 auto 15px;
+background: #fff;
+border-radius: 50%;
+padding: 5px;
+box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+border: 2px solid var(--primary);
+}
+.card-img-container img {
+width: 100%;
+height: 100%;
+object-fit: contain;
+border-radius: 50%;
+}
+.card-title {
+font-weight: 700;
+font-size: 1rem;
+margin: 0;
+color: #fff;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+/* Bottom Nav */
+.bottom-bar {
+position: fixed;
+bottom: 0;
+width: 100%;
+height: 60px;
+background: rgba(11, 20, 36, 0.92);
+display: flex;
+justify-content: space-around;
+align-items: center;
+border-top: 1px solid rgba(255,215,0,0.2);
+z-index: 1000;
+}
+.nav-item {
+color: rgba(255,255,255,0.5);
+text-decoration: none;
+display: flex;
+flex-direction: column;
+align-items: center;
+font-size: 0.8rem;
+transition: all 0.3s;
+outline: none;
+padding: 6px 12px;
+border-radius: 12px;
+min-width: 65px;
+text-align: center;
+}
+.nav-item i { font-size: 1.3rem; margin-bottom: 3px; }
+.nav-item:focus, .nav-item:hover {
+color: #FFD700;
+background: rgba(255,255,255,0.08);
+transform: translateY(-2px);
+}
+.nav-item.active { color: #FFD700; }
+/* Modal */
+.modal {
+display: none;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0,0,0,0.85);
+z-index: 3000;
+align-items: center;
+justify-content: center;
+}
+.modal-content {
+background: #16243a;
+padding: 35px;
+border-radius: 25px;
+border: 2px solid #FFD700;
+text-align: center;
+max-width: 400px;
+width: 85%;
+}
+.modal-btns {
+display: flex;
+justify-content: center;
+gap: 18px;
+margin-top: 25px;
+}
+.btn {
+padding: 10px 30px;
+border-radius: 12px;
+border: none;
+font-weight: 700;
+cursor: pointer;
+outline: none;
+font-family: inherit;
+transition: all 0.3s;
+min-width: 110px;
+}
+.btn-confirm { background: var(--accent); color: white; }
+.btn-confirm:focus { box-shadow: 0 0 18px var(--accent); transform: scale(1.05); }
+.btn-cancel { background: #3d4b63; color: white; }
+.btn-cancel:focus { box-shadow: 0 0 18px #fff; transform: scale(1.05); }
+/* Toast */
+.toast {
+position: fixed;
+top: 90px;
+right: 20px;
+background: rgba(0,0,0,0.8);
+color: white;
+padding: 12px 20px;
+border-radius: 10px;
+z-index: 5000;
+animation: slideInRight 0.3s ease-out;
+border-left: 3px solid var(--accent);
+display: none;
+max-width: 280px;
+}
+@keyframes slideInRight {
+from { transform: translateX(100%); opacity: 0; }
+to { transform: translateX(0); opacity: 1; }
+}
+/* Responsive */
+@media (max-width: 600px) {
+.content-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 12px; }
+.card-img-container { width: 65px; height: 65px; }
+.card-title { font-size: 0.9rem; }
+.header { padding: 0 10px; height: 55px; }
+.icon-btn { width: 38px; height: 38px; }
+.sidebar { width: 80%; right: -80%; }
+.bottom-bar { height: 55px; }
+.nav-item { padding: 5px 10px; min-width: 60px; }
+.nav-item i { font-size: 1.2rem; }
+}
+/* Focus indicator */
+.focusable:focus-visible {
+outline: none;
+box-shadow: 0 0 0 3px #fff, var(--focus);
+}
+</style>
+</head>
+<body>
+<!-- Splash Screen -->
+
+<!-- Sidebar Overlay -->
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<!-- Header - هيكل مصحح -->
+<header class="header">
+  <!-- القسم الأيسر: زر القائمة -->
+  <div class="header-left">
+    <button class="icon-btn focusable" id="open-sidebar" aria-label="القائمة">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+  </div>
+  
+  <!-- القسم الأوسط: الشعار -->
+  <div class="header-center">
+    <div class="header-logo">LABIL TV PRO</div>
+  </div>
+  
+  <!-- القسم الأيمن: الأزرار الثلاثة جنب بعض -->
+  <div class="header-right">
+    <button class="icon-btn focusable" id="language-btn" aria-label="تغيير اللغة">
+      <i class="fa-solid fa-language"></i>
+    </button>
+    <button class="icon-btn focusable" id="toggle-search" aria-label="بحث">
+      <i class="fa-solid fa-search"></i>
+    </button>
+    <button class="icon-btn focusable" id="exit-app-btn" aria-label="خروج">
+      <i class="fa-solid fa-power-off"></i>
+    </button>
+  </div>
+</header>
+<!-- Banner --><div align="center">
+<div class="player-alert"tabindex="0">
+<span><i class="fa-solid fa-circle-exclamation"></i> يرجى تحميل مشغل ليشتغل معك التطبيق:</span>
+<a href="https://dl.dropbox.com/scl/fi/amq3ljf5gnjwf4o8ip4ae/Wuffy-Media-Player_3.5.7.apk?rlkey=65twzksjj8bh9nop4fa9xyl51&dl=1" class="focusable"tabindex="0">Wuffy Player <i class="fa-solid fa-download"></i></a>
+</div></div>
+<!-- Sidebar -->
+<nav class="sidebar" id="sidebar"tabindex="0">
+<div style="text-align: center; margin-bottom: 35px;">
+<div class="card-img-container" style="width: 90px; height: 90px; border-color: #FFD700;">
+<img src="https://raw.githubusercontent.com/aminemk640/Movies-free/refs/heads/main/00.png" alt="Profile">
+</div>
+<h3 style="color: #FFD700; margin: 8px 0 4px; font-size: 1.2rem;">LABIL TV PRO</h3>
+</div>
+<a href="https://facebook.com" class="sidebar-item focusable" target="_blank"tabindex="0">
+<i class="fa-brands fa-facebook"></i> <span>فيسبوك</span>
+</a>
+<a href="https://t.me" class="sidebar-item focusable" target="_blank"tabindex="0">
+<i class="fa-brands fa-telegram"></i> <span>تلجرام</span>
+</a>
+<button class="sidebar-item focusable" id="about-btn"tabindex="0">
+<i class="fa-solid fa-info-circle"></i> <span>عن التطبيق</span>
+</button>
+<button class="sidebar-item focusable"tabindex="0" id="close-sidebar" style="margin-top: 10px; background: rgba(255,255,255,0.1);">
+<i class="fa-solid fa-times"></i> <span>إغلاق</span>
+</button>
+</nav>
+<!-- Search -->
+<div class="search-container" id="search-section"tabindex="0">
+<i class="fa-solid fa-search search-icon" id="search-icon"></i>
+<input type="text" id="searchbar" class="search-box focusable" placeholder="ابحث عن قناتك المفضلة...">
+</div>
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+<!-- Grid -->
+<main>
+
+<div class="content-grid" id="main-grid">
+
+<div class="card focusable" data-url="https://raw.githack.com/ahmadmk2023/ramadan-2025/main/ramadan2025.html" tabindex="0">
+<div class="card-img-container"><img src="https://barlamantoday.com/wp-content/uploads/2025/02/ramadan-2025-1.webp" alt="Ramadan"></div>
+<p class="card-title">رمضان 2026</p>
+</div>
+<div class="card focusable" data-url="https://raw.githack.com/ahmadmk2023/ramadan-2025/main/ramadan2025.html" tabindex="0">
+<div class="card-img-container"><img src="https://barlamantoday.com/wp-content/uploads/2025/02/ramadan-2025-1.webp" alt="Ramadan"></div>
+<p class="card-title">رمضان 2025</p>
+</div>
+<div class="card focusable" data-url="https://raw.githack.com/ahmadmk2023/Movies-free1/main/aflam.w.moslsalt.html" tabindex="0">
+<div class="card-img-container"><img src="https://i.imgur.com/oUE8wRA.png" alt="Movies"></div>
+<p class="card-title">أفلام ومسلسلات</p>
+</div>
+<div class="card focusable" data-url="go:SSC" tabindex="0">
+<div class="card-img-container"><img src="https://i.imgur.com/O92dyWt.png" alt="SSC"></div>
+<p class="card-title">SSC Sport</p>
+</div>
+
+
+<div class="card focusable" data-url="go:OSN" tabindex="0">
+<div class="card-img-container"><img src="https://i.imgur.com/TttttK0.png" alt="OSN"></div>
+<p class="card-title">OSN TV</p>
+</div>
+<div class="card focusable" data-url="go:MBC" tabindex="0">
+<div class="card-img-container"><img src="https://i.imgur.com/ZradR4s.png" alt="MBC"></div>
+<p class="card-title">MBC TV</p>
+</div>
+
+<div class="card focusable" data-url="go:MBC" tabindex="0">
+<div class="card-img-container"><img src="https://i.imgur.com/ZradR4s.png" alt="MBC"></div>
+<p class="card-title">MBC TV</p>
+</div>
+
+
+<div class="card focusable" data-url="https://raw.githack.com/ahmadmk2023/free-channel/main/beIN.sport.[H265].html" tabindex="0">
+<div class="card-img-container"><img src="https://raw.githubusercontent.com/ahmadmk2023/free-channel/refs/heads/main/bein.logo/bein-sports-logo-.png" alt="beIN"></div>
+<p class="card-title">beIN Sports</p>
+</div>
+</div>
+<!-- No Results -->
+<div id="no-results" style="display: none; flex-direction: column; align-items: center; justify-content: center; padding: 80px 20px; text-align: center;">
+<i class="fa-solid fa-search-minus" style="font-size: 3.5rem; color: #ff0066; margin-bottom: 18px;"></i>
+<h3 style="margin-bottom: 12px;">لا توجد نتائج!</h3>
+<p style="opacity: 0.6; margin-bottom: 20px;">تأكد من كتابة الاسم بشكل صحيح</p>
+<button class="btn btn-confirm focusable" id="reset-search-btn">العودة للرئيسية</button>
+</div>
+</main>
+<!-- Navigation -->
+<footer class="bottom-bar">
+<a href="#" class="nav-item focusable active" id="nav-home">
+<i class="fa-solid fa-home"></i><span>الرئيسية</span>
+</a>
+<a href="go:movies" class="nav-item focusable" id="nav-movies">
+<i class="fa-solid fa-film"></i><span>الأفلام</span>
+</a>
+<a href="go:series" class="nav-item focusable" id="nav-series">
+<i class="fa-solid fa-tv"></i><span>المسلسلات</span>
+</a>
+<a href="go:live" class="nav-item focusable" id="nav-live">
+<i class="fa-solid fa-broadcast-tower"></i><span>البث المباشر</span>
+</a>
+</footer>
+<!-- Exit Modal -->
+<div class="modal" id="exit-modal">
+<div class="modal-content">
+<i class="fa-solid fa-power-off" style="font-size: 3rem; color: #ff0066; margin-bottom: 18px;"></i>
+<h3 style="margin-bottom: 10px;">هل تريد الخروج؟</h3>
+<p style="opacity: 0.7; margin-bottom: 20px;">نأمل رؤيتك مرة أخرى قريباً!</p>
+<div class="modal-btns">
+<button class="btn btn-confirm focusable" id="confirm-exit">تأكيد</button>
+<button class="btn btn-cancel focusable" id="cancel-exit">إلغاء</button>
+</div>
+</div>
+</div>
+<!-- About Modal -->
+<div class="modal" id="about-modal">
+<div class="modal-content">
+<i class="fa-solid fa-info-circle" style="font-size: 3rem; color: #33a08c; margin-bottom: 18px;"></i>
+<h3 style="margin-bottom: 10px; color: #FFD700;">عن التطبيق</h3>
+<p style="opacity: 0.9; line-height: 1.5; margin-bottom: 20px;">
+تطبيق يوفر تجربة مشاهدة استثنائية للمحتوى التلفزيوني العربي والعالمي.
+</p>
+<div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 10px; margin-bottom: 20px;">
+<p style="margin: 4px 0;"><strong>الإصدار:</strong> 1.0.0</p>
+<p style="margin: 4px 0;"><strong>التحديث:</strong> مارس 2025</p>
+</div>
+<button class="btn btn-confirm focusable" id="close-about">موافق</button>
+</div>
+</div>
+<!-- Language Modal -->
+<div class="modal" id="language-modal">
+<div class="modal-content">
+<i class="fa-solid fa-language" style="font-size: 3rem; color: #33a08c; margin-bottom: 18px;"></i>
+<h3 style="margin-bottom: 15px; color: #FFD700;">اختر اللغة</h3>
+<div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
+<button class="sidebar-item focusable active" data-lang="ar" style="font-size: 1rem; padding: 12px;">
+<img src="https://flagcdn.com/w20/sa.png" style="width: 25px; height: 18px; border-radius: 3px; margin-right: 12px;">
+<span style="margin-right: 10px;">العربية</span>
+<i class="fa-solid fa-check" style="color: var(--primary); margin-left: 10px;"></i>
+</button>
+<button class="sidebar-item focusable" data-lang="en" style="font-size: 1rem; padding: 12px;">
+<img src="https://flagcdn.com/w20/gb.png" style="width: 25px; height: 18px; border-radius: 3px; margin-right: 12px;">
+<span style="margin-right: 10px;">English</span>
+<i class="fa-solid fa-check" style="color: transparent; margin-left: 10px;"></i>
+</button>
+</div>
+<button class="btn btn-cancel focusable" id="close-language">إغلاق</button>
+</div>
+</div>
+<script>
+// Translations - Arabic & English only
+const translations = {
+ar: {
+searchPlaceholder: "ابحث عن قناتك المفضلة...",
+noResults: "لا توجد نتائج!",
+noResultsMsg: "تأكد من كتابة الاسم بشكل صحيح",
+resetSearch: "العودة للرئيسية",
+toastWelcome: "مرحباً بك في LABIL TV PRO",
+toastSearch: "اكتب اسم القناة للبحث",
+toastLoading: "جاري التحميل",
+toastOpened: "جاري فتح المحتوى",
+toastFeature: "هذه الميزة قيد التطوير",
+aboutTitle: "عن التطبيق",
+aboutDesc: "تطبيق يوفر تجربة مشاهدة استثنائية للمحتوى التلفزيوني العربي والعالمي.",
+version: "الإصدار:",
+update: "التحديث:",
+exitTitle: "هل تريد الخروج؟",
+exitMsg: "نأمل رؤيتك مرة أخرى قريباً!",
+confirm: "تأكيد",
+cancel: "إلغاء",
+ok: "موافق",
+close: "إغلاق"
+},
+en: {
+searchPlaceholder: "Search for your favorite channel...",
+noResults: "No Results!",
+noResultsMsg: "Make sure the name is spelled correctly",
+resetSearch: "Back to Home",
+toastWelcome: "Welcome to LABIL TV PRO",
+toastSearch: "Type channel name to search",
+toastLoading: "Loading...",
+toastOpened: "Opening content...",
+toastFeature: "This feature is under development",
+aboutTitle: "About App",
+aboutDesc: "Application provides an exceptional viewing experience for Arabic and international TV content.",
+version: "Version:",
+update: "Update:",
+exitTitle: "Do you want to exit?",
+exitMsg: "Hope to see you again soon!",
+confirm: "Confirm",
+cancel: "Cancel",
+ok: "OK",
+close: "Close"
+}
+};
+let currentLang = localStorage.getItem('labil_lang') || 'ar';
+
+// Change Language
+function changeLanguage(lang) {
+if (!translations[lang]) return;
+currentLang = lang;
+localStorage.setItem('labil_lang', lang);
+document.documentElement.lang = lang;
+document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+const t = translations[lang];
+document.getElementById('searchbar').placeholder = t.searchPlaceholder;
+document.querySelector('#no-results h3').textContent = t.noResults;
+document.querySelector('#no-results p').textContent = t.noResultsMsg;
+document.getElementById('reset-search-btn').textContent = t.resetSearch;
+document.querySelector('#about-modal h3').textContent = t.aboutTitle;
+document.querySelector('#about-modal p').textContent = t.aboutDesc;
+document.querySelector('#about-modal strong:nth-child(1)').textContent = t.version;
+document.querySelector('#about-modal strong:nth-child(2)').textContent = t.update;
+document.querySelector('#exit-modal h3').textContent = t.exitTitle;
+document.querySelector('#exit-modal p').textContent = t.exitMsg;
+document.getElementById('confirm-exit').textContent = t.confirm;
+document.getElementById('cancel-exit').textContent = t.cancel;
+document.getElementById('close-about').textContent = t.ok;
+document.getElementById('close-language').textContent = t.close;
+updateLanguageModal();
+showToast(t.toastWelcome, 'success');
+}
+
+function updateLanguageModal() {
+document.querySelectorAll('[data-lang]').forEach(el => {
+el.classList.remove('active');
+el.querySelector('.fa-check').style.color = 'transparent';
+if (el.dataset.lang === currentLang) {
+el.classList.add('active');
+el.querySelector('.fa-check').style.color = 'var(--primary)';
+}
+});
+}
+
+// Toast System
+function showToast(msg, type = 'info') {
+const toast = document.getElementById('toast');
+toast.textContent = msg;
+toast.style.display = 'block';
+const colors = {success: '#4CAF50', error: '#f44336', info: '#2196F3', warning: '#FF9800'};
+toast.style.borderLeftColor = colors[type] || colors.info;
+setTimeout(() => toast.style.display = 'none', 2500);
+}
+
+// Splash Screen
+const progress = document.getElementById('js-progress');
+const splash = document.getElementById('splash-screen');
+let width = 0;
+const interval = setInterval(() => {
+if (width >= 100) {
+clearInterval(interval);
+setTimeout(() => {
+splash.style.opacity = '0';
+setTimeout(() => {
+splash.style.display = 'none';
+initApp();
+}, 1000);
+}, 500);
+} else {
+width += Math.random() * 15;
+if(width > 100) width = 100;
+progress.style.width = width + '%';
+}
+}, 200);
+
+function initApp() {
+changeLanguage(currentLang);
+// Focus first card after splash
+setTimeout(() => {
+const firstCard = document.querySelector('.card');
+if (firstCard) firstCard.focus();
+}, 300);
+}
+
+// Sidebar Functions
+const sidebar = document.getElementById('sidebar');
+const sidebarOverlay = document.getElementById('sidebar-overlay');
+const exitModal = document.getElementById('exit-modal');
+const aboutModal = document.getElementById('about-modal');
+const languageModal = document.getElementById('language-modal');
+const searchSection = document.getElementById('search-section');
+const searchInput = document.getElementById('searchbar');
+
+function openSidebar() {
+sidebar.classList.add('active');
+sidebarOverlay.classList.add('active');
+setTimeout(() => document.getElementById('close-sidebar').focus(), 200);
+}
+function closeSidebar() {
+sidebar.classList.remove('active');
+sidebarOverlay.classList.remove('active');
+document.getElementById('open-sidebar').focus();
+}
+
+document.getElementById('open-sidebar').addEventListener('click', openSidebar);
+document.getElementById('close-sidebar').addEventListener('click', closeSidebar);
+sidebarOverlay.addEventListener('click', closeSidebar);
+
+// Language Modal
+document.getElementById('language-btn').addEventListener('click', () => {
+languageModal.style.display = 'flex';
+setTimeout(() => {
+document.querySelector(`[data-lang="${currentLang}"]`).focus();
+}, 100);
+});
+document.querySelectorAll('[data-lang]').forEach(btn => {
+btn.addEventListener('click', function() {
+changeLanguage(this.dataset.lang);
+languageModal.style.display = 'none';
+document.getElementById('language-btn').focus();
+});
+});
+document.getElementById('close-language').addEventListener('click', () => {
+languageModal.style.display = 'none';
+document.getElementById('language-btn').focus();
+});
+
+// About Modal
+document.getElementById('about-btn').addEventListener('click', () => {
+closeSidebar();
+setTimeout(() => {
+aboutModal.style.display = 'flex';
+document.getElementById('close-about').focus();
+}, 300);
+});
+document.getElementById('close-about').addEventListener('click', () => {
+aboutModal.style.display = 'none';
+document.getElementById('open-sidebar').focus();
+});
+
+// Exit Modal
+document.getElementById('exit-app-btn').addEventListener('click', () => {
+exitModal.style.display = 'flex';
+document.getElementById('cancel-exit').focus();
+});
+document.getElementById('cancel-exit').addEventListener('click', () => {
+exitModal.style.display = 'none';
+document.getElementById('exit-app-btn').focus();
+});
+document.getElementById('confirm-exit').addEventListener('click', () => {
+if (window.Android && typeof Android.exitApp === 'function') {
+Android.exitApp();
+} else {
+window.close();
+}
+});
+
+// Search System
+document.getElementById('toggle-search').addEventListener('click', () => {
+const isVisible = searchSection.style.display === 'block';
+searchSection.style.display = isVisible ? 'none' : 'block';
+if (!isVisible) {
+searchInput.focus();
+showToast(translations[currentLang].toastSearch, 'info');
+} else {
+resetSearch();
+}
+});
+document.getElementById('search-icon').addEventListener('click', () => {
+searchInput.focus();
+});
+
+let searchTimeout;
+searchInput.addEventListener('input', function() {
+clearTimeout(searchTimeout);
+searchTimeout = setTimeout(() => {
+const term = this.value.toLowerCase().trim();
+const cards = document.querySelectorAll('.card');
+let matches = 0;
+cards.forEach(card => {
+const title = card.querySelector('.card-title').textContent.toLowerCase();
+const isMatch = title.includes(term);
+card.style.display = isMatch ? 'block' : 'none';
+if (isMatch) matches++;
+});
+document.getElementById('main-grid').style.display = matches > 0 ? 'grid' : 'none';
+document.getElementById('no-results').style.display = (matches === 0 && term !== "") ? 'flex' : 'none';
+}, 250);
+});
+
+function resetSearch() {
+searchInput.value = '';
+document.querySelectorAll('.card').forEach(c => c.style.display = 'block');
+document.getElementById('main-grid').style.display = 'grid';
+document.getElementById('no-results').style.display = 'none';
+searchSection.style.display = 'none';
+const firstCard = document.querySelector('.card');
+if (firstCard) firstCard.focus();
+}
+document.getElementById('reset-search-btn').addEventListener('click', resetSearch);
+
+// Keyboard Navigation - Simple & Effective
+document.addEventListener('keydown', (e) => {
+// Handle Back Button (Escape/Backspace)
+if (e.key === 'Escape' || e.key === 'Backspace') {
+e.preventDefault();
+if (sidebar.classList.contains('active')) closeSidebar();
+else if (exitModal.style.display === 'flex') {
+exitModal.style.display = 'none';
+document.getElementById('exit-app-btn').focus();
+} else if (aboutModal.style.display === 'flex') {
+aboutModal.style.display = 'none';
+document.getElementById('open-sidebar').focus();
+} else if (languageModal.style.display === 'flex') {
+languageModal.style.display = 'none';
+document.getElementById('language-btn').focus();
+} else if (searchSection.style.display === 'block') {
+resetSearch();
+} else {
+document.getElementById('exit-app-btn').click();
+}
+return;
+}
+// Keyboard shortcuts
+if (e.key === 's' || e.key === 'S') {
+e.preventDefault();
+document.getElementById('toggle-search').click();
+}
+if (e.key === 'm' || e.key === 'M') {
+e.preventDefault();
+sidebar.classList.contains('active') ? closeSidebar() : openSidebar();
+}
+if (e.key === 'l' || e.key === 'L') {
+e.preventDefault();
+document.getElementById('language-btn').click();
+}
+// Arrow keys work naturally with tabindex="0"
+// Enter key for activation
+if (e.key === 'Enter') {
+const active = document.activeElement;
+if (active && active.dataset.url) {
+e.preventDefault();
+const url = active.dataset.url;
+if (url.startsWith('go:')) {
+showToast(translations[currentLang].toastLoading, 'info');
+setTimeout(() => {
+showToast(translations[currentLang].toastFeature, 'warning');
+}, 800);
+} else {
+window.open(url, '_blank');
+showToast(translations[currentLang].toastOpened, 'info');
+}
+}
+}
+});
+
+// Card Click Handler
+document.querySelectorAll('.card').forEach(card => {
+card.addEventListener('click', (e) => {
+if (e.detail === 1) {
+const url = card.dataset.url;
+if (url) {
+if (url.startsWith('go:')) {
+showToast(translations[currentLang].toastLoading, 'info');
+setTimeout(() => {
+showToast(translations[currentLang].toastFeature, 'warning');
+}, 800);
+} else {
+window.open(url, '_blank');
+showToast(translations[currentLang].toastOpened, 'info');
+}
+}
+}
+});
+});
+
+// Navigation Items
+document.querySelectorAll('.nav-item').forEach(item => {
+item.addEventListener('click', (e) => {
+e.preventDefault();
+document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+item.classList.add('active');
+if (item.id === 'nav-home') {
+const firstCard = document.querySelector('.card');
+if (firstCard) firstCard.focus();
+} else {
+showToast(translations[currentLang].toastFeature, 'warning');
+}
+});
+});
+
+// Image Error Handler
+document.querySelectorAll('img').forEach(img => {
+img.onerror = function() {
+this.src = "https://raw.githubusercontent.com/aminemk640/Movies-free/refs/heads/main/00.png";
+};
+});
+</script>
+</body>
+</html>

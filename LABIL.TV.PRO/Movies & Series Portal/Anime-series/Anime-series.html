@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مسلسلات الانمي</title>
+     <link rel="icon" type="image/png" href="poster/logo.jpg">
+	<link rel="manifest"href="https://aminemk640.github.io/Labil-Tv-app/LABIL.TV.PRO/manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="rgba(255,255,255,0.75)">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="msapplication-navbutton-color" content="rgba(255,255,255,0.75)">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-pink: #ed1b76;
+            --primary-teal: #339a8a;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --focus-glow: 0 0 15px 2px rgba(237, 27, 118, 0.4);
+            --card-width: 115px;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Tajawal', sans-serif;
+            background: #020617;
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            user-select: none;
+        }
+
+        /* Header Style */
+        .sg-app-header {
+            height: 70px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 5%; position: fixed; top: 0; width: 100%; z-index: 2000;
+            border-bottom: 1px solid var(--glass-border); box-sizing: border-box;
+        }
+
+        #search-container {
+            position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+            background: #0f172a; display: none; align-items: center;
+            padding: 0 5%; box-sizing: border-box; z-index: 2100;
+        }
+
+        #search-container.active { display: flex; animation: fadeIn 0.3s ease; }
+
+        #search-input {
+            flex: 1; background: transparent; border: none; color: white;
+            font-family: 'Tajawal'; font-size: 1.1rem; padding: 10px; outline: none;
+        }
+
+        .sg-nav-icon {
+            font-size: 1.2rem; width: 42px; height: 42px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 12px; cursor: pointer;
+            background: rgba(255,255,255,0.05); color: white; border: none;
+            transition: 0.2s;
+        }
+
+        .sg-nav-icon:focus { background: var(--primary-pink); transform: scale(1.1); outline: none; }
+
+        /* Section Header */
+        .section-header { margin-top: 90px; padding: 15px 6%; display: flex; align-items: center; justify-content: space-between; }
+        .section-title { display: flex; align-items: center; gap: 10px; font-size: 1.2rem; font-weight: 800; opacity: 0.9; }
+        .section-title i { color: var(--primary-teal); }
+
+        /* Cinema Grid */
+        .sg-episodes-grid {
+            padding: 10px 5% 40px; display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(var(--card-width), 1fr));
+            gap: 15px; max-width: 1400px; margin: 0 auto;
+        }
+
+        .sg-card-item {
+            background: var(--glass-bg); border-radius: 12px; overflow: hidden;
+            border: 1px solid var(--glass-border); transition: 0.3s ease; 
+            cursor: pointer; position: relative; outline: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .sg-card-item:focus, .sg-card-item:hover { 
+            transform: translateY(-5px); 
+            border: 2px solid var(--primary-pink); 
+            box-shadow: var(--focus-glow); 
+            z-index: 10; 
+        }
+
+        .sg-poster-box { 
+            position: relative; 
+            width: 100%; 
+            aspect-ratio: 2 / 3; 
+            background: #1e293b; 
+            overflow: hidden;
+        }
+
+        /* Skeleton Loading Effect */
+        .skeleton {
+            background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .sg-poster-box img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            transition: opacity 0.4s ease;
+            opacity: 0; 
+        }
+
+        .sg-poster-box img.loaded {
+            opacity: 1;
+        }
+
+        /* Meta Content */
+        .sg-card-meta { 
+            padding: 10px 6px; 
+            background: linear-gradient(to top, #0f172a, rgba(15, 23, 42, 0.9)); 
+            min-height: 40px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .sg-episode-label { 
+            font-size: 0.85rem; 
+            font-weight: 700; 
+            color: #ffffff; 
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        /* Empty State & Button */
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 80px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .no-results i {
+            font-size: 4rem;
+            color: rgba(255, 255, 255, 0.1);
+            margin-bottom: 10px;
+        }
+
+        .no-results h3 {
+            font-weight: 700;
+            color: #94a3b8;
+            margin: 0;
+        }
+
+        .back-home-btn {
+            background: var(--primary-pink);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-family: 'Tajawal';
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(237, 27, 118, 0.3);
+        }
+
+        .back-home-btn:hover, .back-home-btn:focus {
+            transform: scale(1.05);
+            background: #d4186a;
+            outline: none;
+        }
+
+        /* Modal/Toast Notification */
+        #status-toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+            background: #1e293b; color: white; padding: 12px 25px; border-radius: 50px;
+            border: 1px solid var(--primary-pink); box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            display: flex; align-items: center; gap: 10px; z-index: 3000;
+            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); opacity: 0;
+            pointer-events: none;
+        }
+        #status-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        #status-toast i { color: var(--primary-pink); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 480px) {
+            .sg-episodes-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+            :root { --card-width: 95px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="sg-app-header">
+        <button class="sg-nav-icon" onclick="history.back()"><i class="fas fa-chevron-right"></i></button>
+        <div style="font-weight: 800; letter-spacing: 0.5px;">مسلسلات  <span style="color:var(--primary-teal);">الانمي</span></div>
+        <button class="sg-nav-icon" onclick="toggleSearchBar(true)"><i class="fas fa-search"></i></button>
+
+        <div id="search-container">
+            <button class="sg-nav-icon" onclick="toggleSearchBar(false)"><i class="fas fa-times"></i></button>
+            <input type="text" id="search-input" placeholder="بحث عن فيلم أو قسم..." oninput="handleSearch(this.value)">
+            <button class="sg-nav-icon" onclick="clearSearchField()"><i class="fas fa-backspace"></i></button>
+        </div>
+    </header>
+
+    <div class="section-header">
+        <div class="section-title"><i class="fas fa-th-large"></i> <span>مدبلجة بالعربي</span></div>
+    </div>
+
+    <main class="sg-episodes-grid" id="sg-grid-root"></main>
+
+    <div id="status-toast">
+        <i class="fas fa-clock"></i>
+        <span>سنضيف هذا القسم قريباً...</span>
+    </div>
+
+    <audio id="hoverSound" src="https://github.com/ahmadmk2023/Movies-free1/raw/refs/heads/main/mp3/btn-hover01.mp3" preload="auto"></audio>
+
+    <script>
+        const FALLBACK_IMG = "poster/logo.jpg";
+        const hoverSound = document.getElementById('hoverSound');
+
+        const contentData = [
+            { id: 1, title: "سيف النار",
+			poster: "poster/sayf-alnaar1.jpg",
+			url: "sayf-alnaarS1.html" },
+			
+            { id: 2, title: "سيف النار الجزء الثاني",
+			poster: "poster/sayf-alnaar2.webp",
+			url: "sayf-alnaarS2.html" },
+			
+            { id: 3, title: " داي الشجاع",
+			poster: "poster/Day-Choja3.jpg",
+			url: "Day-Choja3.html" },
+			
+            { id: 4, title: " أسطورة زورو", 
+			poster: "poster/zoro.jpg", 
+			url: "zoro.html" },
+			
+            { id: 5, title: " دراغون بول سوبر",
+			poster: "poster/Dragon-Ball-Super.png",
+			url: "Dragon-Ball-Super.html" },
+			
+            { id: 6, title: "كابتن ماجد الجزء الاول", 
+			poster: "poster/Captain-MajidS1.webp",
+			url: "Captain-MajidS1.html" },
+			
+            { id: 7, title: "كابتن ماجد الجزء الثاني",
+			poster: "poster/Captain-MajidS2.webp", 
+			url: "Captain-MajidS2.html" },
+			
+          
+			
+            { id: 12, title: "قريباً", poster: "poster/logo.jpg", url: "#" }
+        ];
+
+        function playSound() {
+            hoverSound.currentTime = 0;
+            hoverSound.play().catch(() => {});
+        }
+
+        function handleCardAction(url) {
+            if (url === "#" || url === "") {
+                const toast = document.getElementById('status-toast');
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 3000);
+            } else {
+                window.open(url);
+            }
+        }
+
+        function onImageLoad(img) {
+            img.classList.add('loaded');
+            img.parentElement.classList.remove('skeleton');
+        }
+
+        function renderGrid(data = contentData) {
+            const grid = document.getElementById('sg-grid-root');
+            if (data.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-search-minus"></i>
+                        <h3>عذراً، لم نجد ما تبحث عنه</h3>
+                        <p style="color:#64748b; margin-top:-10px;">حاول البحث بكلمة أخرى أو عد للرئيسية</p>
+                        <button class="back-home-btn" onclick="clearSearchField()">
+                            <i class="fas fa-home"></i> العودة للرئيسية
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = data.map(item => `
+                <div class="sg-card-item" tabindex="0" 
+                     onclick="handleCardAction('${item.url}')" 
+                     onmouseenter="playSound()" 
+                     onfocus="playSound()">
+                    <div class="sg-poster-box skeleton">
+                        <img src="${item.poster}" 
+                             loading="lazy" 
+                             onload="onImageLoad(this)"
+                             onerror="this.src='${FALLBACK_IMG}'; onImageLoad(this);">
+                    </div>
+                    <div class="sg-card-meta">
+                        <div class="sg-episode-label">${item.title}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleSearchBar(show) {
+            const bar = document.getElementById('search-container');
+            bar.classList.toggle('active', show);
+            if(show) document.getElementById('search-input').focus();
+        }
+
+        function handleSearch(q) {
+            const query = (q || "").toLowerCase().trim();
+            const filtered = contentData.filter(item => item.title.toLowerCase().includes(query));
+            renderGrid(filtered);
+        }
+
+        function clearSearchField() {
+            document.getElementById('search-input').value = '';
+            toggleSearchBar(false);
+            renderGrid(contentData);
+        }
+
+        window.addEventListener('load', () => renderGrid(contentData));
+    </script>
+</body>
+</html>

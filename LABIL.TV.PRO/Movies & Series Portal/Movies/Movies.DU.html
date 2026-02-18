@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أفلام أجنبية مترجمة</title>
+    <link rel="icon" type="image/png" href="poster/logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="rgba(255,255,255,0.75)">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="msapplication-navbutton-color" content="rgba(255,255,255,0.75)">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <style>
+        :root {
+            --primary-pink: #ed1b76;
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --modal-bg: rgba(7, 10, 25, 0.98);
+            --focus-glow: 0 0 20px 5px rgba(237, 27, 118, 0.6);
+            --watched-bg: rgba(237, 27, 118, 0.9);
+            --card-width: 130px;
+            --glass-blur: blur(12px);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Tajawal', sans-serif;
+            background: #020617;
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            user-select: none;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .glass-top, .glass-bottom {
+            position: fixed;
+            left: 0; right: 0;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            z-index: 9999;
+        }
+        .glass-top { top:0; height:56px; border-bottom: 1px solid rgba(0,0,0,0.08); }
+        .glass-bottom { bottom:0; height:64px; border-top:1px solid rgba(0,0,0,0.08); }
+
+        #android14-fix-frame { position:absolute; width:1px; height:1px; opacity:0.01; pointer-events:none; top:0; left:0; }
+
+        .sg-app-header {
+            height: 70px; background: rgba(15,23,42,0.9); backdrop-filter: blur(15px);
+            display:flex; align-items:center; justify-content:space-between;
+            padding:0 5%; position: fixed; top:0; width:100%; z-index:2000;
+            border-bottom:2px solid var(--primary-pink); box-sizing:border-box;
+        }
+
+        #search-container {
+            position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+            background: #0f172a; display: none; align-items: center;
+            padding: 0 5%; box-sizing: border-box; z-index: 2100;
+        }
+
+        #search-container.active { display: flex; animation: slideIn 0.3s ease; }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        #search-input {
+            flex: 1; background: transparent; border: none; color: white;
+            font-family: 'Tajawal'; font-size: 1.1rem; padding: 10px; outline: none;
+        }
+
+        .sg-nav-icon {
+            font-size: 1.2rem; width: 42px; height: 42px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 12px; cursor: pointer;
+            background: rgba(255,255,255,0.05); color: white; border: none;
+            transition: 0.2s;
+        }
+
+        .sg-nav-icon:focus { 
+            background: var(--primary-pink); outline: none; 
+            transform: scale(1.1); box-shadow: var(--focus-glow);
+        }
+
+        /* Section Header */
+        .section-header { margin-top: 90px; padding: 15px 6%; display: flex; align-items: center; justify-content: space-between; }
+        .section-title { display: flex; align-items: center; gap: 12px; font-size: 1.2rem; font-weight: 800; }
+        .section-title i { color: var(--primary-pink); font-size: 1.4rem; }
+        .reset-history-btn {
+            background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border);
+            color: #94a3b8; display: flex; align-items: center; gap: 8px;
+            cursor: pointer; font-family: 'Tajawal'; padding: 8px 15px; border-radius: 10px;
+            transition: 0.3s;
+        }
+        .reset-history-btn:focus { color:white; background:var(--primary-pink); border-color:white; outline:none; transform:scale(1.05); }
+
+        .sg-movies-grid {
+            padding:10px 5% 40px; display:grid;
+            grid-template-columns:repeat(auto-fill,minmax(var(--card-width),1fr));
+            gap:15px; max-width:1300px; margin:0 auto;
+        }
+
+        .sg-card-item {
+            background:var(--glass-bg); border-radius:15px; overflow:hidden;
+            border:1px solid var(--glass-border); transition:0.3s;
+            cursor:pointer; position:relative; outline:none;
+            height: fit-content;
+        }
+        .sg-card-item:focus { transform:scale(1.1); border:3px solid white; box-shadow:var(--focus-glow); z-index:50; }
+
+        .sg-poster-box { 
+            position:relative; 
+            width:100%; 
+            aspect-ratio:2/3; 
+            background:#0f172a; 
+        }
+        .sg-poster-box img { 
+            width:100%; 
+            height:100%; 
+            object-fit:cover; 
+            display: block;
+        }
+
+        .sg-watched-eye { 
+            position:absolute; 
+            top:8px; 
+            left:8px;  /* تغيير من right إلى left عكس أيقونة المشاهدة */
+            background:var(--watched-bg); 
+            width:28px; 
+            height:28px; 
+            border-radius:8px; 
+            display:none; 
+            align-items:center; 
+            justify-content:center; 
+            z-index:15; 
+            color:white; 
+        }
+        .is-watched .sg-watched-eye { display:flex; }
+        .is-watched .sg-poster-box img { opacity:0.5; }
+
+        /* إضافة عنصر السنة في الجهة اليسرى */
+        .sg-year-badge {
+            position:absolute;
+            top:8px;
+            right:8px;  /* في الجهة اليسرى (يمين الصورة لأن الموقع RTL) */
+            background: rgba(237, 27, 118, 0.9);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            z-index:15;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .sg-card-meta { 
+            padding:10px 5px; 
+            background: rgba(15,23,42,0.8); 
+            text-align:center;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .sg-movie-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            line-height: 1.4;
+            max-width: 100%;
+            word-break: break-word;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;  /* عرض سطرين كحد أقصى */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: font-size 0.2s ease;
+        }
+        
+        /* تصغير الخط إذا كان العنوان طويلاً */
+        .sg-movie-title.long-title {
+            font-size: 0.75rem;
+        }
+        
+        /* تصغير أكثر للعناوين الطويلة جداً */
+        .sg-movie-title.very-long-title {
+            font-size: 0.65rem;
+        }
+
+        .no-results { grid-column:1/-1; text-align:center; padding:60px 20px; display:flex; flex-direction:column; align-items:center; gap:20px; }
+        .no-results i { font-size:4rem; color:rgba(255,255,255,0.1); }
+        .back-home-btn { background:var(--primary-pink); color:white; border:none; padding:12px 30px; border-radius:12px; font-weight:700; cursor:pointer; transition:0.3s; }
+        .back-home-btn:focus { transform:scale(1.1); box-shadow:var(--focus-glow); }
+
+        .modern-server-btn {
+            display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-radius:16px; margin-bottom:12px; cursor:pointer;
+            border:none; color:white; font-weight:700; width:100%; transition:all 0.3s ease; position:relative; overflow:hidden;
+            box-shadow:0 4px 15px rgba(0,0,0,0.3);
+        }
+        .modern-server-btn::before {
+            content:''; position:absolute; top:0; left:-100%; width:100%; height:100%;
+            background:linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition:left 0.6s ease;
+        }
+        .modern-server-btn:hover::before { left:100%; }
+        .modern-server-btn:hover { transform:translateY(-3px) scale(1.02); filter:brightness(1.1); }
+        .modern-server-btn:focus { outline:none; transform:scale(1.05); box-shadow:0 0 20px currentColor; border:2px solid white; }
+
+        .btn-icon { width:40px; height:40px; border-radius:50%; background: rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-size:1.2rem; backdrop-filter:blur(5px); margin-left:12px; }
+        .btn-left { display:flex; align-items:center; }
+        .btn-right { display:flex; align-items:center; gap:10px; }
+        .quality-badge { padding:5px 12px; border-radius:30px; font-size:0.8rem; font-weight:800; background:rgba(0,0,0,0.4); backdrop-filter:blur(4px); letter-spacing:0.5px; }
+
+        .server-fhd { background:linear-gradient(135deg,#ed1b76,#ff4d97,#ff7eb3); border-right:5px solid #ffd700; }
+        .server-hd { background:linear-gradient(135deg,#2563eb,#3b82f6,#60a5fa); border-right:5px solid #ffd700; }
+        .server-sd { background:linear-gradient(135deg,#059669,#10b981,#34d399); border-right:5px solid #ffd700; }
+        .server-4k { background:linear-gradient(135deg,#7c3aed,#8b5cf6,#a78bfa); border-right:5px solid #ffd700; }
+        .server-premium { background:linear-gradient(135deg,#b45309,#d97706,#f59e0b); border-right:5px solid #ffd700; }
+
+        .sg-modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.92); display:none; justify-content:center; align-items:center; z-index:3000; backdrop-filter:blur(10px); }
+        .sg-modal-overlay.active { display:flex; }
+        .sg-server-panel { background:var(--modal-bg); padding:25px; border-radius:24px; border:1px solid var(--glass-border); width:90%; max-width:360px; text-align:center; animation:slideUp 0.4s ease; }
+        @keyframes slideUp { from {transform:translateY(20px); opacity:0;} to {transform:translateY(0); opacity:1;} }
+
+        #toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:#ed1b76; color:white; padding:12px 25px; border-radius:50px; font-weight:700; z-index:5000; display:none; box-shadow:0 10px 20px rgba(0,0,0,0.5); animation:fadeIn 0.3s ease; }
+        @keyframes fadeIn { from{opacity:0; bottom:10px;} to{opacity:1; bottom:30px;} }
+
+        .sg-close-btn { width:100%; background: rgba(255,255,255,0.1); color:white; border:none; padding:12px; border-radius:10px; cursor:pointer; font-weight:600; margin-top:8px; font-size:0.9rem; transition:all 0.2s; }
+        .sg-close-btn:hover { background: rgba(255,255,255,0.15); }
+        .sg-close-btn:focus { background: rgba(255,255,255,0.2); outline:none; transform:scale(1.02); }
+
+        /* تحسينات للشاشات الصغيرة */
+        @media(max-width:480px){ 
+            .sg-movies-grid{
+                grid-template-columns:repeat(3,1fr); 
+                gap:10px;
+            }
+            .sg-movie-title {
+                font-size: 0.75rem;
+            }
+            .sg-movie-title.long-title {
+                font-size: 0.7rem;
+            }
+            .sg-movie-title.very-long-title {
+                font-size: 0.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <iframe id="android14-fix-frame" src="about:blank"></iframe>
+
+    <header class="sg-app-header">
+        <button class="sg-nav-icon" onclick="handleExit()" tabindex="0"><i class="fas fa-chevron-right"></i></button>
+        <div style="font-weight:800; font-size:1.2rem;">  أفلام<span style="color:var(--primary-pink)"> أجنبية </span></div>
+        <button class="sg-nav-icon" onclick="toggleSearchBar(true)"><i class="fas fa-search"></i></button>
+
+        <div id="search-container">
+            <button class="sg-nav-icon" onclick="toggleSearchBar(false)"><i class="fas fa-times"></i></button>
+            <input type="text" id="search-input" placeholder="ابحث عن فيلم..." oninput="handleSearch(this.value)">
+            <button class="sg-nav-icon" onclick="clearSearchField()"><i class="fas fa-eraser"></i></button>
+        </div>
+    </header>
+
+    <div class="section-header">
+        <div class="section-title"><i class="fas fa-film"></i> <span> مدبلجة</span></div>
+        <button class="reset-history-btn" onclick="openResetModal()" tabindex="0">
+            <i class="fas fa-eye-slash"></i> حذف مشاهدة
+        </button>
+    </div>
+
+    <main class="sg-movies-grid" id="sg-grid-root"></main>
+
+    <div id="toast">جاري رفع الفيلم حالياً...</div>
+
+    <!-- Modal جودة السيرفرات -->
+    <div class="sg-modal-overlay" id="quality-modal">
+        <div class="sg-server-panel">
+            <h3 id="modal-title" style="margin-bottom:20px; color: var(--primary-pink);"></h3>
+            <div id="servers-list"></div>
+            <button class="sg-close-btn" onclick="closeModal('quality-modal')">إلغاء</button>
+        </div>
+    </div>
+
+    <!-- Install Modal -->
+    <div class="sg-modal-overlay" id="install-modal">
+        <div class="sg-server-panel">
+            <i class="fas fa-download" style="font-size:3rem; color:var(--primary-pink); margin-bottom:20px;"></i>
+            <h3 style="font-weight:800;">المشغل غير مثبت</h3>
+            <p style="font-size:0.9rem; color:#94a3b8; margin-bottom:25px;">لم نتمكن من فتح الفيلم. يبدو أن مشغل Wuffy Player غير مثبت على جهازك.</p>
+            <button class="modern-server-btn server-premium" onclick="goToInstallPage()" style="justify-content:center;">
+                <i class="fas fa-download"></i> صفحة التحميل المتكاملة
+            </button>
+            <button class="sg-close-btn" onclick="closeModal('install-modal')">تراجع</button>
+        </div>
+    </div>
+
+    <!-- Reset Modal -->
+    <div class="sg-modal-overlay" id="reset-modal">
+        <div class="sg-server-panel">
+            <i class="fas fa-eye-slash" style="font-size:3rem; color:var(--primary-pink); margin-bottom:20px;"></i>
+            <h3 style="font-weight:800;">حذف علامات المشاهدة؟</h3>
+            <p style="font-size:0.9rem; color:#94a3b8; margin-bottom:25px;">سيتم إخفاء أيقونات العين من الأفلام التي شاهدتها سابقاً.</p>
+            <button class="modern-server-btn server-sd" onclick="executeReset()" style="justify-content:center;">
+                <span>تأكيد الحذف</span> <i class="fas fa-trash"></i>
+            </button>
+            <button class="sg-close-btn" onclick="closeModal('reset-modal')">تراجع</button>
+        </div>
+    </div>
+
+<script>
+/* ==================================================
+         كود عرض الأفلام الأجنبية المترجمة
+================================================== */
+const STORAGE_KEY="Movies-DUD00";
+const INSTALL_PAGE_URL="https://aminemk640.github.io/Labil-Tv-app/LABIL.TV.PRO/install.html";
+const FALLBACK_IMG="Series/poster/logo.jpg";
+
+// بيانات الأفلام الأجنبية المترجمة
+// بيانات الأفلام المحولة للنظام الجديد
+const movies = [
+
+{
+        id: 41,
+        title: "Armor",
+        arabicTitle: "درع",
+        year: 2024,
+        poster: "https://resizing.flixster.com/1iYbHs1iqDwUUIhrk9BVpQLDViY=/206x305/v2/https://resizing.flixster.com/sztYWQ9vBo1gd_Jqi6W_oSXRg_o=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzLzA1MDc1NGZiLWI5NDQtNDYyMy04M2Y0LTlhMzBiZWE4MzE2ZS5qcGc=",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/9jbsj1hs1yk8s67l3zysq/Armor.2024...AR.HQ.DUB.mp4?rlkey=kv4jrxhvwnarnr2ffkqtsln6e&st=gk2ft5bf&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/9jbsj1hs1yk8s67l3zysq/Armor.2024...AR.HQ.DUB.mp4?rlkey=kv4jrxhvwnarnr2ffkqtsln6e&st=gk2ft5bf&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/9jbsj1hs1yk8s67l3zysq/Armor.2024...AR.HQ.DUB.mp4?rlkey=kv4jrxhvwnarnr2ffkqtsln6e&st=gk2ft5bf&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 42,
+        title: "28 Years Later",
+        arabicTitle: "بعد 28 عامًا",
+        year: 2024,
+        poster: "https://resizing.flixster.com/nba6W1t5JJcVReFyBKxu_j5fFx8=/fit-in/705x460/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p28969124_v_v9_am.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/ipd0lhpa2s0emsvv1tza3/28.Years.Later.25.AR.mp4?rlkey=ybr518hscqvoua349ztutf383&st=ukisc6r8&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/ipd0lhpa2s0emsvv1tza3/28.Years.Later.25.AR.mp4?rlkey=ybr518hscqvoua349ztutf383&st=ukisc6r8&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/ipd0lhpa2s0emsvv1tza3/28.Years.Later.25.AR.mp4?rlkey=ybr518hscqvoua349ztutf383&st=ukisc6r8&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 43,
+        title: "The Long Walk",
+        arabicTitle: "المسيرة الطويلة",
+        year: 2025,
+        poster: "https://resizing.flixster.com/VpjdNtJ-KoNZtTnD3bK5serA_Do=/fit-in/705x460/v2/https://resizing.flixster.com/SmFbanoZwH3Zu1VDR4KP_fQT_HQ=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzL2FkMTBkYjYwLTdjNmYtNDQzZi1hMzU1LWMzMTkxODYwMTQxNS5qcGc=",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/sdoq1jddh2fn0ujlcs5hz/The.Long.Walk.25.mp4?rlkey=psbpx259mooicgwksc3oq1el6&st=gjjws5kb&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/sdoq1jddh2fn0ujlcs5hz/The.Long.Walk.25.mp4?rlkey=psbpx259mooicgwksc3oq1el6&st=gjjws5kb&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/sdoq1jddh2fn0ujlcs5hz/The.Long.Walk.25.mp4?rlkey=psbpx259mooicgwksc3oq1el6&st=gjjws5kb&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 44,
+        title: "Primitive War",
+        arabicTitle: "الحرب البدائية",
+        year: 2025,
+        poster: "https://resizing.flixster.com/D6aLbOtCJdj4ItAJL_UgDI_lzzA=/206x305/v2/https://resizing.flixster.com/plXBY_-mUKZMuuf0Xh2_A9f0i3g=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzLzQwMjk0MmYzLTRlZTktNGUxZS1iNDUzLTBkOWY5NTgxMTJlOC5qcGc=",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/b8ruvd7g8hg3jcbfi9bji/Primitive.War.25..mp4?rlkey=t37nrcqxqa0mfa17w008qu02v&st=k0b02xp1&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/b8ruvd7g8hg3jcbfi9bji/Primitive.War.25..mp4?rlkey=t37nrcqxqa0mfa17w008qu02v&st=k0b02xp1&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/b8ruvd7g8hg3jcbfi9bji/Primitive.War.25..mp4?rlkey=t37nrcqxqa0mfa17w008qu02v&st=k0b02xp1&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 45,
+        title: "Dangerous Animals",
+        arabicTitle: "الحيوانات الخطرة",
+        year: 2025,
+        poster: "https://resizing.flixster.com/ExxToZZKncU3BpbQzBijK4tqaqQ=/fit-in/705x460/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p29582973_v_v13_ag.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/i088zjrctn30ynmu85oeh/Dangerous.Animals.2025...AR.DUB.mp4?rlkey=5ow00d95esoqgy9queqrfwopd&st=2uwuqdoc&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/i088zjrctn30ynmu85oeh/Dangerous.Animals.2025...AR.DUB.mp4?rlkey=5ow00d95esoqgy9queqrfwopd&st=2uwuqdoc&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/i088zjrctn30ynmu85oeh/Dangerous.Animals.2025...AR.DUB.mp4?rlkey=5ow00d95esoqgy9queqrfwopd&st=2uwuqdoc&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 46,
+        title: "Tornado",
+        arabicTitle: "الأعاصير",
+        year: 2025,
+        poster: "https://resizing.flixster.com/BontLZaMPTJPRBBMSetEOuDH3-4=/fit-in/705x460/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p29674460_v_v9_ac.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/vvt5usci8ct1g6gbbs6rc/Tornado.2025...AR.DUB.mp4?rlkey=ecz1gste8hg3w3wvxp7i5926p&st=qogq793d&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/vvt5usci8ct1g6gbbs6rc/Tornado.2025...AR.DUB.mp4?rlkey=ecz1gste8hg3w3wvxp7i5926p&st=qogq793d&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/vvt5usci8ct1g6gbbs6rc/Tornado.2025...AR.DUB.mp4?rlkey=ecz1gste8hg3w3wvxp7i5926p&st=qogq793d&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 47,
+        title: "Afterburn",
+        arabicTitle: "احتراق لاحق",
+        year: 2025,
+        poster: "https://resizing.flixster.com/D6aLbOtCJdj4ItAJL_UgDI_lzzA=/206x305/v2/https://resizing.flixster.com/Ku1nhKxk8ZVT7UBDKN4zhIXTayY=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzL2Q0NTk2MWY0LWRlMDYtNGFhOS1hMzNlLTJhYmM0ZGZmZjFhMC5qcGc=",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/rue2gblz2b4j7p05rip66/Afterburn.2025.AR.DUB.mp4?rlkey=cyywlrok3lkr2afv2rb0p6fnv&st=mx5pnwjt&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/rue2gblz2b4j7p05rip66/Afterburn.2025.AR.DUB.mp4?rlkey=cyywlrok3lkr2afv2rb0p6fnv&st=mx5pnwjt&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/rue2gblz2b4j7p05rip66/Afterburn.2025.AR.DUB.mp4?rlkey=cyywlrok3lkr2afv2rb0p6fnv&st=mx5pnwjt&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 48,
+        title: "Splitsville",
+        arabicTitle: "سبليتسفيل",
+        year: 2025,
+        poster: "https://resizing.flixster.com/D6aLbOtCJdj4ItAJL_UgDI_lzzA=/206x305/v2/https://resizing.flixster.com/KP8rEQp8CsFjBeko5yVhXwNYMe4=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzLzM4MDc5NWRlLTg3ODgtNDMwYy1hZmM4LTExNGM3ZjJiOTIxYi5qcGc=",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/4bxm6c7bic58nhdgqrmkr/Splitsville.25.AR.mp4?rlkey=jcydyb20ld2enho27q6bmr255&st=el47cjti&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/4bxm6c7bic58nhdgqrmkr/Splitsville.25.AR.mp4?rlkey=jcydyb20ld2enho27q6bmr255&st=el47cjti&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/zs3vuixlcbqy1n9axla65/Splitsville.25.AR.mp4?rlkey=dfqa5xtr0k0nzhh8yuoo8xksg&st=y9xhl23h&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 49,
+        title: "The Shadow's Edge",
+        arabicTitle: "حافة الظل",
+        year: 2025,
+        poster: "https://resizing.flixster.com/auAyM5YkqrDaUZI8qbtnvMVTdag=/fit-in/705x460/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p30946693_v_v7_aa.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/x3wq45fm1upl6bnbzye25/The.Shadow.s.Edge.25..AR.mp4?rlkey=nglaqpmc5jvdrk7j1st3cq1rm&st=hf7bij6h&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/x3wq45fm1upl6bnbzye25/The.Shadow.s.Edge.25..AR.mp4?rlkey=nglaqpmc5jvdrk7j1st3cq1rm&st=hf7bij6h&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/x3wq45fm1upl6bnbzye25/The.Shadow.s.Edge.25..AR.mp4?rlkey=nglaqpmc5jvdrk7j1st3cq1rm&st=hf7bij6h&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 50,
+        title: "Red Sonja",
+        arabicTitle: "ريد سونيا",
+        year: 2025,
+        poster: "https://resizing.flixster.com/D6aLbOtCJdj4ItAJL_UgDI_lzzA=/206x305/v2/https://resizing.flixster.com/JOuHJ5JzTPaS3OAK3i_ujOfHbLM=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzLzk2ZjlmZTI2LWI4ZTgtNDY4Yi05OWU2LTEwMTIyYjM4ZTIyNC5qcGc=",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/5h2t7x0j41r4zysq0qxmt/Red.Sonja.25.AR.mp4?rlkey=qtn0e373mp356phyye7j023se&st=e5r1lb8e&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/5h2t7x0j41r4zysq0qxmt/Red.Sonja.25.AR.mp4?rlkey=qtn0e373mp356phyye7j023se&st=e5r1lb8e&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/5h2t7x0j41r4zysq0qxmt/Red.Sonja.25.AR.mp4?rlkey=qtn0e373mp356phyye7j023se&st=e5r1lb8e&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 51,
+        title: "Rich Flu",
+        arabicTitle: "ريتش فلو",
+        year: 2024,
+        poster: "https://resizing.flixster.com/D6aLbOtCJdj4ItAJL_UgDI_lzzA=/206x305/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p29026593_p_v13_aa.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/9nz1xg5ylvd3faywv5wy2/Rich.Flu.24.AR.DUB.mp4?rlkey=pfivwosemvp2vnhohq7nlmnps&st=l5ic22t5&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/9nz1xg5ylvd3faywv5wy2/Rich.Flu.24.AR.DUB.mp4?rlkey=pfivwosemvp2vnhohq7nlmnps&st=l5ic22t5&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/9nz1xg5ylvd3faywv5wy2/Rich.Flu.24.AR.DUB.mp4?rlkey=pfivwosemvp2vnhohq7nlmnps&st=l5ic22t5&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+{
+        id: 40,
+        title: "Terrifier 3",
+        arabicTitle: "المرعب 3",
+        year: 2024,
+        poster: "https://resizing.flixster.com/gLnc5SzmOCyCJLnKMFJBQM2xAW4=/206x305/v2/https://resizing.flixster.com/NkIqUFGlPZwDqziUn_4x_zwRSy4=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzLzE3ODE2OTQ0LWQyZWEtNDIxMi05NTQ1LTZkYWQ4OTdjZDdkZC5qcGc=",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/rrburtwuqmbxjwpnmfq2e/Terrifier.3.2024...AR.DUB.mp4?rlkey=blvqp1cj698cl2rp9jklm7ub3&st=9l1xr801&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/rrburtwuqmbxjwpnmfq2e/Terrifier.3.2024...AR.DUB.mp4?rlkey=blvqp1cj698cl2rp9jklm7ub3&st=9l1xr801&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/rrburtwuqmbxjwpnmfq2e/Terrifier.3.2024...AR.DUB.mp4?rlkey=blvqp1cj698cl2rp9jklm7ub3&st=9l1xr801&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 41,
+        title: "Love Hurts",
+        arabicTitle: "الحب يؤلم",
+        year: 2025,
+        poster: "https://resizing.flixster.com/D6aLbOtCJdj4ItAJL_UgDI_lzzA=/206x305/v2/https://resizing.flixster.com/BUSNT64l_F_VStkJU4uTHYBsgWw=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzL2ExYjFlZDUyLTBhOGItNDRiOC05MzAzLTc0ZTU2MGExMDQ5MS5qcGc=",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/b5t66vx6dgl83io0o75yo/Love.Hurts.2025.AR.DUB.mp4?rlkey=y12u3gsmw0zgswqv7c7y7my82&st=sx7mwsuq&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/b5t66vx6dgl83io0o75yo/Love.Hurts.2025.AR.DUB.mp4?rlkey=y12u3gsmw0zgswqv7c7y7my82&st=sx7mwsuq&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/b5t66vx6dgl83io0o75yo/Love.Hurts.2025.AR.DUB.mp4?rlkey=y12u3gsmw0zgswqv7c7y7my82&st=sx7mwsuq&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 42,
+        title: "Cleaner",
+        arabicTitle: "عاملة التنظيف",
+        year: 2025,
+        poster: "https://resizing.flixster.com/q2ZiI5r-Kx2E50odexMMrQZTmo0=/fit-in/705x460/v2/https://resizing.flixster.com/uBz-VSUPKCwY1RgXmZVxEDOkhUg=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzLzQxYjUyY2ViLTAyMjItNDU3ZC05NTY2LWU5YzNjNWQxNTFmMi5qcGc=",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/bbchn3pnni5ibjjf3z5tw/Cleaner.25.AR.mp4?rlkey=mljzla6rzqoaqp9n1ns2kyhqi&st=oasvfytr&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/bbchn3pnni5ibjjf3z5tw/Cleaner.25.AR.mp4?rlkey=mljzla6rzqoaqp9n1ns2kyhqi&st=oasvfytr&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/bbchn3pnni5ibjjf3z5tw/Cleaner.25.AR.mp4?rlkey=mljzla6rzqoaqp9n1ns2kyhqi&st=oasvfytr&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 43,
+        title: "The Accountant 2",
+        arabicTitle: "السيد وولف 2",
+        year: 2025,
+        poster: "https://fr.web.img4.acsta.net/c_310_420/img/15/f6/15f6ef83084f0128db0b3993e9f9e888.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/4f57fuzo4ldty2dyv50k0/The.Accountant.2.25.AR.mp4?rlkey=3pidk54pd59wal8xijcthusm9&st=ry5b10yo&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/4f57fuzo4ldty2dyv50k0/The.Accountant.2.25.AR.mp4?rlkey=3pidk54pd59wal8xijcthusm9&st=ry5b10yo&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/4f57fuzo4ldty2dyv50k0/The.Accountant.2.25.AR.mp4?rlkey=3pidk54pd59wal8xijcthusm9&st=ry5b10yo&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 44,
+        title: "The Rule of Jenny Pen",
+        arabicTitle: "قاعدة جيني بن",
+        year: 2024,
+        poster: "https://m.media-amazon.com/images/I/81yMrYZJmIL._AC_UY218_.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/t99gu9dwgaa9o5crm3ilu/.T.he.Rule.of.Jenny.Pen.AR.mp4?rlkey=21dcxgt5f5ss7qwauccfgsa5j&st=7qoz38ni&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/t99gu9dwgaa9o5crm3ilu/.T.he.Rule.of.Jenny.Pen.AR.mp4?rlkey=21dcxgt5f5ss7qwauccfgsa5j&st=7qoz38ni&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/t99gu9dwgaa9o5crm3ilu/.T.he.Rule.of.Jenny.Pen.AR.mp4?rlkey=21dcxgt5f5ss7qwauccfgsa5j&st=7qoz38ni&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 45,
+        title: "Screamboat",
+        arabicTitle: "قارب الصراخ",
+        year: 2025,
+        poster: "https://m.media-amazon.com/images/I/81LeHDpjazL._AC_UY218_.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/e64x35xkeqt00f0ujyifv/Screamboat.25.AR.mp4?rlkey=c23cqasjhshm9am8evdj616zm&st=gockqgxu&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/e64x35xkeqt00f0ujyifv/Screamboat.25.AR.mp4?rlkey=c23cqasjhshm9am8evdj616zm&st=gockqgxu&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/e64x35xkeqt00f0ujyifv/Screamboat.25.AR.mp4?rlkey=c23cqasjhshm9am8evdj616zm&st=gockqgxu&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 46,
+        title: "Warfare",
+        arabicTitle: "الحرب",
+        year: 2025,
+        poster: "https://fr.web.img6.acsta.net/c_310_420/img/36/fb/36fb45edeb926327f8ca0f3c74315aa4.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/c9mk3cek5g291ilspqd7b/.Warfare.25.AR.mp4?rlkey=0ox4kc7b1po8plrzw98tm15r4&st=n6s31953&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/c9mk3cek5g291ilspqd7b/.Warfare.25.AR.mp4?rlkey=0ox4kc7b1po8plrzw98tm15r4&st=n6s31953&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/c9mk3cek5g291ilspqd7b/.Warfare.25.AR.mp4?rlkey=0ox4kc7b1po8plrzw98tm15r4&st=n6s31953&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 47,
+        title: "The Amateur",
+        arabicTitle: "الهواة",
+        year: 2025,
+        poster: "https://fr.web.img4.acsta.net/c_310_420/img/c5/05/c505b0f6236c06a7887b162758ee96a4.gif",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/uxd7yotln9vu1ja64qpmb/.The.Amateur.2025.AR.mp4?rlkey=nf0jbnhlmqw0uioy1ctaxgyf5&st=91b5oups&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/uxd7yotln9vu1ja64qpmb/.The.Amateur.2025.AR.mp4?rlkey=nf0jbnhlmqw0uioy1ctaxgyf5&st=91b5oups&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/uxd7yotln9vu1ja64qpmb/.The.Amateur.2025.AR.mp4?rlkey=nf0jbnhlmqw0uioy1ctaxgyf5&st=91b5oups&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 48,
+        title: "Death Of A Unicorn",
+        arabicTitle: "موت وحيد القرن",
+        year: 2025,
+        poster: "https://fr.web.img2.acsta.net/c_310_420/img/a9/cf/a9cfe0493dee80e422dea7c061bec8a5.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/i51rlbzigcib1wcp1izhn/.Death.Of.A.Unicorn.2025...AR.mp4?rlkey=ilq50z5ju483zrkifdb9twxk0&st=fl9ma1kb&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/i51rlbzigcib1wcp1izhn/.Death.Of.A.Unicorn.2025...AR.mp4?rlkey=ilq50z5ju483zrkifdb9twxk0&st=fl9ma1kb&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/i51rlbzigcib1wcp1izhn/.Death.Of.A.Unicorn.2025...AR.mp4?rlkey=ilq50z5ju483zrkifdb9twxk0&st=fl9ma1kb&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 49,
+        title: "Black Bag",
+        arabicTitle: "الحقيبة السوداء",
+        year: 2025,
+        poster: "https://es.web.img3.acsta.net/c_310_420/img/46/43/4643c20f14b4196a97b79bcec5987736.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/aigiohqg2xyp4fwt8rsgn/.Black.Bag.2025.AR.mp4?rlkey=qu08vywmsvajk3762zjgibrby&st=htmvek90&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/aigiohqg2xyp4fwt8rsgn/.Black.Bag.2025.AR.mp4?rlkey=qu08vywmsvajk3762zjgibrby&st=htmvek90&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/aigiohqg2xyp4fwt8rsgn/.Black.Bag.2025.AR.mp4?rlkey=qu08vywmsvajk3762zjgibrby&st=htmvek90&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 50,
+        title: "Last Breath",
+        arabicTitle: "النفس الأخير",
+        year: 2025,
+        poster: "https://fr.web.img6.acsta.net/c_310_420/img/50/5a/505af7db726cc4ac28690cb7403ffca2.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/eesjmw4rny2ww89itx51v/Last.Breath.2025.AR.mp4?rlkey=mziit7xru9prbhyyoitw4siif&st=m0lq9bpm&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/eesjmw4rny2ww89itx51v/Last.Breath.2025.AR.mp4?rlkey=mziit7xru9prbhyyoitw4siif&st=m0lq9bpm&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/eesjmw4rny2ww89itx51v/Last.Breath.2025.AR.mp4?rlkey=mziit7xru9prbhyyoitw4siif&st=m0lq9bpm&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 51,
+        title: "Mickey 17",
+        arabicTitle: "ميكي 17",
+        year: 2025,
+        poster: "https://fr.web.img2.acsta.net/c_310_420/img/a5/5e/a55e6a3b1771606323178493aae5e262.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/u2xf4prpyq8vvq9b9zvjr/Mickey.17.2025.AR.mp4?rlkey=z6ewf8i3ba52aail8wlev5zoh&st=5iak79an&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/u2xf4prpyq8vvq9b9zvjr/Mickey.17.2025.AR.mp4?rlkey=z6ewf8i3ba52aail8wlev5zoh&st=5iak79an&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/u2xf4prpyq8vvq9b9zvjr/Mickey.17.2025.AR.mp4?rlkey=z6ewf8i3ba52aail8wlev5zoh&st=5iak79an&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 52,
+        title: "Inheritance",
+        arabicTitle: "الميراث",
+        year: 2025,
+        poster: "https://es.web.img2.acsta.net/c_310_420/img/0c/f1/0cf1003455a669b6aaef859b766b2921.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/9kl7wtutyfiobdt27jah4/Inheritance.2025...AR.mp4?rlkey=kmi29yburwz1d33sw100pvwgu&st=dw17nlnu&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/9kl7wtutyfiobdt27jah4/Inheritance.2025...AR.mp4?rlkey=kmi29yburwz1d33sw100pvwgu&st=dw17nlnu&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/9kl7wtutyfiobdt27jah4/Inheritance.2025...AR.mp4?rlkey=kmi29yburwz1d33sw100pvwgu&st=dw17nlnu&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 53,
+        title: "In The Lost Lands",
+        arabicTitle: "في الأراضي المفقودة",
+        year: 2025,
+        poster: "https://fr.web.img4.acsta.net/c_310_420/img/98/2f/982faa79408ae6f833933f43977c2dd1.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/kmftdv68l5wd1a3vh7gwv/In.The.Lost.Lands.2025.AR.mp4?rlkey=05nk85z2af52y2e5idfrqjvdb&st=y7n7vk88&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/kmftdv68l5wd1a3vh7gwv/In.The.Lost.Lands.2025.AR.mp4?rlkey=05nk85z2af52y2e5idfrqjvdb&st=y7n7vk88&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/kmftdv68l5wd1a3vh7gwv/In.The.Lost.Lands.2025.AR.mp4?rlkey=05nk85z2af52y2e5idfrqjvdb&st=y7n7vk88&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 54,
+        title: "Silent Zone",
+        arabicTitle: "المنطقة الصامتة",
+        year: 2025,
+        poster: "https://m.media-amazon.com/images/I/91qMd51aqvL._AC_UY218_.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/memvrorfvcfototfb9pf0/Silent.Zone.2025.AR.mp4?rlkey=19hfzp7jss2v0fwui6zquuxb0&st=gx12mz0v&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/memvrorfvcfototfb9pf0/Silent.Zone.2025.AR.mp4?rlkey=19hfzp7jss2v0fwui6zquuxb0&st=gx12mz0v&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/memvrorfvcfototfb9pf0/Silent.Zone.2025.AR.mp4?rlkey=19hfzp7jss2v0fwui6zquuxb0&st=gx12mz0v&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+{
+        id: 30,
+        title: "Long Gone Heroes",
+        arabicTitle: "أبطال رحلوا منذ زمن طويل",
+        year: 2025,
+        poster: "https://resizing.flixster.com/D6aLbOtCJdj4ItAJL_UgDI_lzzA=/206x305/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p27924961_v_v13_ac.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/3tgk51jcoqhs1yh0npssg/Long.Gone.Heroes.2024.480p.AR..mp4?rlkey=l2fpgi3dg5b6vxrcqo1yumr6j&st=jikrv3op&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/3tgk51jcoqhs1yh0npssg/Long.Gone.Heroes.2024.480p.AR..mp4?rlkey=l2fpgi3dg5b6vxrcqo1yumr6j&st=jikrv3op&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/3tgk51jcoqhs1yh0npssg/Long.Gone.Heroes.2024.480p.AR..mp4?rlkey=l2fpgi3dg5b6vxrcqo1yumr6j&st=jikrv3op&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 31,
+        title: "Locked",
+        arabicTitle: "مقفلة",
+        year: 2025,
+        poster: "https://es.web.img3.acsta.net/c_310_420/img/dd/48/dd4830253818333848a4b1760d6b2f31.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/ic439h7eahndyxtyqz2tp/Locked.2025..AR.mp4?rlkey=nzba30neq03zuplp9e6u9897k&st=pjgqw9r5&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/ic439h7eahndyxtyqz2tp/Locked.2025..AR.mp4?rlkey=nzba30neq03zuplp9e6u9897k&st=pjgqw9r5&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/ic439h7eahndyxtyqz2tp/Locked.2025..AR.mp4?rlkey=nzba30neq03zuplp9e6u9897k&st=pjgqw9r5&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 32,
+        title: "Ash",
+        arabicTitle: "رماد",
+        year: 2025,
+        poster: "https://fr.web.img6.acsta.net/c_310_420/img/08/cb/08cbc086754676cc9fe70edae5d76a7f.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/tql2eisqyt08umwvxex4c/Ash.2025.AR.mp4?rlkey=jq3v1sdbc89237pzq2qk54yqo&st=xj0dn96p&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/tql2eisqyt08umwvxex4c/Ash.2025.AR.mp4?rlkey=jq3v1sdbc89237pzq2qk54yqo&st=xj0dn96p&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/tql2eisqyt08umwvxex4c/Ash.2025.AR.mp4?rlkey=jq3v1sdbc89237pzq2qk54yqo&st=xj0dn96p&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 33,
+        title: "Holland",
+        arabicTitle: "هولندا",
+        year: 2025,
+        poster: "https://m.media-amazon.com/images/I/81zQqEb-9IL._AC_UL320_.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/1xxqvcgtxbqzewcu57oyo/Holland.2025.Ar.mp4?rlkey=vbcndu9pa1a5akvn8s8w7ulei&st=1u2rc2j9&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/1xxqvcgtxbqzewcu57oyo/Holland.2025.Ar.mp4?rlkey=vbcndu9pa1a5akvn8s8w7ulei&st=1u2rc2j9&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/1xxqvcgtxbqzewcu57oyo/Holland.2025.Ar.mp4?rlkey=vbcndu9pa1a5akvn8s8w7ulei&st=1u2rc2j9&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 34,
+        title: "A Knight's War",
+        arabicTitle: "حرب الفارس",
+        year: 2025,
+        poster: "https://resizing.flixster.com/D6aLbOtCJdj4ItAJL_UgDI_lzzA=/206x305/v2/https://resizing.flixster.com/UqNWpHnb4OXowdqoc_kRDpj-PH0=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzLzQ4N2ZmMGE1LWZjNjItNDhlYy1iNzEzLTMyNmExN2ZjNmY5My5qcGc=",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/o3klo61bozi5obq78y3wl/A.Knight.s.War.2025.AR.mp4?rlkey=8mx96wwfy25t4joprlqqdkkrb&st=4n2wyzu7&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/o3klo61bozi5obq78y3wl/A.Knight.s.War.2025.AR.mp4?rlkey=8mx96wwfy25t4joprlqqdkkrb&st=4n2wyzu7&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/o3klo61bozi5obq78y3wl/A.Knight.s.War.2025.AR.mp4?rlkey=8mx96wwfy25t4joprlqqdkkrb&st=4n2wyzu7&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 35,
+        title: "A Working Man",
+        arabicTitle: "رجل عامل",
+        year: 2025,
+        poster: "https://fr.web.img6.acsta.net/c_310_420/img/16/9b/169bbcbdb93babc2905e4fab5c8d66d5.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/j3g0o35n2ga5yzyxp5lfi/A.Working.Man.AR.DUB.mp4?rlkey=9pbw472apafei05dbd3461rd8&st=9hrkamm4&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/j3g0o35n2ga5yzyxp5lfi/A.Working.Man.AR.DUB.mp4?rlkey=9pbw472apafei05dbd3461rd8&st=9hrkamm4&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/j3g0o35n2ga5yzyxp5lfi/A.Working.Man.AR.DUB.mp4?rlkey=9pbw472apafei05dbd3461rd8&st=9hrkamm4&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 36,
+        title: "Home Sweet Home: Rebirth",
+        arabicTitle: "البيت الحلو: الولادة من جديد",
+        year: 2025,
+        poster: "https://m.media-amazon.com/images/I/81uuRKKmhtL._AC_UY218_.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/sm3mlsenvyx8iz8k56uvn/H.ome.Sweet.Home.DUB.mp4?rlkey=w1cpi19jvjiqjvbty6dqhox5f&st=c79nun03&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/sm3mlsenvyx8iz8k56uvn/H.ome.Sweet.Home.DUB.mp4?rlkey=w1cpi19jvjiqjvbty6dqhox5f&st=c79nun03&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/sm3mlsenvyx8iz8k56uvn/H.ome.Sweet.Home.DUB.mp4?rlkey=w1cpi19jvjiqjvbty6dqhox5f&st=c79nun03&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 37,
+        title: "Novocaine",
+        arabicTitle: "نوفوكايين",
+        year: 2025,
+        poster: "https://es.web.img3.acsta.net/c_310_420/img/01/5d/015d8e0dc8548f5ba948f4dce486bdbb.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/ohi11g194vl64a31l18w8/N.ovocaine.2025.AR.HQ.DUB.mp4?rlkey=3fwvzlnbvwpgt2vn0csz4azlq&st=ysgpc0aa&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/ohi11g194vl64a31l18w8/N.ovocaine.2025.AR.HQ.DUB.mp4?rlkey=3fwvzlnbvwpgt2vn0csz4azlq&st=ysgpc0aa&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 38,
+        title: "High Rollers",
+        arabicTitle: "كبار اللاعبين",
+        year: 2025,
+        poster: "https://m.media-amazon.com/images/I/91ZaepoU3iL._AC_UY218_.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/89h6b9eo7h4mcsu9giycr/High.Rollers.2025...AR.DUB.mp4?rlkey=295b4w4eyur0zakvadqr71hk5&st=ic3wd8s1&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/89h6b9eo7h4mcsu9giycr/High.Rollers.2025...AR.DUB.mp4?rlkey=295b4w4eyur0zakvadqr71hk5&st=ic3wd8s1&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/89h6b9eo7h4mcsu9giycr/High.Rollers.2025...AR.DUB.mp4?rlkey=295b4w4eyur0zakvadqr71hk5&st=ic3wd8s1&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 39,
+        title: "Putin",
+        arabicTitle: "بوتين",
+        year: 2024,
+        poster: "https://m.media-amazon.com/images/M/MV5BMjZlODY0ZDEtMTUyOS00ZWJiLWI0NGEtMWY4NzViZjFmZGRmXkEyXkFqcGc@._V1_SX300.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/thmzohy284fajvvfig5uw/Putin.2024..CAMRip.AR.DUB.mp4?rlkey=tqujbdysgixa1hq31fuqntbks&st=snmkkocr&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/thmzohy284fajvvfig5uw/Putin.2024..CAMRip.AR.DUB.mp4?rlkey=tqujbdysgixa1hq31fuqntbks&st=snmkkocr&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/thmzohy284fajvvfig5uw/Putin.2024..CAMRip.AR.DUB.mp4?rlkey=tqujbdysgixa1hq31fuqntbks&st=snmkkocr&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 20,
+        title: "Laws of Man",
+        arabicTitle: "قوانين الإنسان",
+        year: 2024,
+        poster: "https://m.media-amazon.com/images/M/MV5BNTViYzRlZDEtMDM5Ni00MmQxLTg2MGQtN2M5YmUxMGFiYjMzXkEyXkFqcGc@._V1_SX300.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/jrw56xnxxc099i4jrvocz/Laws.Of.Man.2024...AR.DUB.mp4?rlkey=okmjle0j9lcykbfpco6pdh911&st=el8n8j0q&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/jrw56xnxxc099i4jrvocz/Laws.Of.Man.2024...AR.DUB.mp4?rlkey=okmjle0j9lcykbfpco6pdh911&st=el8n8j0q&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/jrw56xnxxc099i4jrvocz/Laws.Of.Man.2024...AR.DUB.mp4?rlkey=okmjle0j9lcykbfpco6pdh911&st=el8n8j0q&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 21,
+        title: "Kraven the Hunter",
+        arabicTitle: "كرافن الصياد",
+        year: 2024,
+        poster: "https://m.media-amazon.com/images/M/MV5BZDU0YTI5ODAtN2NmMS00YTg3LTgyNDItN2RmOWEzOTkzZjcyXkEyXkFqcGc@._V1_SX300.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/jrw56xnxxc099i4jrvocz/Laws.Of.Man.2024...AR.DUB.mp4?rlkey=okmjle0j9lcykbfpco6pdh911&st=el8n8j0q&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 22,
+        title: "The Omicron Killer",
+        arabicTitle: "القاتل أوميكرون",
+        year: 2024,
+        poster: "https://m.media-amazon.com/images/I/91KjXqB7TBL._AC_UY218_.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/5z0bfyj490pmgn77z0z4q/Cimawbas-Twisters.2024..CAMRip.AR.HQ.DUB.V2.mp4?rlkey=zldwc8dtu16qa58mdjb7wefcj&st=2nphncjk&dl=0#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "VK", url: "https://vk.com/video_ext.php?oid=750041670&id=456241719&hash=f13cfacd469b3ad9"},
+            {name: "SERVER 3", quality: "Web", url: "https://vipserver.liiivideo.com/embed-90qe9zm3friv.html"}
+        ]
+    },
+    {
+        id: 23,
+        title: "Twisters",
+        arabicTitle: "الأعاصير",
+        year: 2024,
+        poster: "https://fr.web.img6.acsta.net/c_310_420/img/84/7a/847a7ba3d470cb6037975b831af9d70d.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/5z0bfyj490pmgn77z0z4q/Cimawbas-Twisters.2024..CAMRip.AR.HQ.DUB.V2.mp4?rlkey=zldwc8dtu16qa58mdjb7wefcj&st=2nphncjk&dl=0#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "VK", url: "https://vk.com/video_ext.php?oid=720493913&id=456239625&hash=e314872a8ebfafa7"},
+            {name: "SERVER 3", quality: "Web", url: "https://vipserver.liiivideo.com/embed-x0rv2z6csf33.html"}
+        ]
+    },
+    {
+        id: 24,
+        title: "Deadpool and Wolverine",
+        arabicTitle: "ديبول و ولفيرين",
+        year: 2024,
+        poster: "https://fr.web.img3.acsta.net/c_310_420/img/e4/cd/e4cd101f2e66f4e7818fcf53d05c006a.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/twjt7uqmc2penaa7fptp7/Cimawbas-Deadpool.-.Wolverine.2024..CAMRip.AR.DUB.V2.mp4?rlkey=2wt1cshk0oa7pelmyjhaau1ui&st=azm1myee&dl=0#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "Web", url: "https://vipserver.liiivideo.com/embed-h43vru1p0uws.html"}
+        ]
+    },
+    {
+        id: 25,
+        title: "Wake Up",
+        arabicTitle: "استيقظ",
+        year: 2023,
+        poster: "https://fr.web.img4.acsta.net/c_310_420/img/fa/da/fadae66ea51795215b869f81d18b4d62.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://aHR0cHM6Ly9kbC5kcm9wYm94LmNvbS9zY2wvZmkvank4dTh5ZnM5ZjRzanU5ZzdtNHA1L0NpbWF3YmFzLVdha2UuVXAuMjAyMy4uQ0FNUmlwLkFSLkhRLkRVQi5tcDQ/cmxrZXk9djF1NHpwZzZrY3p3enBsOHN1bXJ2NnVzaCZzdD0wNnc1Mjd6aCZkbD0w#Intent;scheme=xmtv;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "VK", url: "https://vk.com/video_ext.php?oid=720493913&id=456239628&hash=9f1ad44a6c2f2b6a"}
+        ]
+    },
+    {
+        id: 26,
+        title: "Beverly Hills Cop: Axel F",
+        arabicTitle: "شرطي بيفرلي هيلز: أكسل فولي",
+        year: 2024,
+        poster: "https://fr.web.img5.acsta.net/c_310_420/img/ee/50/ee50ce0f552b8fc805219d5a7cbfe8be.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://aHR0cHM6Ly9kbC5kcm9wYm94LmNvbS9zY2wvZmkvbjlnZ2p4OW8xNW52cW56N3FlaTBxL0JldmVy bHkuSGlsbHMuQ29wLkF4ZWwuRi4yMDI0Li4uQVIuSFEuRFVCLm1wND9ybGtleT1mZ3l6am82cHFv bHpwdXZvamd3MGpocnFqJnN0PXNyOGlocjVyJmRsPTA=#Intent;scheme=xmtv;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "Web", url: "https://a.cimastream.xyz/embed-8i5o4uyzwxyn.html"}
+        ]
+    },
+    {
+        id: 27,
+        title: "Bad Boys 4 Ride or Die",
+        arabicTitle: "فتيان أشقاء: اركب أو مت",
+        year: 2024,
+        poster: "https://fr.web.img4.acsta.net/c_310_420/img/ef/bb/efbbe86f093b0904258c8a9b1e60bae7.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://aHR0cHM6Ly9kbC5kcm9wYm94LmNvbS9zY2wvZmkvbWI1cmljZjB4ODhiNGpmcjVraHgyL0JhZC5C b3lzLlJpZGUuT3IuRGllLjIwMjQuLi5BUi5EVUIubXA0P3Jsa2V5PXkycGNvaXEzYWZlMGtmMDFy MzIwNmNraGkmc3Q9Mmp0NTE1anomZGw9MA==#Intent;scheme=xmtv;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "Web", url: "https://vipserver.liiivideo.com/embed-60i2gws7czj7.html"}
+        ]
+    },
+    {
+        id: 28,
+        title: "Hijack 1971",
+        arabicTitle: "اختطاف طائرة 1971",
+        year: 2024,
+        poster: "https://fr.web.img3.acsta.net/c_310_420/pictures/23/05/29/09/31/3171423.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/zl7mof0pgt9u9473wswoj/Cimawbas-Hijack.1971.2024..CAMRip.AR.DUB.mp4?rlkey=y8o4kbz0x5elj0ls29s4ypmpo&st=tr9d4vh4&dl=0#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 29,
+        title: "Elyas",
+        arabicTitle: "إلياس",
+        year: 2024,
+        poster: "https://fr.web.img5.acsta.net/c_310_420/img/d0/98/d098a7d3e8e1173ff37cd11aeef6c259.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/j2rx7x9cspexqtbu0hqbw/Elyas.2024..CAMRip.AR.HQ.DUB.mp4?rlkey=shta13tywc4ley60wau1ee40q&st=sbauvq1z&dl=0#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 3,
+        title: "The End We Start From",
+        arabicTitle: "نهاية نبدأ منها",
+        year: 2023,
+        poster: "https://fr.web.img5.acsta.net/c_310_420/pictures/23/10/12/11/50/0462809.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/vpo1ywtx2j2sv2xloig9f/The.End.We.Start.From.2023.AR.DUB.mp4?rlkey=f8n2c6f0lx9ydn7uoe0l1orxh&st=kcux705i&dl=0#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/vpo1ywtx2j2sv2xloig9f/The.End.We.Start.From.2023.AR.DUB.mp4?rlkey=f8n2c6f0lx9ydn7uoe0l1orxh&st=kcux705i&dl=0#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 4,
+        title: "The Exorcism",
+        arabicTitle: "طرد الأرواح الشريرة",
+        year: 2023,
+        poster: "https://fr.web.img2.acsta.net/c_310_420/img/35/a5/35a564f17ec51b0068dbaab0dd31bcae.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://aHR0cHM6Ly9kbC5kcm9wYm94LmNvbS9zY2wvZmkvcGkwdHkxbHh0bTBrbGl3ZWo3dzY1L1RoZS5FeG9yY2lzbS4yMDI0LkFSLkRVQi5tcDQ/cmxrZXk9MzkybjI4MDBrbjlnaHJmbmx0Z3g2dnZiZCZzdD0yMDJzc3lsaiZkbD0w#Intent;scheme=xmtv;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 5,
+        title: "The Bikeriders",
+        arabicTitle: "راكبو الدراجات",
+        year: 2023,
+        poster: "https://fr.web.img2.acsta.net/c_310_420/img/a5/ac/a5acac69498dc12d27daaf9015efe733.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://aHR0cHM6Ly9kbC5kcm9wYm94LmNvbS9zY2wvZmkvbWh5OTd1Y3Yzb3RkZmx5ZGo0YmFrL1RoZS5CaWtlcmlkZXJzLjIwMjMuLkNBTVJpcC5BUi5EVUIubXA0P3Jsa2V5PWt4N2VrcXJ0Z3FhcGNsa3NsMTFobWJyMTQmc3Q9YmczY3psbzQmZGw9MA==#Intent;scheme=xmtv;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 6,
+        title: "Wild Eyed And Wicked",
+        arabicTitle: "وحشي وذو عيون برية",
+        year: 2024,
+        poster: "https://m.media-amazon.com/images/I/91rbOrta+WL._AC_UY218_.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://aHR0cHM6Ly9kbC5kcm9wYm94LmNvbS9zY2wvZmkvN3JqN3kzajlheTE2bDBqMnUzaHZ4L1dpbGQuRXllZC5BbmQuV2lja2VkLjIwMjMuLi5BUi5IUS5EVUIubXA0P3Jsa2V5PW5pdnlxZ3Q5ZHluMTl3ZDgxYzk4YWFlZG4mc3Q9Y2ZwejZzamUmZGw9MA==#Intent;scheme=xmtv;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 7,
+        title: "A Quiet Place: Day One",
+        arabicTitle: "مكان هادئ: اليوم الأول",
+        year: 2024,
+        poster: "https://fr.web.img6.acsta.net/c_310_420/img/4f/95/4f95a31f1562e41ba10b199f25b25931.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://aHR0cHM6Ly9kbC5kcm9wYm94LmNvbS9zY2wvZmkvcmJkZHdlMm5jNmh5M3Q0ZXQxMHIyL0EuUXVpZXQuUGxhY2UuRGF5Lk9uZS4yMDI0Li5DQU1SaXAuQVIuRFVCLlYyLm1rdi5tcDQ/cmxrZXk9ZnRtaTR0M2NmN2x5b3I1cHp3cGd2dzZpYiZzdD04YzZ4Nmt5ZCZkbD0w#Intent;scheme=xmtv;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 8,
+        title: "The Painter",
+        arabicTitle: "الرسام",
+        year: 2024,
+        poster: "https://fr.web.img4.acsta.net/c_310_420/pictures/23/12/06/09/29/1363090.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://aHR0cHM6Ly9kbC5kcm9wYm94LmNvbS9zY2wvZmkvY3NqZWY2bndlaDVubmU4dGZtaGVoL1RoZS5QYWludGVyLjIwMjQuNDgwcC5XRUItREwuQVIuRFVCLi5tcDQ/cmxrZXk9b2d5d2pmMmJ4bjFrdzlxMGRuZDFha3VwcyZzdD1yNGJwaG9ndyZkbD0w#Intent;scheme=xmtv;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 9,
+        title: "Alienoid: The Return to the Future",
+        arabicTitle: "ألينويد: العودة إلى المستقبل",
+        year: 2024,
+        poster: "https://es.web.img3.acsta.net/c_310_420/pictures/24/01/17/18/48/5049553.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://aHR0cHM6Ly9kbC5kcm9wYm94LmNvbS9zY2wvZmkvY3BocTR0emJrdDVqdjM2czAwMWV2L0FsaWVub2lkLlRoZS5SZXR1cm4uVG8uVGhlLkZ1dHVyZS4yMDI0Li4uQVIuRFVCLm1wND9ybGtleT1rYzZ0aHBoZ3dzOW5yeG1rOGwyejhlNXhnJnN0PTZibmNkM3I5JmRsPTA=#Intent;scheme=xmtv;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 10,
+        title: "Bloodline Killer",
+        arabicTitle: "قاتل خط الدم",
+        year: 2024,
+        poster: "https://m.media-amazon.com/images/I/71WoJlz16OL._AC_UY218_.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://aHR0cHM6Ly9kbC5kcm9wYm94LmNvbS9zY2wvZmkvcjVlOTVmbHY0Mnh6eDRzOWZzd2h5L0Jsb29kbGluZS5LaWxsZXIuMjAyNC4uLkFSLkRVQi5tcDQ/cmxrZXk9aDNncnV0bjJneXpvcmM3ZWhmamJmcWttcCZzdD1tbzNiZ2JjZCZkbD0w#Intent;scheme=xmtv;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 11,
+        title: "Monkey Man",
+        arabicTitle: "رجل القرد",
+        year: 2024,
+        poster: "https://es.web.img3.acsta.net/c_310_420/pictures/24/03/04/18/07/5186373.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://aHR0cHM6Ly9kbC5kcm9wYm94LmNvbS9zY2wvZmkvNmYybHptaGtqdnpvcm95bm01Ym52L01vbmtleS1NYW4ubXA0P3Jsa2V5PXpsZTl5c2tudGc1dnY0cnp4MW5yc2JrcGMmc3Q9dGxzNG9mNjcmZGw9MA==#Intent;scheme=xmtv;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 12,
+        title: "Among the Willows",
+        arabicTitle: "بين الصفصاف",
+        year: 2023,
+        poster: "https://m.media-amazon.com/images/I/61DeKHCyAOL._AC_UY218_.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://aHR0cHM6Ly9kbC5kcm9wYm94LmNvbS9zY2wvZmkvZTJpd2JibXI5eXhpNTVxZHk4YTBjL0Ftb25nLnRoZS5XaWxsb3dzLjIwMjMuLkNBTVJpcC5BUi5EVUIubXA0P3Jsa2V5PW5oajR2aWU5aWlpemlkZHgwNnl3ZzZmaTAmc3Q9eThiNWUwZHImZGw9MA==#Intent;scheme=xmtv;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 13,
+        title: "Hit Man",
+        arabicTitle: "هيت مان",
+        year: 2024,
+        poster: "https://es.web.img2.acsta.net/c_310_420/img/86/2a/862a16dd24349d0bfd4d41e8fd048079.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/5sub555rpfv4igvcd4co5/Cimawbas-Hit.Man.2023...AR.DUB.mkv.mp4?rlkey=xytmtci8tka9ynnajbl22ieoz&st=k0xrlqw2&dl=0#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "Web", url: "https://vbn2.vdbtm.shop/embed-rttofpul4h4z.html"}
+        ]
+    },
+    {
+        id: 14,
+        title: "Correr para Vivir",
+        arabicTitle: "الركض من أجل الحياة",
+        year: 2024,
+        poster: "https://es.web.img2.acsta.net/c_310_420/img/59/45/59450f6682c258e1af89f1f8ac09011b.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/0d9a5cl8702k2qr241q4m/Correr.para.Vivir.2024..CAMRip.AR.DUB.mkv.mp4?rlkey=fordx4yfjs82oog29odmews0i&st=cdzyr3dh&dl=0#Intent;scheme=https;package=co.wuffy.player;end"},
+            {name: "SERVER 2", quality: "Web", url: "https://vbn2.vdbtm.shop/embed-03q84ec1vgdc.html"}
+        ]
+    },
+    {
+        id: 15,
+        title: "Arcadian",
+        arabicTitle: "أركاديان",
+        year: 2024,
+        poster: "https://fr.web.img2.acsta.net/c_310_420/img/2f/cd/2fcdfec6c8ef5878880e1b6fbbc3dc88.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://aHR0cHM6Ly9kbC5kcm9wYm94LmNvbS9zY2wvZmkvZmxjbTNkaWhwamU3M205d2k0M2hjL0FyY2FkaWFuLjIwMjQuQVIuRFVCLm1wND9ybGtleT04bzZ4cnB3amNjM3FwM3Vsank3ZDVjNXdoJnN0PW4wd2dlbDZyJmRsPTA=#Intent;scheme=xmtv;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 16,
+        title: "Sleeping Dogs",
+        arabicTitle: "كلاب نائمة",
+        year: 2024,
+        poster: "https://es.web.img2.acsta.net/c_310_420/img/fb/71/fb71cd349499d1489ad5f217b850256c.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://aHR0cHM6Ly9kbC5kcm9wYm94LmNvbS9zY2wvZmkvYXljaGNtbzZrZ2V4Z3c4enNjcGZoL1NsZWVwaW5nLkRvZ3MuMjAyNC5BUi5EVUIubXA0P3Jsa2V5PW1jaGd4a3V5MTQ4Mng5ZHV2YmM2ZHRjY3kmc3Q9dnJzMG8weWkmZGw9MA==#Intent;scheme=xmtv;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 17,
+        title: "Cash Out",
+        arabicTitle: "كاش آوت",
+        year: 2024,
+        poster: "https://fr.web.img6.acsta.net/c_310_420/pictures/24/03/07/11/02/0937322.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://aHR0cHM6Ly9kbC5kcm9wYm94LmNvbS9zY2wvZmkveDJ4Ym1odW8zYXMyZnJkMnN2dzMyL0Nhc2guT3V0LjIwMjQuLldFQlJpcC5BUi5IUS4ubXA0P3Jsa2V5PTNmaWVydDV0OGgxMTk0bHE0ZmdhaWJod2omc3Q9bjd5NTkycnQmZGw9MA==#Intent;scheme=xmtv;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 18,
+        title: "Boy Kills World",
+        arabicTitle: "فتى يقتل العالم",
+        year: 2023,
+        poster: "https://es.web.img3.acsta.net/c_310_420/img/e5/5c/e55c0cd4756b82d8e1513a850ff0a2f1.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://aHR0cHM6Ly9kbC5kcm9wYm94LmNvbS9zY2wvZmkvdnRidWFraGtvNmFqeWl4Nm0xOXB4L0JveS5LaWxscy5Xb3JsZC4yMDIzLl8uV0VCUmlwLkFSLkRVQi5tcDQ/cmxrZXk9aHVnMWR5bTBpYXlyenZmZm9xYmxzb2I3YSZzdD1sbjBiOXgxcSZkbD0w#Intent;scheme=xmtv;package=co.wuffy.player;end"}
+        ]
+    },
+    {
+        id: 19,
+        title: "Furiosa: A Mad Max Saga",
+        arabicTitle: "فوريوسا: ملحمة ماد ماكس",
+        year: 2024,
+        poster: "https://fr.web.img4.acsta.net/c_310_420/img/bd/b1/bdb11f06bd2f0392cfc2bf9f64ecca1d.jpg",
+        servers: [
+            {name: "SERVER 1", quality: "FHD", url: "intent://aHR0cHM6Ly9kbC5kcm9wYm94LmNvbS9zY2wvZmkveGJjOWRqcjZ5enhkYW1xazRrZ3U2L0Z1cmlvc2EuQS5NYWQuTWF4LlNhZ2EuMjAyNC4uQ0FNUmlwLkFSLkRVQi5ta3YubXA0P3Jsa2V5PWFxNjNvemU5ejVwdnJka3VkdXhnejJwNmwmc3Q9OTNtOWg0dW4mZGw9MA==#Intent;scheme=xmtv;package=co.wuffy.player;end"}
+        ]
+    },
+    
+
+];
+
+let activeMovieId = null;
+let lastActiveId = null;
+let isAndroid14 = false;
+
+// كشف نسخة أندرويد
+function detectAndroidVersion(){
+    const ua = navigator.userAgent;
+    if(ua.includes("Android 14") || ua.includes("Android14") || ua.includes("API 34")){
+        isAndroid14 = true;
+        console.log("✅ Android 14 detected");
+    }
+}
+
+function handleExit(){
+    window.history.length > 1 ? window.history.back() : window.location.href = "/";
+}
+
+function goToInstallPage(){
+    window.location.href = INSTALL_PAGE_URL;
+}
+
+function toggleSearchBar(show){
+    document.getElementById("search-container").classList.toggle("active", show);
+    if(show){
+        document.getElementById("search-input").focus();
+    }
+}
+
+function handleSearch(val){
+    val = val.trim().toLowerCase();
+    if(val === ""){
+        renderGrid();
+        return;
+    }
+    // البحث في العنوان الإنجليزي والعربي
+    const filtered = movies.filter(movie => 
+        movie.title.toLowerCase().includes(val) || 
+        movie.arabicTitle.includes(val) ||
+        movie.year.toString().includes(val)
+    );
+    renderGrid(filtered);
+}
+
+function clearSearchField(){
+    document.getElementById("search-input").value = "";
+    renderGrid();
+    toggleSearchBar(false);
+}
+
+// دالة لتحديد إذا كان العنوان طويلاً وإضافة الكلاس المناسب
+function getTitleClass(title) {
+    if (title.length > 30) {
+        return "very-long-title";
+    } else if (title.length > 20) {
+        return "long-title";
+    }
+    return "";
+}
+
+function renderGrid(data = movies){
+    const grid = document.getElementById("sg-grid-root");
+    const history = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    
+    if(data.length === 0){
+        grid.innerHTML = `<div class="no-results">
+            <i class="fas fa-search-minus"></i>
+            <h3>عذراً، لم يتم العثور على فيلم</h3>
+            <button class="back-home-btn" onclick="clearSearchField()">العودة للقائمة</button>
+        </div>`;
+        return;
+    }
+    
+    grid.innerHTML = data.map(movie => {
+        const titleClass = getTitleClass(movie.title);
+        return `<div class="sg-card-item ${history.includes(movie.id) ? "is-watched" : ""}" 
+                    tabindex="0" 
+                    onclick="openServerMenu(${movie.id})" 
+                    onkeydown="if(event.key==='Enter') openServerMenu(${movie.id})">
+            <div class="sg-poster-box">
+                <div class="sg-watched-eye"><i class="fas fa-eye"></i></div>
+                <div class="sg-year-badge">${movie.year}</div>
+                <img src="${movie.poster}" 
+                     onerror="this.onerror=null;this.src='${FALLBACK_IMG}';"
+                     alt="${movie.title}">
+            </div>
+            <div class="sg-card-meta">
+                <div class="sg-movie-title ${titleClass}">
+                    ${movie.title}<br>
+                    <span style="font-size:0.75em; color:var(--primary-pink);">${movie.arabicTitle}</span>
+                </div>
+            </div>
+        </div>`;
+    }).join("");
+}
+
+function showToast(){
+    const t = document.getElementById("toast");
+    t.style.display = "block";
+    setTimeout(() => {
+        t.style.display = "none";
+    }, 3000);
+}
+
+function openServerMenu(id){
+    activeMovieId = id;
+    sessionStorage.setItem("lastMovieId", id);
+    const movie = movies.find(m => m.id === id);
+    document.getElementById("modal-title").innerHTML = `<i class="fas fa-film"></i> ${movie.title} (${movie.year})`;
+    
+    const list = document.getElementById("servers-list");
+    
+    const getServerClass = quality => {
+        switch(quality.toUpperCase()){
+            case "FHD": return "server-fhd";
+            case "HD": return "server-hd";
+            case "SD": return "server-sd";
+            case "4K": return "server-4k";
+            default: return "server-premium";
+        }
+    };
+    
+    const getIcon = quality => {
+        switch(quality.toUpperCase()){
+            case "FHD": return "fa-star";
+            case "HD": return "fa-bolt";
+            case "SD": return "fa-play";
+            case "4K": return "fa-gem";
+            default: return "fa-play-circle";
+        }
+    };
+    
+    list.innerHTML = movie.servers.map(s => 
+        `<button class="modern-server-btn ${getServerClass(s.quality)}" 
+                  onclick="playVideo('${s.url}')" 
+                  tabindex="0">
+            <span class="btn-left">
+                <span class="btn-icon"><i class="fas ${getIcon(s.quality)}"></i></span>
+                <span style="font-size: 1rem;">${s.name}</span>
+            </span>
+            <span class="btn-right">
+                <span class="quality-badge">${s.quality}</span>
+                <i class="fas fa-chevron-left"></i>
+            </span>
+        </button>`
+    ).join("");
+    
+    document.getElementById("quality-modal").classList.add("active");
+    setTimeout(() => list.querySelector("button")?.focus(), 200);
+}
+
+function closeModal(m){
+    document.getElementById(m).classList.remove("active");
+    if(lastActiveId){
+        setTimeout(() => {
+            document.querySelectorAll(".sg-card-item").forEach(card => {
+                if(card.getAttribute("onclick")?.includes(`openServerMenu(${lastActiveId})`)){
+                    card.focus();
+                }
+            });
+        }, 100);
+    }
+}
+
+function restoreLastState(){
+    const lastId = sessionStorage.getItem("lastMovieId");
+    if(lastId){
+        lastActiveId = lastId;
+        setTimeout(() => {
+            document.querySelectorAll(".sg-card-item").forEach(card => {
+                if(card.getAttribute("onclick")?.includes(`openServerMenu(${lastId})`)){
+                    card.focus();
+                    card.scrollIntoView({behavior: "smooth", block: "center"});
+                }
+            });
+        }, 300);
+    }
+}
+
+function playVideo(url){
+    if(!url || url === "#"){
+        showToast();
+        return;
+    }
+    
+    let history = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    if(!history.includes(activeMovieId)){
+        history.push(activeMovieId);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+        renderGrid();
+    }
+    
+    lastActiveId = activeMovieId;
+    sessionStorage.setItem("lastMovieId", activeMovieId);
+    sessionStorage.setItem("lastVisited", Date.now().toString());
+    closeModal("quality-modal");
+    
+    let videoUrl = url;
+    if(url.includes("intent://")){
+        videoUrl = url.replace("intent://", "https://").split("#Intent")[0];
+    }
+    
+    try {
+        if(isAndroid14){
+            const fixFrame = document.getElementById("android14-fix-frame");
+            if(fixFrame){
+                fixFrame.src = "about:blank";
+                setTimeout(() => {
+                    fixFrame.src = videoUrl;
+                }, 50);
+            }
+            setTimeout(() => {
+                window.open(url, "_system");
+            }, 100);
+            setTimeout(() => {
+                window.location.href = url;
+            }, 200);
+        } else {
+            const iframe = document.createElement("iframe");
+            iframe.style.display = "none";
+            iframe.src = url;
+            document.body.appendChild(iframe);
+            setTimeout(() => {
+                document.body.removeChild(iframe);
+            }, 1000);
+        }
+    } catch(e) {
+        console.error("❌ خطأ عند محاولة فتح الفيديو:", e);
+        document.getElementById("install-modal").classList.add("active");
+    }
+    
+    setTimeout(() => {
+        if(document.visibilityState === "visible"){
+            document.getElementById("install-modal").classList.add("active");
+        }
+    }, 2000);
+}
+
+function openResetModal(){
+    document.getElementById("reset-modal").classList.add("active");
+}
+
+function executeReset(){
+    localStorage.removeItem(STORAGE_KEY);
+    renderGrid();
+    closeModal("reset-modal");
+}
+
+window.onload = function(){
+    detectAndroidVersion();
+    renderGrid();
+    restoreLastState();
+    setTimeout(() => {
+        if(!lastActiveId){
+            const firstCard = document.querySelector(".sg-card-item");
+            if(firstCard) firstCard.focus();
+        }
+    }, 500);
+    console.log("✅ تطبيق الأفلام الأجنبية المترجمة جاهز");
+};
+</script>
+
+</body>
+</html>

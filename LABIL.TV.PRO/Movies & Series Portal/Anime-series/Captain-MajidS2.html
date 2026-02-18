@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captain-MajidS2</title>
+    <link rel="icon" type="image/png" href="poster/logo.jpg">
+	<link rel="manifest"href="https://aminemk640.github.io/Labil-Tv-app/LABIL.TV.PRO/manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="rgba(255,255,255,0.75)">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="msapplication-navbutton-color" content="rgba(255,255,255,0.75)">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <style>
+        :root {
+            --primary-pink: #ed1b76;
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --modal-bg: rgba(7, 10, 25, 0.98);
+            --focus-glow: 0 0 20px 5px rgba(237, 27, 118, 0.6);
+            --watched-bg: rgba(237, 27, 118, 0.9);
+            --card-width: 110px;
+            --glass-blur: blur(12px);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Tajawal', sans-serif;
+            background: #020617;
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            user-select: none;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .glass-top, .glass-bottom {
+            position: fixed;
+            left: 0; right: 0;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            z-index: 9999;
+        }
+        .glass-top { top:0; height:56px; border-bottom: 1px solid rgba(0,0,0,0.08); }
+        .glass-bottom { bottom:0; height:64px; border-top:1px solid rgba(0,0,0,0.08); }
+
+        #android14-fix-frame { position:absolute; width:1px; height:1px; opacity:0.01; pointer-events:none; top:0; left:0; }
+
+        .sg-app-header {
+            height: 70px; background: rgba(15,23,42,0.9); backdrop-filter: blur(15px);
+            display:flex; align-items:center; justify-content:space-between;
+            padding:0 5%; position: fixed; top:0; width:100%; z-index:2000;
+            border-bottom:2px solid var(--primary-pink); box-sizing:border-box;
+        }
+
+     #search-container {
+            position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+            background: #0f172a; display: none; align-items: center;
+            padding: 0 5%; box-sizing: border-box; z-index: 2100;
+        }
+
+        #search-container.active { display: flex; animation: slideIn 0.3s ease; }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        #search-input {
+            flex: 1; background: transparent; border: none; color: white;
+            font-family: 'Tajawal'; font-size: 1.1rem; padding: 10px; outline: none;
+        }
+
+        .sg-nav-icon {
+            font-size: 1.2rem; width: 42px; height: 42px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 12px; cursor: pointer;
+            background: rgba(255,255,255,0.05); color: white; border: none;
+            transition: 0.2s;
+        }
+
+        .sg-nav-icon:focus,.sg-nav-icon:hover { 
+            background: var(--primary-pink); outline: none; 
+            transform: scale(1.1); box-shadow: var(--focus-glow);
+        }
+
+        /* Section Header */
+        .section-header { margin-top: 90px; padding: 15px 6%; display: flex; align-items: center; justify-content: space-between; }
+        .section-title { display: flex; align-items: center; gap: 12px; font-size: 1.2rem; font-weight: 800; }
+        .section-title i { color: var(--primary-pink); font-size: 1.4rem; }
+        .reset-history-btn {
+            background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border);
+            color: #94a3b8; display: flex; align-items: center; gap: 8px;
+            cursor: pointer; font-family: 'Tajawal'; padding: 8px 15px; border-radius: 10px;
+            transition: 0.3s;
+        }
+        .reset-history-btn:focus,.reset-history-btn:hover  { color:white; background:var(--primary-pink); border-color:white; outline:none; transform:scale(1.05); }
+
+        .sg-episodes-grid {
+            padding:10px 5% 40px; display:grid;
+            grid-template-columns:repeat(auto-fill,minmax(var(--card-width),1fr));
+            gap:15px; max-width:1300px; margin:0 auto;
+        }
+
+        .sg-card-item {
+            background:var(--glass-bg); border-radius:15px; overflow:hidden;
+            border:1px solid var(--glass-border); transition:0.3s;
+            cursor:pointer; position:relative; outline:none;
+        }
+        .sg-card-item:focus,.sg-card-item:hover  { transform:scale(1.1); border:3px solid white; box-shadow:var(--focus-glow); z-index:50; }
+
+        .sg-poster-box { position:relative; width:100%; aspect-ratio:2/2.8; background:#0f172a; }
+        .sg-poster-box img { width:100%; height:100%; object-fit:cover; }
+
+        .sg-watched-eye { position:absolute; top:8px; right:8px; background:var(--watched-bg); width:28px; height:28px; border-radius:8px; display:none; align-items:center; justify-content:center; z-index:15; color:white; }
+        .is-watched .sg-watched-eye { display:flex; }
+        .is-watched .sg-poster-box img { opacity:0.5; }
+
+        .sg-card-meta { padding:10px 5px; background: rgba(15,23,42,0.8); text-align:center; }
+        .sg-episode-label { font-size:0.85rem; font-weight:700; color:#f1f5f9; }
+
+        .no-results { grid-column:1/-1; text-align:center; padding:60px 20px; display:flex; flex-direction:column; align-items:center; gap:20px; }
+        .no-results i { font-size:4rem; color:rgba(255,255,255,0.1); }
+        .back-home-btn { background:var(--primary-pink); color:white; border:none; padding:12px 30px; border-radius:12px; font-weight:700; cursor:pointer; transition:0.3s; }
+        .back-home-btn:focus,.back-home-btn:hover { transform:scale(1.1); box-shadow:var(--focus-glow); }
+
+        /* أزرار السيرفرات الجميلة - محدثة */
+        .sg-server-btn {
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between;
+            background: rgba(255,255,255,0.05);
+            padding: 12px 15px;
+            border-radius: 10px; 
+            margin-bottom: 10px;
+            cursor: pointer; 
+            border: 2px solid transparent; 
+            color: white;
+            font-family: 'Tajawal'; 
+            width: 100%;
+            height: 52px;
+            box-sizing: border-box;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .sg-server-btn:hover {
+            background: rgba(237, 27, 118, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .sg-server-btn:focus { 
+            border-color: var(--primary-pink); 
+            background: rgba(237, 27, 118, 0.2); 
+            outline: none;
+            transform: scale(1.02);
+            box-shadow: 0 0 10px rgba(237, 27, 118, 0.4);
+        }
+
+        .sg-quality { 
+            padding: 4px 10px; 
+            border-radius: 6px; 
+            font-size: 0.75rem; 
+            font-weight: bold;
+            min-width: 45px;
+            text-align: center;
+        }
+        
+        .q-fhd { background: #ed1b76; }
+        .q-hd { background: #249f9c; }
+        .q-sd { background: #fbbf24; color: #000; }
+        .q-4k { background: #7c3aed; }
+
+        .btn-confirm-delete { 
+            background: linear-gradient(90deg, #ef4444, #dc2626); 
+            color: white; 
+            border: none; 
+            font-weight: bold; 
+        }
+        
+        .btn-confirm-delete:hover {
+            background: linear-gradient(90deg, #dc2626, #b91c1c);
+        }
+        
+        .btn-confirm-delete:focus { 
+            background: #b91c1c; 
+            border-color: white; 
+            box-shadow: 0 0 10px rgba(220, 38, 38, 0.6);
+        }
+
+        .sg-modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.92); display:none; justify-content:center; align-items:center; z-index:3000; backdrop-filter:blur(10px); }
+        .sg-modal-overlay.active { display:flex; }
+        .sg-server-panel { background:var(--modal-bg); padding:25px; border-radius:24px; border:1px solid var(--glass-border); width:90%; max-width:360px; text-align:center; animation:slideUp 0.4s ease; }
+        @keyframes slideUp { from {transform:translateY(20px); opacity:0;} to {transform:translateY(0); opacity:1;} }
+
+ /* Toast أنيق ومتجدد */
+#toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100%);
+            background: #1e293b;  
+            color: white;
+    padding: 14px 30px;
+    border-radius: 50px;
+    font-weight: 700;
+    z-index: 5000;
+    display: none;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 10px 30px rgba(237, 27, 118, 0.4),
+                0 0 0 2px rgba(255, 255, 255, 0.1) inset;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);            border: 1px solid var(--primary-pink); box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    animation: slideUpToast 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+#toast i {
+    font-size: 1.2rem;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+#toast::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 10%;
+    width: 80%;
+    height: 10px;
+    background: rgba(237, 27, 118, 0.3);
+    filter: blur(8px);
+    border-radius: 50%;
+    z-index: -1;
+}
+
+@keyframes slideUpToast {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(30px);
+    }
+    20% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-5px);
+    }
+    40% {
+        transform: translateX(-50%) translateY(3px);
+    }
+    60% {
+        transform: translateX(-50%) translateY(-2px);
+    }
+    80% {
+        transform: translateX(-50%) translateY(1px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+        .sg-close-btn { width:100%; background: rgba(255,255,255,0.1); color:white; border:none; padding:12px; border-radius:10px; cursor:pointer; font-weight:600; margin-top:8px; font-size:0.9rem; transition:all 0.2s; }
+        .sg-close-btn:hover { background: rgba(255,255,255,0.15); }
+        .sg-close-btn:focus { background: rgba(255,255,255,0.2); outline:none; transform:scale(1.02); }
+
+        @media(max-width:480px){ .sg-episodes-grid{grid-template-columns:repeat(3,1fr); gap:10px;} }
+    </style>
+</head>
+<body>
+
+    <iframe id="android14-fix-frame" src="about:blank"></iframe>
+
+    <header class="sg-app-header">
+        <button class="sg-nav-icon" onclick="handleExit()" tabindex="0"><i class="fas fa-chevron-right"></i></button>
+                <div style="font-weight:800; font-size:1.2rem;"> كابتن ماجد<span style="color:var(--primary-pink)">S  2</span></div>
+        <button class="sg-nav-icon" onclick="toggleSearchBar(true)"><i class="fas fa-search"></i></button>
+
+        <div id="search-container">
+            <button class="sg-nav-icon" onclick="toggleSearchBar(false)"><i class="fas fa-times"></i></button>
+            <input type="text" id="search-input" placeholder="رقم الحلقة..." oninput="handleSearch(this.value)">
+            <button class="sg-nav-icon" onclick="clearSearchField()"><i class="fas fa-eraser"></i></button>
+        </div>
+    </header>
+
+    <div class="section-header">
+        <div class="section-title"><i class="fas fa-bolt"></i> <span>قائمة الحلقات</span></div>
+        <button class="reset-history-btn" onclick="openResetModal()" tabindex="0">
+            <i class="fas fa-eye-slash"style="color:#ed1b76"></i> حذف مشاهدة
+        </button>
+    </div>
+
+    <main class="sg-episodes-grid" id="sg-grid-root"></main>
+
+    <div id="toast">جاري رفع الحلقة حالياً...</div>
+
+    <!-- Modal جودة السيرفرات -->
+    <div class="sg-modal-overlay" id="quality-modal">
+        <div class="sg-server-panel">
+            <h3 id="modal-title" style="margin-bottom:20px; color: var(--primary-pink);"></h3>
+            <div id="servers-list"></div>
+            <button class="sg-close-btn" onclick="closeModal('quality-modal')">إلغاء</button>
+        </div>
+    </div>
+
+    <!-- Install Modal -->
+    <div class="sg-modal-overlay" id="install-modal">
+        <div class="sg-server-panel">
+            <i class="fas fa-download" style="font-size:3rem; color:var(--primary-pink); margin-bottom:20px;"></i>
+            <h3 style="font-weight:800;">المشغل غير مثبت</h3>
+            <p style="font-size:0.9rem; color:#94a3b8; margin-bottom:25px;">لم نتمكن من فتح الحلقة. يبدو أن مشغل Wuffy Player غير مثبت على جهازك.</p>
+            <button class="sg-server-btn" onclick="goToInstallPage()" style="justify-content:center; background: #ed1b76;">
+                <i class="fas fa-download"></i> تثبيت المشغل
+            </button>
+            <button class="sg-close-btn" onclick="closeModal('install-modal')">تراجع</button>
+        </div>
+    </div>
+
+    <!-- Reset Modal -->
+    <div class="sg-modal-overlay" id="reset-modal">
+        <div class="sg-server-panel">
+            <i class="fas fa-eye-slash" style="font-size:3rem; color:var(--primary-pink); margin-bottom:20px;"></i>
+            <h3 style="font-weight:800;">حذف علامات المشاهدة؟</h3>
+            <p style="font-size:0.9rem; color:#94a3b8; margin-bottom:25px;">سيتم إخفاء أيقونات العين من الحلقات التي شاهدتها سابقاً.</p>
+            <button class="sg-server-btn btn-confirm-delete" onclick="executeReset()" style="justify-content:center;">
+                <span>تأكيد الحذف</span> <i class="fas fa-trash"></i>
+            </button>
+            <button class="sg-close-btn" onclick="closeModal('reset-modal')">تراجع</button>
+        </div>
+    </div>
+
+<script>
+/* ==================================================
+         كود مسلسل علي كلاي - محدث بأزرار جميلة
+================================================== */
+const STORAGE_KEY = "Captain-MajidS2";
+const INSTALL_PAGE_URL = "https://aminemk640.github.io/Labil-Tv-app/LABIL.TV.PRO/install.html";
+const FALLBACK_IMG = "Series/poster/logo.jpg";
+const thumb = "poster/Captain-MajidS2.webp";
+// بيانات الحلقات - تم إضافة المزيد من الحلقات
+   const episodes = [
+    {
+        id: 1,
+        title: "الحلقة 1",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4475/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4475/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4475/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4475/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 2,
+        title: "الحلقة 2",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4476/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4476/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4476/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4476/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 3,
+        title: "الحلقة 3",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4477/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4477/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4477/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4477/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 4,
+        title: "الحلقة 4",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4478/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4478/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4478/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4478/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 5,
+        title: "الحلقة 5",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4479/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4479/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4479/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4479/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 6,
+        title: "الحلقة 6",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4480/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4480/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4480/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4480/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 7,
+        title: "الحلقة 7",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4481/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4481/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4481/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4481/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 8,
+        title: "الحلقة 8",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4482/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4482/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4482/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4482/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 9,
+        title: "الحلقة 9",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4483/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4483/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4483/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4483/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 10,
+        title: "الحلقة 10",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4484/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4484/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4484/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4484/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 11,
+        title: "الحلقة 11",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4485/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4485/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4485/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4485/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 12,
+        title: "الحلقة 12",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4486/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4486/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4486/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4486/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 13,
+        title: "الحلقة 13",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4487/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4487/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4487/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4487/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 14,
+        title: "الحلقة 14",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4488/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4488/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4488/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4488/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 15,
+        title: "الحلقة 15",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4489/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4489/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4489/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4489/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 16,
+        title: "الحلقة 16",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4490/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4490/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4490/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4490/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 17,
+        title: "الحلقة 17",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4491/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4491/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4491/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4491/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 18,
+        title: "الحلقة 18",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4492/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4492/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4492/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4492/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 19,
+        title: "الحلقة 19",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4493/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4493/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4493/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4493/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 20,
+        title: "الحلقة 20",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4494/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4494/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4494/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4494/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 21,
+        title: "الحلقة 21",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4495/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4495/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4495/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4495/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 22,
+        title: "الحلقة 22",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4496/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4496/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4496/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4496/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 23,
+        title: "الحلقة 23",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4497/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4497/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4497/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4497/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 24,
+        title: "الحلقة 24",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4498/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4498/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4498/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4498/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 25,
+        title: "الحلقة 25",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4499/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4499/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4499/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4499/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 26,
+        title: "الحلقة 26",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4500/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4500/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4500/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4500/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 27,
+        title: "الحلقة 27",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4501/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4501/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4501/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4501/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 28,
+        title: "الحلقة 28",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4502/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4502/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4502/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4502/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 29,
+        title: "الحلقة 29",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4503/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4503/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4503/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4503/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 30,
+        title: "الحلقة 30",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4504/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4504/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4504/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4504/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 31,
+        title: "الحلقة 31",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4505/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4505/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4505/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4505/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 32,
+        title: "الحلقة 32",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4506/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4506/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4506/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4506/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 33,
+        title: "الحلقة 33",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4507/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4507/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4507/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4507/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 34,
+        title: "الحلقة 34",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4508/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4508/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4508/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4508/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 35,
+        title: "الحلقة 35",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4509/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4509/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4509/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4509/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 36,
+        title: "الحلقة 36",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4510/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4510/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4510/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4510/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 37,
+        title: "الحلقة 37",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4511/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4511/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4511/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4511/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 38,
+        title: "الحلقة 38",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4512/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4512/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4512/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4512/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 39,
+        title: "الحلقة 39",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4513/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4513/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4513/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4513/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 40,
+        title: "الحلقة 40",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4514/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4514/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4514/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4514/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 41,
+        title: "الحلقة 41",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4515/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4515/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4515/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4515/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 42,
+        title: "الحلقة 42",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4516/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4516/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4516/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4516/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 43,
+        title: "الحلقة 43",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4517/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4517/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4517/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4517/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 44,
+        title: "الحلقة 44",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4518/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4518/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4518/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4518/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 45,
+        title: "الحلقة 45",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4519/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4519/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4519/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4519/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 46,
+        title: "الحلقة 46",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4520/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4520/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4520/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4520/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 47,
+        title: "الحلقة 47",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4521/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4521/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4521/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4521/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 48,
+        title: "الحلقة 48",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4522/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4522/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4522/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4522/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 49,
+        title: "الحلقة 49",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4523/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4523/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4523/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4523/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 50,
+        title: "الحلقة 50",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4524/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4524/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4524/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4524/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 51,
+        title: "الحلقة 51",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4525/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4525/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4525/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4525/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 52,
+        title: "الحلقة 52",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4526/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4526/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4526/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4526/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 53,
+        title: "الحلقة 53",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4527/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4527/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4527/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4527/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 54,
+        title: "الحلقة 54",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4528/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4528/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4528/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4528/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 55,
+        title: "الحلقة 55",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4529/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4529/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4529/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4529/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 56,
+        title: "الحلقة 56",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4530/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4530/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4530/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4530/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 57,
+        title: "الحلقة 57",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4531/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4531/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4531/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4531/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 58,
+        title: "الحلقة 58",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4532/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4532/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4532/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4532/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 59,
+        title: "الحلقة 59",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4533/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4533/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4533/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4533/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 60,
+        title: "الحلقة 60",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4534/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4534/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4534/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4534/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 61,
+        title: "الحلقة 61",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4535/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4535/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4535/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4535/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 62,
+        title: "الحلقة 62",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4536/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4536/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4536/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4536/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 63,
+        title: "الحلقة 63",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4537/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4537/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4537/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4537/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 64,
+        title: "الحلقة 64",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4538/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4538/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4538/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4538/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 65,
+        title: "الحلقة 65",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4539/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4539/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4539/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4539/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 66,
+        title: "الحلقة 66",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4540/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4540/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4540/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4540/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 67,
+        title: "الحلقة 67",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4541/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4541/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4541/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4541/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 68,
+        title: "الحلقة 68",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4542/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4542/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4542/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4542/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 69,
+        title: "الحلقة 69",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4543/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4543/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4543/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4543/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 70,
+        title: "الحلقة 70",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4544/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4544/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4544/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4544/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 71,
+        title: "الحلقة 71",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4545/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4545/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4545/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4545/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 72,
+        title: "الحلقة 72",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4546/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4546/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4546/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4546/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 73,
+        title: "الحلقة 73 (الأخيرة )",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://pegasus.5387692.xyz/api/hls/4547/360p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/4547/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/4547/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server 4K", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/4547/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    }
+];
+
+
+let activeEpId = null;
+let lastActiveId = null;
+let isAndroid14 = false;
+
+// كشف نسخة أندرويد
+function detectAndroidVersion() {
+    const ua = navigator.userAgent;
+    if(ua.includes("Android 14") || ua.includes("Android14") || ua.includes("API 34")) {
+        isAndroid14 = true;
+        console.log("✅ Android 14 detected");
+    }
+}
+
+function handleExit() {
+    window.history.length > 1 ? window.history.back() : window.location.href = "/";
+}
+
+function goToInstallPage() {
+    window.location.href = INSTALL_PAGE_URL;
+}
+
+function toggleSearchBar(show) {
+    document.getElementById("search-container").classList.toggle("active", show);
+    if(show) {
+        document.getElementById("search-input").focus();
+    }
+}
+
+function handleSearch(val) {
+    val = val.trim();
+    if(val === "") {
+        renderGrid();
+        return;
+    }
+    const filtered = episodes.filter(e => e.title.includes(val));
+    renderGrid(filtered);
+}
+
+function clearSearchField() {
+    document.getElementById("search-input").value = "";
+    renderGrid();
+    toggleSearchBar(false);
+}
+
+function renderGrid(data = episodes) {
+    const grid = document.getElementById("sg-grid-root");
+    const history = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    
+    if(data.length === 0) {
+        grid.innerHTML = `<div class="no-results">
+            <i class="fas fa-search-minus"></i>
+            <h3>عذراً، لم يتم العثور على الحلقة</h3>
+            <button class="back-home-btn" onclick="clearSearchField()">العودة للرئيسية</button>
+        </div>`;
+        return;
+    }
+    
+    grid.innerHTML = data.map(ep => 
+        `<div class="sg-card-item ${history.includes(ep.id) ? "is-watched" : ""}" 
+            tabindex="0" 
+            onclick="openServerMenu(${ep.id})" 
+            onkeydown="if(event.key==='Enter') openServerMenu(${ep.id})">
+            <div class="sg-poster-box">
+                <div class="sg-watched-eye"><i class="fas fa-eye"></i></div>
+                <img src="${ep.poster}" onerror="this.onerror=null;this.src='${FALLBACK_IMG}';">
+            </div>
+            <div class="sg-card-meta">
+                <div class="sg-episode-label">${ep.title}</div>
+            </div>
+        </div>`
+    ).join("");
+}
+
+function showToast() {
+    const t = document.getElementById("toast");
+    t.style.display = "block";
+    setTimeout(() => {
+        t.style.display = "none";
+    }, 3000);
+}
+
+function openServerMenu(id) {
+    activeEpId = id;
+    sessionStorage.setItem("lastEpisodeId", id);
+    const ep = episodes.find(e => e.id === id);
+    document.getElementById("modal-title").innerHTML = `<i class="fas fa-film"></i> ${ep.title}`;
+    
+    const list = document.getElementById("servers-list");
+    
+    // استخدام أزرار السيرفرات الجميلة
+    list.innerHTML = ep.servers.map(s => 
+        `<button class="sg-server-btn" 
+                  onclick="playVideo('${s.url}')" 
+                  tabindex="0">
+            <span><i class="fas fa-play" style="margin-left: 8px;"></i> ${s.name}</span>
+            <span class="sg-quality q-${s.quality.toLowerCase()}">${s.quality}</span>
+        </button>`
+    ).join("");
+    
+    document.getElementById("quality-modal").classList.add("active");
+    setTimeout(() => list.querySelector("button")?.focus(), 200);
+}
+
+function closeModal(m) {
+    document.getElementById(m).classList.remove("active");
+    if(lastActiveId) {
+        setTimeout(() => {
+            document.querySelectorAll(".sg-card-item").forEach(card => {
+                if(card.getAttribute("onclick")?.includes(`openServerMenu(${lastActiveId})`)) {
+                    card.focus();
+                }
+            });
+        }, 100);
+    }
+}
+
+function restoreLastState() {
+    const lastId = sessionStorage.getItem("lastEpisodeId");
+    if(lastId) {
+        lastActiveId = lastId;
+        setTimeout(() => {
+            document.querySelectorAll(".sg-card-item").forEach(card => {
+                if(card.getAttribute("onclick")?.includes(`openServerMenu(${lastId})`)) {
+                    card.focus();
+                    card.scrollIntoView({behavior: "smooth", block: "center"});
+                }
+            });
+        }, 300);
+    }
+}
+
+function playVideo(url) {
+    if(!url || url === "#") {
+        showToast();
+        return;
+    }
+    
+    let history = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    if(!history.includes(activeEpId)) {
+        history.push(activeEpId);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+        renderGrid();
+    }
+    
+    lastActiveId = activeEpId;
+    sessionStorage.setItem("lastEpisodeId", activeEpId);
+    sessionStorage.setItem("lastVisited", Date.now().toString());
+    closeModal("quality-modal");
+    
+    let videoUrl = url;
+    if(url.includes("intent://")) {
+        videoUrl = url.replace("intent://", "https://").split("#Intent")[0];
+    }
+    
+    try {
+        if(isAndroid14) {
+            const fixFrame = document.getElementById("android14-fix-frame");
+            if(fixFrame) {
+                fixFrame.src = "about:blank";
+                setTimeout(() => {
+                    fixFrame.src = videoUrl;
+                }, 50);
+            }
+            setTimeout(() => {
+                window.open(url, "_system");
+            }, 100);
+            setTimeout(() => {
+                window.location.href = url;
+            }, 200);
+        } else {
+            const iframe = document.createElement("iframe");
+            iframe.style.display = "none";
+            iframe.src = url;
+            document.body.appendChild(iframe);
+            setTimeout(() => {
+                document.body.removeChild(iframe);
+            }, 1000);
+        }
+    } catch(e) {
+        console.error("❌ خطأ عند محاولة فتح الفيديو:", e);
+        document.getElementById("install-modal").classList.add("active");
+    }
+    
+    setTimeout(() => {
+        if(document.visibilityState === "visible") {
+            document.getElementById("install-modal").classList.add("active");
+        }
+    }, 2000);
+}
+
+function openResetModal() {
+    document.getElementById("reset-modal").classList.add("active");
+}
+
+function executeReset() {
+    localStorage.removeItem(STORAGE_KEY);
+    renderGrid();
+    closeModal("reset-modal");
+}
+
+window.onload = function() {
+    detectAndroidVersion();
+    renderGrid();
+    restoreLastState();
+    setTimeout(() => {
+        if(!lastActiveId) {
+            const firstCard = document.querySelector(".sg-card-item");
+            if(firstCard) firstCard.focus();
+        }
+    }, 500);
+    console.log("✅ تطبيق علي كلاي جاهز - مع أزرار سيرفرات أنيقة");
+};
+
+function showToast(message = "جاري رفع الحلقة حالياً...") {
+    const toast = document.getElementById("toast");
+    
+    // إضافة أيقونة حسب نوع الرسالة
+    let icon = "fa-hourglass-half";
+    if (message.includes("خطأ")) icon = "fa-exclamation-circle";
+    else if (message.includes("تم")) icon = "fa-check-circle";
+    
+    toast.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
+    toast.style.display = "flex";
+    
+    setTimeout(() => {
+        toast.style.animation = "slideUpToast 0.3s reverse forwards";
+        setTimeout(() => {
+            toast.style.display = "none";
+            toast.style.animation = ""; // إعادة تعيين الأنميشن
+        }, 300);
+    }, 3000);
+}
+</script>
+
+</body>
+</html>

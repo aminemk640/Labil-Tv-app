@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دراغون بول سوبر
+</title>
+    <link rel="icon" type="image/png" href="poster/logo.jpg">
+	<link rel="manifest"href="https://aminemk640.github.io/Labil-Tv-app/LABIL.TV.PRO/manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="rgba(255,255,255,0.75)">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="msapplication-navbutton-color" content="rgba(255,255,255,0.75)">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <style>
+        :root {
+            --primary-pink: #ed1b76;
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --modal-bg: rgba(7, 10, 25, 0.98);
+            --focus-glow: 0 0 20px 5px rgba(237, 27, 118, 0.6);
+            --watched-bg: rgba(237, 27, 118, 0.9);
+            --card-width: 110px;
+            --glass-blur: blur(12px);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Tajawal', sans-serif;
+            background: #020617;
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            user-select: none;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .glass-top, .glass-bottom {
+            position: fixed;
+            left: 0; right: 0;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            z-index: 9999;
+        }
+        .glass-top { top:0; height:56px; border-bottom: 1px solid rgba(0,0,0,0.08); }
+        .glass-bottom { bottom:0; height:64px; border-top:1px solid rgba(0,0,0,0.08); }
+
+        #android14-fix-frame { position:absolute; width:1px; height:1px; opacity:0.01; pointer-events:none; top:0; left:0; }
+
+        .sg-app-header {
+            height: 70px; background: rgba(15,23,42,0.9); backdrop-filter: blur(15px);
+            display:flex; align-items:center; justify-content:space-between;
+            padding:0 5%; position: fixed; top:0; width:100%; z-index:2000;
+            border-bottom:2px solid var(--primary-pink); box-sizing:border-box;
+        }
+
+     #search-container {
+            position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+            background: #0f172a; display: none; align-items: center;
+            padding: 0 5%; box-sizing: border-box; z-index: 2100;
+        }
+
+        #search-container.active { display: flex; animation: slideIn 0.3s ease; }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        #search-input {
+            flex: 1; background: transparent; border: none; color: white;
+            font-family: 'Tajawal'; font-size: 1.1rem; padding: 10px; outline: none;
+        }
+
+        .sg-nav-icon {
+            font-size: 1.2rem; width: 42px; height: 42px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 12px; cursor: pointer;
+            background: rgba(255,255,255,0.05); color: white; border: none;
+            transition: 0.2s;
+        }
+
+        .sg-nav-icon:focus,.sg-nav-icon:hover { 
+            background: var(--primary-pink); outline: none; 
+            transform: scale(1.1); box-shadow: var(--focus-glow);
+        }
+
+        /* Section Header */
+        .section-header { margin-top: 90px; padding: 15px 6%; display: flex; align-items: center; justify-content: space-between; }
+        .section-title { display: flex; align-items: center; gap: 12px; font-size: 1.2rem; font-weight: 800; }
+        .section-title i { color: var(--primary-pink); font-size: 1.4rem; }
+        .reset-history-btn {
+            background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border);
+            color: #94a3b8; display: flex; align-items: center; gap: 8px;
+            cursor: pointer; font-family: 'Tajawal'; padding: 8px 15px; border-radius: 10px;
+            transition: 0.3s;
+        }
+        .reset-history-btn:focus,.reset-history-btn:hover  { color:white; background:var(--primary-pink); border-color:white; outline:none; transform:scale(1.05); }
+
+        .sg-episodes-grid {
+            padding:10px 5% 40px; display:grid;
+            grid-template-columns:repeat(auto-fill,minmax(var(--card-width),1fr));
+            gap:15px; max-width:1300px; margin:0 auto;
+        }
+
+        .sg-card-item {
+            background:var(--glass-bg); border-radius:15px; overflow:hidden;
+            border:1px solid var(--glass-border); transition:0.3s;
+            cursor:pointer; position:relative; outline:none;
+        }
+        .sg-card-item:focus,.sg-card-item:hover  { transform:scale(1.1); border:3px solid white; box-shadow:var(--focus-glow); z-index:50; }
+
+        .sg-poster-box { position:relative; width:100%; aspect-ratio:2/2.8; background:#0f172a; }
+        .sg-poster-box img { width:100%; height:100%; object-fit:cover; }
+
+        .sg-watched-eye { position:absolute; top:8px; right:8px; background:var(--watched-bg); width:28px; height:28px; border-radius:8px; display:none; align-items:center; justify-content:center; z-index:15; color:white; }
+        .is-watched .sg-watched-eye { display:flex; }
+        .is-watched .sg-poster-box img { opacity:0.5; }
+
+        .sg-card-meta { padding:10px 5px; background: rgba(15,23,42,0.8); text-align:center; }
+        .sg-episode-label { font-size:0.85rem; font-weight:700; color:#f1f5f9; }
+
+        .no-results { grid-column:1/-1; text-align:center; padding:60px 20px; display:flex; flex-direction:column; align-items:center; gap:20px; }
+        .no-results i { font-size:4rem; color:rgba(255,255,255,0.1); }
+        .back-home-btn { background:var(--primary-pink); color:white; border:none; padding:12px 30px; border-radius:12px; font-weight:700; cursor:pointer; transition:0.3s; }
+        .back-home-btn:focus,.back-home-btn:hover { transform:scale(1.1); box-shadow:var(--focus-glow); }
+
+        /* أزرار السيرفرات الجميلة - محدثة */
+        .sg-server-btn {
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between;
+            background: rgba(255,255,255,0.05);
+            padding: 12px 15px;
+            border-radius: 10px; 
+            margin-bottom: 10px;
+            cursor: pointer; 
+            border: 2px solid transparent; 
+            color: white;
+            font-family: 'Tajawal'; 
+            width: 100%;
+            height: 52px;
+            box-sizing: border-box;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .sg-server-btn:hover {
+            background: rgba(237, 27, 118, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .sg-server-btn:focus { 
+            border-color: var(--primary-pink); 
+            background: rgba(237, 27, 118, 0.2); 
+            outline: none;
+            transform: scale(1.02);
+            box-shadow: 0 0 10px rgba(237, 27, 118, 0.4);
+        }
+
+        .sg-quality { 
+            padding: 4px 10px; 
+            border-radius: 6px; 
+            font-size: 0.75rem; 
+            font-weight: bold;
+            min-width: 45px;
+            text-align: center;
+        }
+        
+        .q-fhd { background: #ed1b76; }
+        .q-hd { background: #249f9c; }
+        .q-sd { background: #fbbf24; color: #000; }
+        .q-4k { background: #7c3aed; }
+
+        .btn-confirm-delete { 
+            background: linear-gradient(90deg, #ef4444, #dc2626); 
+            color: white; 
+            border: none; 
+            font-weight: bold; 
+        }
+        
+        .btn-confirm-delete:hover {
+            background: linear-gradient(90deg, #dc2626, #b91c1c);
+        }
+        
+        .btn-confirm-delete:focus { 
+            background: #b91c1c; 
+            border-color: white; 
+            box-shadow: 0 0 10px rgba(220, 38, 38, 0.6);
+        }
+
+        .sg-modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.92); display:none; justify-content:center; align-items:center; z-index:3000; backdrop-filter:blur(10px); }
+        .sg-modal-overlay.active { display:flex; }
+        .sg-server-panel { background:var(--modal-bg); padding:25px; border-radius:24px; border:1px solid var(--glass-border); width:90%; max-width:360px; text-align:center; animation:slideUp 0.4s ease; }
+        @keyframes slideUp { from {transform:translateY(20px); opacity:0;} to {transform:translateY(0); opacity:1;} }
+
+ /* Toast أنيق ومتجدد */
+#toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100%);
+            background: #1e293b;  
+            color: white;
+    padding: 14px 30px;
+    border-radius: 50px;
+    font-weight: 700;
+    z-index: 5000;
+    display: none;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 10px 30px rgba(237, 27, 118, 0.4),
+                0 0 0 2px rgba(255, 255, 255, 0.1) inset;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);            border: 1px solid var(--primary-pink); box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    animation: slideUpToast 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+#toast i {
+    font-size: 1.2rem;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+#toast::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 10%;
+    width: 80%;
+    height: 10px;
+    background: rgba(237, 27, 118, 0.3);
+    filter: blur(8px);
+    border-radius: 50%;
+    z-index: -1;
+}
+
+@keyframes slideUpToast {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(30px);
+    }
+    20% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-5px);
+    }
+    40% {
+        transform: translateX(-50%) translateY(3px);
+    }
+    60% {
+        transform: translateX(-50%) translateY(-2px);
+    }
+    80% {
+        transform: translateX(-50%) translateY(1px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+        .sg-close-btn { width:100%; background: rgba(255,255,255,0.1); color:white; border:none; padding:12px; border-radius:10px; cursor:pointer; font-weight:600; margin-top:8px; font-size:0.9rem; transition:all 0.2s; }
+        .sg-close-btn:hover { background: rgba(255,255,255,0.15); }
+        .sg-close-btn:focus { background: rgba(255,255,255,0.2); outline:none; transform:scale(1.02); }
+
+        @media(max-width:480px){ .sg-episodes-grid{grid-template-columns:repeat(3,1fr); gap:10px;} }
+    </style>
+</head>
+<body>
+
+    <iframe id="android14-fix-frame" src="about:blank"></iframe>
+
+    <header class="sg-app-header">
+        <button class="sg-nav-icon" onclick="handleExit()" tabindex="0"><i class="fas fa-chevron-right"></i></button>
+                <div style="font-weight:800; font-size:1.2rem;"> دراغون بول سوبر<span style="color:var(--primary-pink)">  </span></div>
+        <button class="sg-nav-icon" onclick="toggleSearchBar(true)"><i class="fas fa-search"></i></button>
+
+        <div id="search-container">
+            <button class="sg-nav-icon" onclick="toggleSearchBar(false)"><i class="fas fa-times"></i></button>
+            <input type="text" id="search-input" placeholder="رقم الحلقة..." oninput="handleSearch(this.value)">
+            <button class="sg-nav-icon" onclick="clearSearchField()"><i class="fas fa-eraser"></i></button>
+        </div>
+    </header>
+
+    <div class="section-header">
+        <div class="section-title"><i class="fas fa-bolt"></i> <span>قائمة الحلقات</span></div>
+        <button class="reset-history-btn" onclick="openResetModal()" tabindex="0">
+            <i class="fas fa-eye-slash"style="color:#ed1b76"></i> حذف مشاهدة
+        </button>
+    </div>
+
+    <main class="sg-episodes-grid" id="sg-grid-root"></main>
+
+    <div id="toast">جاري رفع الحلقة حالياً...</div>
+
+    <!-- Modal جودة السيرفرات -->
+    <div class="sg-modal-overlay" id="quality-modal">
+        <div class="sg-server-panel">
+            <h3 id="modal-title" style="margin-bottom:20px; color: var(--primary-pink);"></h3>
+            <div id="servers-list"></div>
+            <button class="sg-close-btn" onclick="closeModal('quality-modal')">إلغاء</button>
+        </div>
+    </div>
+
+    <!-- Install Modal -->
+    <div class="sg-modal-overlay" id="install-modal">
+        <div class="sg-server-panel">
+            <i class="fas fa-download" style="font-size:3rem; color:var(--primary-pink); margin-bottom:20px;"></i>
+            <h3 style="font-weight:800;">المشغل غير مثبت</h3>
+            <p style="font-size:0.9rem; color:#94a3b8; margin-bottom:25px;">لم نتمكن من فتح الحلقة. يبدو أن مشغل Wuffy Player غير مثبت على جهازك.</p>
+            <button class="sg-server-btn" onclick="goToInstallPage()" style="justify-content:center; background: #ed1b76;">
+                <i class="fas fa-download"></i> تثبيت المشغل
+            </button>
+            <button class="sg-close-btn" onclick="closeModal('install-modal')">تراجع</button>
+        </div>
+    </div>
+
+    <!-- Reset Modal -->
+    <div class="sg-modal-overlay" id="reset-modal">
+        <div class="sg-server-panel">
+            <i class="fas fa-eye-slash" style="font-size:3rem; color:var(--primary-pink); margin-bottom:20px;"></i>
+            <h3 style="font-weight:800;">حذف علامات المشاهدة؟</h3>
+            <p style="font-size:0.9rem; color:#94a3b8; margin-bottom:25px;">سيتم إخفاء أيقونات العين من الحلقات التي شاهدتها سابقاً.</p>
+            <button class="sg-server-btn btn-confirm-delete" onclick="executeReset()" style="justify-content:center;">
+                <span>تأكيد الحذف</span> <i class="fas fa-trash"></i>
+            </button>
+            <button class="sg-close-btn" onclick="closeModal('reset-modal')">تراجع</button>
+        </div>
+    </div>
+
+<script>
+/* ==================================================
+         كود مسلسل علي كلاي - محدث بأزرار جميلة
+================================================== */
+const STORAGE_KEY = "Dragon-Ball-Super";
+const INSTALL_PAGE_URL = "https://aminemk640.github.io/Labil-Tv-app/LABIL.TV.PRO/install.html";
+const FALLBACK_IMG = "Series/poster/logo.jpg";
+const thumb = "poster/Dragon-Ball-Super.png";
+
+// بيانات الحلقات - تم إضافة المزيد من الحلقات
+// بيانات حلقات Dragon Ball Super (1 - 15)
+
+const episodes = [
+    {
+        id: 1,
+        title: "الحلقة 1",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/hbhn7caqdfx16iclv1aln/Dragon_Ball_Super_-1.mp4?rlkey=gbi9ko6oef5o49nptw263i1q3&st=q643lzh1&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 2,
+        title: "الحلقة 2",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/343uanjrvxkxyl5a8e9xe/Dragon_Ball_Super_-2.ts?rlkey=666go10owpmb9rkawaotdi5rv&st=vkzt239p&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 3,
+        title: "الحلقة 3",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/ytjqgnp83wo3qbl6mvxqg/Dragon_Ball_Super_-3.mp4?rlkey=p7grf9ey9nyx3avcxps36qm10&st=deroojow&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 4,
+        title: "الحلقة 4",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/bvlkeg6tor39luivpcmlh/Dragon_Ball_Super_-4.mp4?rlkey=2oxt3loe7go4dahfuebpwfkl8&st=nsta2axh&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 5,
+        title: "الحلقة 5",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/jrjqo1u7jcoaxl8xi5ilf/Dragon_Ball_Super_-5.mp4?rlkey=2ickv3uwj5m3ju68wq3jq04d4&st=gr9cwpy9&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 6,
+        title: "الحلقة 6",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/tqal748xfnwrhg4hjae97/Dragon_Ball_Super_-6.mp4?rlkey=9dkiuo9uy680bz6vicp1ryeqa&st=3ia7t193&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 7,
+        title: "الحلقة 7",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/t40kqcvh7r0yk5s7l6auh/Dragon_Ball_Super_-7.mp4?rlkey=et4bpihbdnc9x2uq97bfkgwia&st=n60c57vy&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 8,
+        title: "الحلقة 8",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/7hciag3a0q6p620fqiu99/Dragon_Ball_Super_-8.mp4?rlkey=hyc2ual0rzvto0urzp8k2kog1&st=1t09jqd0&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 9,
+        title: "الحلقة 9",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/g805v6g1lyrd9fggw5szv/Dragon_Ball_Super_-9.mp4?rlkey=4xxtuud45h1ioz1kxu8lm0ruo&st=fg7dgxyh&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 10,
+        title: "الحلقة 10",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/cgl4iv1m397l4i98zfw0j/Dragon_Ball_Super_-10.mp4?rlkey=lqcpoce8g0ojxbs6kop89h44s&st=1nxkidng&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 11,
+        title: "الحلقة 11",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/tzk58bo2dw74orybvjn0w/Dragon_Ball_Super_-11.mp4?rlkey=4gg018jcz2x4fysqne2vupv9x&st=og36llv1&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 12,
+        title: "الحلقة 12",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/lmc53elvpfavmmabp2iiw/Dragon_Ball_Super_-12.mp4?rlkey=adwxbhgttpzld5y3oq0gyhg6m&st=zc92d6nc&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 13,
+        title: "الحلقة 13",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/i4ful3ontozcs166sjx36/Dragon_Ball_Super_-13.mp4?rlkey=ra51vxreyd0sbh9znqpkk0ow7&st=03e5ly1x&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 14,
+        title: "الحلقة 14",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/nnjrxtk3p1pfyct4ren5v/Dragon_Ball_Super_-14.mp4?rlkey=uskmfot2hhe0itpqql66f3qjz&st=pcq5ax9v&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 15,
+        title: "الحلقة 15",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/5kofxxcc4yccck97jp7l0/Dragon_Ball_Super_-15.mp4?rlkey=kf1cgzr3nuguxjfcm8xcimhhq&st=zl7ousx2&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 16,
+        title: "الحلقة 16",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/ve030rc8ncmts0tj0n6mr/Dragon_Ball_Super_-16.mp4?rlkey=6ll5butb9mgqs7qjq6cbzpuhy&st=5wne78y0&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 17,
+        title: "الحلقة 17",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/kovqc20s2gmxrf6yuzwjm/Dragon_Ball_Super_-17.mp4?rlkey=s6mf0ybr0iv1kgkockuxy4mc8&st=9rmfds7p&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 18,
+        title: "الحلقة 18",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/r9vqw6euem8yl9eghq5a4/Dragon_Ball_Super_-18.mp4?rlkey=u4o4ndmymkcd4njw5taxfp381&st=67je7z6v&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 19,
+        title: "الحلقة 19",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/nunqzox9qv6vvfta8mg3s/Dragon_Ball_Super_-19.mp4?rlkey=4p2ycrrzr49oqqzy8ra3hrkd2&st=64frl6lz&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 20,
+        title: "الحلقة 20",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/vzzlifzz3jrwv6qww8gr5/Dragon_Ball_Super_-20.mp4?rlkey=pxcbxcpvmtxrtdd97uf8ee18n&st=vfo3f0mc&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 21,
+        title: "الحلقة 21",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/r15ew5yt0bo4xxgc00zj0/Dragon_Ball_Super_-21.m4v?rlkey=53c5dmxcwf3r5rs4ctpsd8bvv&st=jx83zn2f&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 22,
+        title: "الحلقة 22",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/tz7qx02c383oqlaeo3g9f/Dragon_Ball_Super_-22.mp4?rlkey=7m5yf926fbfhc17xgvz7197zb&st=zsv8g9r8&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 23,
+        title: "الحلقة 23",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/kmhhay6fqc0m9nxcjl9ts/DragonBall-Super-Arabic-EP23.mp4?rlkey=eschienes1614ch96gy0s22pl&st=kxuchuao&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 24,
+        title: "الحلقة 24",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/gedmic4m7r53xhuse44mx/DragonBall-Super-Arabic-EP24.mp4?rlkey=cy37k9fi6toyhv8xo11oeboj7&st=8cbotyah&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 25,
+        title: "الحلقة 25",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/r88pqzabft649pmoz3kvc/DragonBall-Super-Arabic-EP25.mp4?rlkey=q0ae5wpmkr75ybmvexptospj9&st=8jgv8bor&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 26,
+        title: "الحلقة 26",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/5hh22pzrm83xqsz655lmc/DragonBall-Super-Arabic-EP26.mp4?rlkey=p9tq9tzx2aevc4jlc2e9t7rx0&st=9wx230g3&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 27,
+        title: "الحلقة 27",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/sna3bjcqoojpzz381jekf/DragonBall-Super-Arabic-EP27.mp4?rlkey=ctl1sexr9ebpeq5rn5fbc9psm&st=xfz26q8r&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 28,
+        title: "الحلقة 28",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/xetdqlrqae4qv1wn0oltq/Dragon_Ball_Super_-28.mp4?rlkey=9pu3hritgleobmzu11hjm7e3n&st=9a9k077j&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 29,
+        title: "الحلقة 29",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/1a9ruuwzf2ytei0fzkht6/Dragon_Ball_Super_-29.mp4?rlkey=j0fqlvck4o7bg66k1egmjh3uk&st=k1invi5a&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 30,
+        title: "الحلقة 30",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/iw3px88hbksp7jrp3iisj/Dragon_Ball_Super_-30.mp4?rlkey=nr55aoymaglfnkkk6kcakc2hm&st=322lpsxd&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 31,
+        title: "الحلقة 31",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/w42ko3m8y6qws9rxywdxa/Dragon_Ball_Super_-31.mp4?rlkey=5oc7layo793i4pos0vh4yd5lh&st=ve5ban0p&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 32,
+        title: "الحلقة 32",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/52sz6mcky4g380fk0ql06/DragonBall-Super-Arabic-EP32.mp4?rlkey=apzmbb6bpk31cjgf6kggb6ps8&st=9kkjb2zf&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 33,
+        title: "الحلقة 33",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/bf2s9mgz42zxwsv3b0tqo/Dragon_Ball_Super_-33.mp4?rlkey=812ohx953sx5ej4ywygbcjpl0&st=isnye4ql&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 34,
+        title: "الحلقة 34",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/qxan7jx0exlwisnt8h10t/DragonBall-Super-Arabic-EP34.mp4?rlkey=nr3qwjmeo867lrdcxqfkkjkdw&st=3vicj65d&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 35,
+        title: "الحلقة 35",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/s24zv8m71kp10bins8g3s/DragonBall-Super-Arabic-EP35.mp4?rlkey=5lbucob140rmquaumm4rfnyh2&st=fg3f8da7&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 36,
+        title: "الحلقة 36",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/jaxm7m42fbtux4jmul6n9/DragonBall-Super-Arabic-EP36.mp4?rlkey=jhdtnx48e52pssfi69rca7s13&st=w2plbdbd&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 37,
+        title: "الحلقة 37",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/by8in1svgw6s5qgqid65t/DragonBall-Super-Arabic-EP37.mp4?rlkey=yhemwg79tgwqggbnhrtcob3uf&st=i3cnzyki&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 38,
+        title: "الحلقة 38",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/755l9su1i3mikjicgcdlu/DragonBall-Super-Arabic-EP38.mp4?rlkey=lrcitp0ckvdoqyaihahlenahk&st=9c0flbxe&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 39,
+        title: "الحلقة 39",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/8ndlk3bhk3agl4jxxrdtk/DragonBall-Super-Arabic-EP39.mp4?rlkey=kn8lyvbc7a6gy3jy24f36a9bs&st=h2v7z2el&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 40,
+        title: "الحلقة 40",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/piotdzyyomnp28xgtp9h4/DragonBall-Super-Arabic-EP40.mp4?rlkey=3pnwn59oz0jaay7d3428jzox6&st=7gwpy5ns&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 41,
+        title: "الحلقة 41",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/wweq6nwtfb2jufx4ehn1u/DragonBall-Super-Arabic-EP41.mp4?rlkey=eye0nih6m31rsi9dszby1guq7&st=07v1pntg&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 42,
+        title: "الحلقة 42",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/6pljwj85igz7e1rsxvay2/DragonBall-Super-Arabic-EP42.mp4?rlkey=u82fzfziq5u5h6xbngf2v9lqw&st=0i59l5l6&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 43,
+        title: "الحلقة 43",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/czpcmwxu1x9b1bzdk5iu9/DragonBall-Super-Arabic-EP43.mp4?rlkey=kt8ypbmykqxqmhd1198qgjt4a&st=xv8s7dss&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 44,
+        title: "الحلقة 44",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/6p5fnzg2watb41uhp4bg9/DragonBall-Super-Arabic-EP44.mp4?rlkey=3qindoth3gb5v5pti2gmk3qna&st=q9iyoqti&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 45,
+        title: "الحلقة 45",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/wpqwde3k9p89rpnmi0fjt/DragonBall-Super-Arabic-EP45.mp4?rlkey=bb7x821aysp0sx2wa33vriovw&st=qi2x22kr&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 46,
+        title: "الحلقة 46",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/medsixescj0ks3eb0z0f9/DragonBall-Super-Arabic-EP46.mp4?rlkey=95so03muh3k5pv7dq2k8fznf8&st=7mv90ztn&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 47,
+        title: "الحلقة 47",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/yyk9xtr6b9vpbde4xsjkb/DragonBall-Super-Arabic-EP47.mp4?rlkey=lef9hwfazy47fiuly1vx7riw7&st=laojwbd9&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 48,
+        title: "الحلقة 48",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/m3qdrjcxbzpdrkhxbguwg/DragonBall-Super-Arabic-EP48.mp4?rlkey=ob1htcpdwjowf1zdxvlitt21z&st=tfkox5wv&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 49,
+        title: "الحلقة 49",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/80utf8o6ajor8n364k9iw/DragonBall-Super-Arabic-EP49.mp4?rlkey=7f2hnx6nf09fgcsh0p2dippkt&st=y38zrmje&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 50,
+        title: "الحلقة 50",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/dcqcx5meopeq2ecp2qnte/DragonBall-Super-Arabic-EP50.mp4?rlkey=cd032aiceptat88qpiets38ga&st=4u1g7v6a&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 51,
+        title: "الحلقة 51",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/43jkt766no3w15ov1f9gv/DragonBall-Super-Arabic-EP51.mp4?rlkey=wh0iubhyywy6cz34mu8cspij9&st=8eqgq3w2&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 52,
+        title: "الحلقة 52",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/kvfcg8dnjbakayjhwpo9c/DragonBall-Super-Arabic-EP52.mp4?rlkey=xntuymb20f4dwkl4xp0nx6zhh&st=gwfnrnek&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 53,
+        title: "الحلقة 53",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/4lxl7suqua0kc3upf7mkm/DragonBall-Super-Arabic-EP53.mp4?rlkey=m46lojgwg6gla410wivglgbz2&st=u0su0g0e&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 54,
+        title: "الحلقة 54",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/ps7kxbui0lzvtczabzq4r/DragonBall-Super-Arabic-EP54.mp4?rlkey=f77pst9abykdwsf6lq5z4ca9x&st=pt405gmw&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 55,
+        title: "الحلقة 55",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/flusf4hm4ib9lpn71zr9z/DragonBall-Super-Arabic-EP55.mp4?rlkey=pff688yfrtdns0afbuc0q6qv7&st=srx06q5f&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 56,
+        title: "الحلقة 56",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/tu6sowjhh5sl5caiyfw9i/DragonBall-Super-Arabic-EP56.mp4?rlkey=0t5aavbqj9g7udf5f5ueb1apl&st=8oda6xoz&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 57,
+        title: "الحلقة 57",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/tmczoqje4y81di1u3pp5h/DragonBall-Super-Arabic-EP57.mp4?rlkey=0r9fzwryd6zlbobl3z0n51f4i&st=l1gi6au8&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 58,
+        title: "الحلقة 58",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/ifgm1k9e44xquq5vewqc8/DragonBall-Super-Arabic-EP58.mp4?rlkey=62tviv4qszidhv9nczxzvlv25&st=hb76l981&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 59,
+        title: "الحلقة 59",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/l0m5afqbm9rozn9hy22ct/DragonBall-Super-Arabic-EP59.mp4?rlkey=p6uyr8y2tw2rtnmj7zyw0wack&st=aucwjlaz&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 60,
+        title: "الحلقة 60",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/ywphp1kuasgpbesshm86g/DragonBall-Super-Arabic-EP60.mp4?rlkey=a8g4urnx2wn5j9lvv4m9pyrx3&st=v9gpxy7q&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 61,
+        title: "الحلقة 61",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/ua74cu0tl76o9l0c3i8th/DragonBall-Super-Arabic-EP61.mp4?rlkey=7rs2p4xstcc5ia074937ne6ql&st=qkt3vssh&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 62,
+        title: "الحلقة 62",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/9il2stq9k7h4y702m3uar/DragonBall-Super-Arabic-EP62.mp4?rlkey=3tufuxtl5qqjtsmyyutwm664e&st=i88g9wr7&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 63,
+        title: "الحلقة 63",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/oyjwzanj4i5oztj1ef5m9/DragonBall-Super-Arabic-EP63.mp4?rlkey=x2mvls9sh6cess2urzgje3zi6&st=bxn94x2u&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 64,
+        title: "الحلقة 64",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/ohdhi271848j6ch1om16n/DragonBall-Super-Arabic-EP64.mp4?rlkey=e5ssxeldj117inf3mfhaeayp3&st=fm5ttpoi&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 65,
+        title: "الحلقة 65",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/f4p7j0bka5irwgoupez9c/DragonBall-Super-Arabic-EP65.mp4?rlkey=148yoxuq4nb6zh210rs1e49km&st=j7z7wxmw&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 66,
+        title: "الحلقة 66",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/lckm0i5e2xmpapyiwepis/DragonBall-Super-Arabic-EP66.mp4?rlkey=0r2yu0wcjjlpgir7rii0la20a&st=9qevuavt&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 67,
+        title: "الحلقة 67",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/jjbg3bu42rlfg1gq5scmh/DragonBall-Super-Arabic-EP67.mp4?rlkey=hhkg775m57l09fij2a4xdp5io&st=2yax0g88&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 68,
+        title: "الحلقة 68",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/dcz6c8cilf3ankb55t3f1/Dragon_Ball_Super_E68.mp4?rlkey=capkf3zf17xwl7xiwtbbl6lp0&st=n30vn56m&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 69,
+        title: "الحلقة 69",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/hg8vw3se861d02hby3vmx/Dragon_Ball_Super_E069_Ar.mp4?rlkey=zszoz00wj0uvcv84qk2kix0i7&st=dbcis7d3&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 70,
+        title: "الحلقة 70",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/751p8iqnsmrj7wkotraei/DragonBall-Super-Arabic-EP70.mp4?rlkey=p2hc16n3gqhcz31ez8iujv7lv&st=u1nek2yj&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 71,
+        title: "الحلقة 71",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/wcj30t44zrxptnwqrvvts/DragonBall-Super-Arabic-EP71.mp4?rlkey=vulpjzhalv76jdmq2ry8nwqhj&st=mkli4fhu&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 72,
+        title: "الحلقة 72",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/id3f2yrvgc7d8g2coyluw/DragonBall-Super-Arabic-EP72.mp4?rlkey=4i826fuw443g4d94cav64tbue&st=egno1bas&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 73,
+        title: "الحلقة 73",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/6qmutcreg1ln5lm6c1y0m/DragonBall-Super-Arabic-EP73.mp4?rlkey=mzvjse1oo10bexxeegbjw5cne&st=94hplisi&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 74,
+        title: "الحلقة 74",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/4ivyytaltdtvm56k36cih/DragonBall-Super-Arabic-EP74.mp4?rlkey=g6ex48unp6kup3htz1j3tukpc&st=o4lhyzd2&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 75,
+        title: "الحلقة 75",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/serd24wbwubf9d1szn0dr/DragonBall-Super-Arabic-EP75.mp4?rlkey=yq455nnayk0n05le0i4szd5sz&st=ewnhigzp&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 76,
+        title: "الحلقة 76",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/khk8i5nare5djxwpbgb8m/DragonBall-Super-Arabic-EP76.mp4?rlkey=w1dd70u6hlir1gsvcxl2ke7by&st=vc3j4hfu&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 77,
+        title: "الحلقة 77",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/x32djxcg0tfxra71y8unh/DragonBall-Super-Arabic-EP77.mp4?rlkey=ib4psp8n27fcucyv8mdgpwx07&st=tz8lw1kx&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 78,
+        title: "الحلقة 78",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/z9moztl9zknd2idg55y8f/DragonBall-Super-Arabic-EP78.mp4?rlkey=xpxxblnnifi8hyxy0b6sgz8b5&st=gah6hvqg&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 79,
+        title: "الحلقة 79",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/4svzjfxrq0u81c17dfeuf/Dragon_Ball_Super_-79-.CiNEMATY_-source.mp4?rlkey=bi75z7vybd2zlcxs2moloigkp&st=n7qp5v58&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 80,
+        title: "الحلقة 80",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/7bxv2zzzo1h55onq2lcde/Dragon_Ball_Super_-80-.CiNEMATY_-source.mp4?rlkey=zaqlwo1k8ao0ojszmq00s5wq4&st=y1irvqg8&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 81,
+        title: "الحلقة 81",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/5r790f4s047mblu7emwsr/dragon_ball_super_081.mp4?rlkey=tw09ggok3omew77an2qdbw29w&st=t6u4xuwh&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+	{
+        id: 82,
+        title: "الحلقة 82",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/s5fyra7v424jz7spcy30s/DragonBall-Super-Arabic-EP82.mp4?rlkey=4txwpdy3c81lf7swnbpk83xfc&st=5l7y6ddf&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 83,
+        title: "الحلقة 83",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/qmwoprlqjwibxxrtcao68/DragonBall-Super-Arabic-EP83.mp4?rlkey=eb7qr398ycixoj9wrxcc2x2zm&st=u3sybtdx&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 84,
+        title: "الحلقة 84",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/7odnh4zan35nl1hn8o3be/DragonBall-Super-Arabic-EP84.mp4?rlkey=9pwtrbaozdq2ma6ndfxfyt01n&st=7qyzbbks&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 85,
+        title: "الحلقة 85",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/8os5mv7eyp167k66nm417/DragonBall-Super-Arabic-EP85.mp4?rlkey=3i355egk50tnf19pprk2ometd&st=9wmtxgdc&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 86,
+        title: "الحلقة 86",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/2xfu44cwu69m43xmts7ne/DragonBall-Super-Arabic-EP86.mp4?rlkey=1k4h1hzlrchoxkacclw4hy61x&st=xiehex56&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 87,
+        title: "الحلقة 87",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/3sele656gkfxejllbuxb8/DragonBall-Super-Arabic-EP87.mp4?rlkey=84zn2v06bi15muqe4772pe7vx&st=sohi54wr&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 88,
+        title: "الحلقة 88",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/y9th346d55gkz3srnjlb7/DragonBall-Super-Arabic-EP88.mp4?rlkey=a4gfjyu4vm0kck57b88frth8l&st=i1tzycez&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 89,
+        title: "الحلقة 89",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/qjop171s553bkx458ca0m/dragon_ball_super_089.mp4?rlkey=hp4fekz0flwfizy954x4t2n24&st=g6kou9wc&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 90,
+        title: "الحلقة 90",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/p28m7xsr0avzj6vp56248/dragon_ball_super_090.mp4?rlkey=cnm0e1ultdn42a04i1v2p1q4q&st=c0ryuuk2&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 91,
+        title: "الحلقة 91",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/lwn2pw62mxkefw2mguztg/DragonBall-Super-Arabic-EP91.mp4?rlkey=j8ez8qa6gupifris3jb6c877y&st=2tdwqi7s&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 92,
+        title: "الحلقة 92",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/xxorj5ikj5hdglq5gk74l/DragonBall-Super-Arabic-EP92.mp4?rlkey=xgn9ylj5289sojl523la5l3ru&st=m8c16gzc&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 93,
+        title: "الحلقة 93",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/xwual8s2gdo913u0klrlt/DragonBall-Super-Arabic-EP93.mp4?rlkey=5tw4p9mlwp8lcolf3ku7ghxi1&st=y3v9wdy2&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 94,
+        title: "الحلقة 94",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/1pruhcel00b0h86anawnp/DragonBall-Super-Arabic-EP94.mp4?rlkey=a9o7o2a9ty71u1yw57d0mnhzq&st=21j5zz0d&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 95,
+        title: "الحلقة 95",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/tog3rtpqlar0mkse7cw5z/DragonBall-Super-Arabic-EP95.mp4?rlkey=f6xtg15s3gohydgsjklzbi9wk&st=yboc7ke6&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 96,
+        title: "الحلقة 96",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/6grlu61aqp9gg0wui6au8/dragon_ball_super_096.mp4?rlkey=p1rjqowyrgsr5un7tgdtr5k0n&st=aoc7ym61&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 97,
+        title: "الحلقة 97",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/s702dajwpd6ka2zleqco3/dragon_ball_super_097.mp4?rlkey=76pa9iuajwqjd0hwi1n7morsr&st=4bsep2f1&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 98,
+        title: "الحلقة 98",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/b1puterbaqfu60fgb3a6a/dragon_ball_super_098.mp4?rlkey=0g40d3tl53zt2uroy5n7b8kk5&st=8aeunbyp&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 99,
+        title: "الحلقة 99",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/s1p62vs7ysmv59euom8me/dragon_ball_super_099.mp4?rlkey=mjbawabmdck1d512xf0y5gk1r&st=6qwkpo5r&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 100,
+        title: "الحلقة 100",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/i4tjt21ku63f2386uyvrt/dragon_ball_super_100.mp4?rlkey=47myb7sy8lnlream51fakasoo&st=v0cqdshh&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 101,
+        title: "الحلقة 101",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/fmo3rp57chiqbzro7ww1p/dragon_ball_super_101.mp4?rlkey=1dmvua4m4rh5v9c0gjrgr6dig&st=hcah11jp&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 102,
+        title: "الحلقة 102",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/8tet6te67adhlkd8xfepe/dragon_ball_super_102.mp4?rlkey=17sh1zhrhmxh42l47c7ihp7da&st=h8xbjnwa&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 103,
+        title: "الحلقة 103",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/q98g3hzzdbcmork1y9wxm/dragon_ball_super_103.mp4?rlkey=zdwu0dapi2nwhvoh2v9qc04v8&st=gza605ze&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 104,
+        title: "الحلقة 104",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/fry346i4ixluyrnf2rb2i/dragon_ball_super_104.mp4?rlkey=7r8r1vqbqerj1s7bgdhifvq5z&st=qcs1wv9e&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 105,
+        title: "الحلقة 105",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/nmm9y8hbmr36cx3bv4ob4/dragon_ball_super_105.mp4?rlkey=rgebdp1c4bdchg3ps8phrgbqq&st=k0ledjru&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    },
+    {
+        id: 106,
+        title: "الحلقة 106",
+        poster: thumb,
+        servers: [{ name: "سيرفر FHD", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/48klx5bd92mlrfhq2x73l/dragon_ball_super_106.mp4?rlkey=r1y05idx9s4m55grl6stnle8r&st=wgc04v1i&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }]
+    }
+];
+
+
+let activeEpId = null;
+let lastActiveId = null;
+let isAndroid14 = false;
+
+// كشف نسخة أندرويد
+function detectAndroidVersion() {
+    const ua = navigator.userAgent;
+    if(ua.includes("Android 14") || ua.includes("Android14") || ua.includes("API 34")) {
+        isAndroid14 = true;
+        console.log("✅ Android 14 detected");
+    }
+}
+
+function handleExit() {
+    window.history.length > 1 ? window.history.back() : window.location.href = "/";
+}
+
+function goToInstallPage() {
+    window.location.href = INSTALL_PAGE_URL;
+}
+
+function toggleSearchBar(show) {
+    document.getElementById("search-container").classList.toggle("active", show);
+    if(show) {
+        document.getElementById("search-input").focus();
+    }
+}
+
+function handleSearch(val) {
+    val = val.trim();
+    if(val === "") {
+        renderGrid();
+        return;
+    }
+    const filtered = episodes.filter(e => e.title.includes(val));
+    renderGrid(filtered);
+}
+
+function clearSearchField() {
+    document.getElementById("search-input").value = "";
+    renderGrid();
+    toggleSearchBar(false);
+}
+
+function renderGrid(data = episodes) {
+    const grid = document.getElementById("sg-grid-root");
+    const history = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    
+    if(data.length === 0) {
+        grid.innerHTML = `<div class="no-results">
+            <i class="fas fa-search-minus"></i>
+            <h3>عذراً، لم يتم العثور على الحلقة</h3>
+            <button class="back-home-btn" onclick="clearSearchField()">العودة للرئيسية</button>
+        </div>`;
+        return;
+    }
+    
+    grid.innerHTML = data.map(ep => 
+        `<div class="sg-card-item ${history.includes(ep.id) ? "is-watched" : ""}" 
+            tabindex="0" 
+            onclick="openServerMenu(${ep.id})" 
+            onkeydown="if(event.key==='Enter') openServerMenu(${ep.id})">
+            <div class="sg-poster-box">
+                <div class="sg-watched-eye"><i class="fas fa-eye"></i></div>
+                <img src="${ep.poster}" onerror="this.onerror=null;this.src='${FALLBACK_IMG}';">
+            </div>
+            <div class="sg-card-meta">
+                <div class="sg-episode-label">${ep.title}</div>
+            </div>
+        </div>`
+    ).join("");
+}
+
+function showToast() {
+    const t = document.getElementById("toast");
+    t.style.display = "block";
+    setTimeout(() => {
+        t.style.display = "none";
+    }, 3000);
+}
+
+function openServerMenu(id) {
+    activeEpId = id;
+    sessionStorage.setItem("lastEpisodeId", id);
+    const ep = episodes.find(e => e.id === id);
+    document.getElementById("modal-title").innerHTML = `<i class="fas fa-film"></i> ${ep.title}`;
+    
+    const list = document.getElementById("servers-list");
+    
+    // استخدام أزرار السيرفرات الجميلة
+    list.innerHTML = ep.servers.map(s => 
+        `<button class="sg-server-btn" 
+                  onclick="playVideo('${s.url}')" 
+                  tabindex="0">
+            <span><i class="fas fa-play" style="margin-left: 8px;"></i> ${s.name}</span>
+            <span class="sg-quality q-${s.quality.toLowerCase()}">${s.quality}</span>
+        </button>`
+    ).join("");
+    
+    document.getElementById("quality-modal").classList.add("active");
+    setTimeout(() => list.querySelector("button")?.focus(), 200);
+}
+
+function closeModal(m) {
+    document.getElementById(m).classList.remove("active");
+    if(lastActiveId) {
+        setTimeout(() => {
+            document.querySelectorAll(".sg-card-item").forEach(card => {
+                if(card.getAttribute("onclick")?.includes(`openServerMenu(${lastActiveId})`)) {
+                    card.focus();
+                }
+            });
+        }, 100);
+    }
+}
+
+function restoreLastState() {
+    const lastId = sessionStorage.getItem("lastEpisodeId");
+    if(lastId) {
+        lastActiveId = lastId;
+        setTimeout(() => {
+            document.querySelectorAll(".sg-card-item").forEach(card => {
+                if(card.getAttribute("onclick")?.includes(`openServerMenu(${lastId})`)) {
+                    card.focus();
+                    card.scrollIntoView({behavior: "smooth", block: "center"});
+                }
+            });
+        }, 300);
+    }
+}
+
+function playVideo(url) {
+    if(!url || url === "#") {
+        showToast();
+        return;
+    }
+    
+    let history = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    if(!history.includes(activeEpId)) {
+        history.push(activeEpId);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+        renderGrid();
+    }
+    
+    lastActiveId = activeEpId;
+    sessionStorage.setItem("lastEpisodeId", activeEpId);
+    sessionStorage.setItem("lastVisited", Date.now().toString());
+    closeModal("quality-modal");
+    
+    let videoUrl = url;
+    if(url.includes("intent://")) {
+        videoUrl = url.replace("intent://", "https://").split("#Intent")[0];
+    }
+    
+    try {
+        if(isAndroid14) {
+            const fixFrame = document.getElementById("android14-fix-frame");
+            if(fixFrame) {
+                fixFrame.src = "about:blank";
+                setTimeout(() => {
+                    fixFrame.src = videoUrl;
+                }, 50);
+            }
+            setTimeout(() => {
+                window.open(url, "_system");
+            }, 100);
+            setTimeout(() => {
+                window.location.href = url;
+            }, 200);
+        } else {
+            const iframe = document.createElement("iframe");
+            iframe.style.display = "none";
+            iframe.src = url;
+            document.body.appendChild(iframe);
+            setTimeout(() => {
+                document.body.removeChild(iframe);
+            }, 1000);
+        }
+    } catch(e) {
+        console.error("❌ خطأ عند محاولة فتح الفيديو:", e);
+        document.getElementById("install-modal").classList.add("active");
+    }
+    
+    setTimeout(() => {
+        if(document.visibilityState === "visible") {
+            document.getElementById("install-modal").classList.add("active");
+        }
+    }, 2000);
+}
+
+function openResetModal() {
+    document.getElementById("reset-modal").classList.add("active");
+}
+
+function executeReset() {
+    localStorage.removeItem(STORAGE_KEY);
+    renderGrid();
+    closeModal("reset-modal");
+}
+
+window.onload = function() {
+    detectAndroidVersion();
+    renderGrid();
+    restoreLastState();
+    setTimeout(() => {
+        if(!lastActiveId) {
+            const firstCard = document.querySelector(".sg-card-item");
+            if(firstCard) firstCard.focus();
+        }
+    }, 500);
+    console.log("✅ تطبيق علي كلاي جاهز - مع أزرار سيرفرات أنيقة");
+};
+
+function showToast(message = "جاري رفع الحلقة حالياً...") {
+    const toast = document.getElementById("toast");
+    
+    // إضافة أيقونة حسب نوع الرسالة
+    let icon = "fa-hourglass-half";
+    if (message.includes("خطأ")) icon = "fa-exclamation-circle";
+    else if (message.includes("تم")) icon = "fa-check-circle";
+    
+    toast.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
+    toast.style.display = "flex";
+    
+    setTimeout(() => {
+        toast.style.animation = "slideUpToast 0.3s reverse forwards";
+        setTimeout(() => {
+            toast.style.display = "none";
+            toast.style.animation = ""; // إعادة تعيين الأنميشن
+        }, 300);
+    }, 3000);
+}
+</script>
+
+</body>
+</html>
