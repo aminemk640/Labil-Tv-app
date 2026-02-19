@@ -182,11 +182,11 @@
         }
         
         .btn-confirm-delete:hover {
-            background: linear-gradient(90deg, #dc2626, #b91c1c);
+            background: red;
         }
         
         .btn-confirm-delete:focus { 
-            background: #b91c1c; 
+            background: red; 
             border-color: white; 
             box-shadow: 0 0 10px rgba(220, 38, 38, 0.6);
         }
@@ -264,8 +264,8 @@
 }
 
         .sg-close-btn { width:100%; background: rgba(255,255,255,0.1); color:white; border:none; padding:12px; border-radius:10px; cursor:pointer; font-weight:600; margin-top:8px; font-size:0.9rem; transition:all 0.2s; }
-        .sg-close-btn:hover { background: rgba(255,255,255,0.15); }
-        .sg-close-btn:focus { background: rgba(255,255,255,0.2); outline:none; transform:scale(1.02); }
+        .sg-close-btn:hover { background: red; }
+        .sg-close-btn:focus { background: red; outline:none; transform:scale(1.02); }
 
         @media(max-width:480px){ .sg-episodes-grid{grid-template-columns:repeat(3,1fr); gap:10px;} }
     </style>
@@ -358,9 +358,21 @@ const episodes = [
         poster: thumb,
         servers: [
             { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/feeafg4z86a5ot9yup5u9/Hiyya_Chemya.EP02.mp4?rlkey=we4hhynfnr4pl0ogtgv2ofv3h&st=x1wdihvr&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dl.dropbox.com/scl/fi/feeafg4z86a5ot9yup5u9/Hiyya_Chemya.EP02.mp4?rlkey=we4hhynfnr4pl0ogtgv2ofv3h&st=x1wdihvr&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/feeafg4z86a5ot9yup5u9/Hiyya_Chemya.EP02.mp4?rlkey=we4hhynfnr4pl0ogtgv2ofv3h&st=x1wdihvr&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     },
+   {
+             id: 3,
+        title: "Episode 3",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/v4rwjgkbxq5t00oulkre8/Hiyya_Chemya.S01EP03.mp4?rlkey=duzuzc9k3cwybcbm6whozq2c8&st=wjx7n7na&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/v4rwjgkbxq5t00oulkre8/Hiyya_Chemya.S01EP03.mp4?rlkey=duzuzc9k3cwybcbm6whozq2c8&st=wjx7n7na&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },  
+    
+    
+    
 ];
 
 let activeEpId = null;
