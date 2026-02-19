@@ -182,11 +182,11 @@
         }
         
         .btn-confirm-delete:hover {
-            background: linear-gradient(90deg, #dc2626, #b91c1c);
+            background: red;
         }
         
         .btn-confirm-delete:focus { 
-            background: #b91c1c; 
+            background: red; 
             border-color: white; 
             box-shadow: 0 0 10px rgba(220, 38, 38, 0.6);
         }
@@ -200,8 +200,8 @@
         @keyframes fadeIn { from{opacity:0; bottom:10px;} to{opacity:1; bottom:30px;} }
 
         .sg-close-btn { width:100%; background: rgba(255,255,255,0.1); color:white; border:none; padding:12px; border-radius:10px; cursor:pointer; font-weight:600; margin-top:8px; font-size:0.9rem; transition:all 0.2s; }
-        .sg-close-btn:hover { background: rgba(255,255,255,0.15); }
-        .sg-close-btn:focus { background: rgba(255,255,255,0.2); outline:none; transform:scale(1.02); }
+        .sg-close-btn:hover { background: red; }
+        .sg-close-btn:focus { background: red; outline:none; transform:scale(1.02); }
 
         @media(max-width:480px){ .sg-episodes-grid{grid-template-columns:repeat(3,1fr); gap:10px;} }
     </style>
@@ -223,7 +223,7 @@
     </header>
 
     <div class="section-header">
-        <div class="section-title"><i class="fas fa-bolt"></i> <span>يعرض في 15 رمضان</span></div>
+        <div class="section-title"><i class="fas fa-bolt"></i> <span>قائمة الحلقات</span></div>
         <button class="reset-history-btn" onclick="openResetModal()" tabindex="0">
             <i class="fas fa-eye-slash"></i> حذف مشاهدة
         </button>
@@ -280,15 +280,24 @@ const thumb = "poster/Efrag.jpg";
 // بيانات الحلقات - تم إضافة المزيد من الحلقات
 const episodes = [
     {
-        id: 1,
-        title: "الحلقة 1",
+       id: 1,
+        title: "Episode 1",
         poster: thumb,
         servers: [
-            { name: "سيرفر SD", quality: "SD", url: "#" },
-            { name: "سيرفر HD", quality: "HD", url: "#" },
-            { name: "سيرفر FHD", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/629/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/or7b6tvigu9vr62r9af6w/Efrag.S01EP01.mp4?rlkey=4o8czu8nsj5zzzjdddhq4yw0x&st=0m402bjb&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/or7b6tvigu9vr62r9af6w/Efrag.S01EP01.mp4?rlkey=4o8czu8nsj5zzzjdddhq4yw0x&st=0m402bjb&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
-    }
+    },
+       {
+       id: 2,
+        title: "Episode 2",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/tqli3kbvl8l6azlfakdb9/Efrag.S01EP02.mp4?rlkey=0b8rl8g1g2z2zf4bhn6sycfh6&st=7o26yllq&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/tqli3kbvl8l6azlfakdb9/Efrag.S01EP02.mp4?rlkey=0b8rl8g1g2z2zf4bhn6sycfh6&st=7o26yllq&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+     
 ];
 
 let activeEpId = null;
