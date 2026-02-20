@@ -185,11 +185,11 @@
         }
         
         .btn-confirm-delete:hover {
-            background: linear-gradient(90deg, #dc2626, #b91c1c);
+            background: red;
         }
         
         .btn-confirm-delete:focus { 
-            background: #b91c1c; 
+            background: red; 
             border-color: white; 
             box-shadow: 0 0 10px rgba(220, 38, 38, 0.6);
         }
@@ -267,8 +267,8 @@
 }
 
         .sg-close-btn { width:100%; background: rgba(255,255,255,0.1); color:white; border:none; padding:12px; border-radius:10px; cursor:pointer; font-weight:600; margin-top:8px; font-size:0.9rem; transition:all 0.2s; }
-        .sg-close-btn:hover { background: rgba(255,255,255,0.15); }
-        .sg-close-btn:focus { background: rgba(255,255,255,0.2); outline:none; transform:scale(1.02); }
+        .sg-close-btn:hover { background: red; }
+        .sg-close-btn:focus { background:red; outline:none; transform:scale(1.02); }
 
         @media(max-width:480px){ .sg-episodes-grid{grid-template-columns:repeat(3,1fr); gap:10px;} }
     </style>
@@ -364,6 +364,19 @@ const episodes = [
             { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/5rdn6do0v8rx1fdv216er/Ras.Al.Afaa.E02.mp4?rlkey=49w5cgwbfeb2iqaxwov7k5nlv&st=edv19d84&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     },
+     {
+          id: 3,
+        title: "Episode 3",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/326645c05rhwwqcqfma7l/Ras.Al.Afaa.E03.mp4?rlkey=rs9ro66j90fdx94au5fqfpxgi&st=qwt1r6an&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/326645c05rhwwqcqfma7l/Ras.Al.Afaa.E03.mp4?rlkey=rs9ro66j90fdx94au5fqfpxgi&st=qwt1r6an&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    
+    
+    
+    
 ];
 
 let activeEpId = null;
