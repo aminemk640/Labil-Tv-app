@@ -183,11 +183,11 @@
         }
         
         .btn-confirm-delete:hover {
-            background: linear-gradient(90deg, #dc2626, #b91c1c);
+            background: red;
         }
         
         .btn-confirm-delete:focus { 
-            background: #b91c1c; 
+            background: red; 
             border-color: white; 
             box-shadow: 0 0 10px rgba(220, 38, 38, 0.6);
         }
@@ -265,8 +265,8 @@
 }
 
         .sg-close-btn { width:100%; background: rgba(255,255,255,0.1); color:white; border:none; padding:12px; border-radius:10px; cursor:pointer; font-weight:600; margin-top:8px; font-size:0.9rem; transition:all 0.2s; }
-        .sg-close-btn:hover { background: rgba(255,255,255,0.15); }
-        .sg-close-btn:focus { background: rgba(255,255,255,0.2); outline:none; transform:scale(1.02); }
+        .sg-close-btn:hover { background: red; }
+        .sg-close-btn:focus { background: red; outline:none; transform:scale(1.02); }
 
         @media(max-width:480px){ .sg-episodes-grid{grid-template-columns:repeat(3,1fr); gap:10px;} }
     </style>
@@ -409,6 +409,15 @@ const episodes = [
         servers: [
             { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/vnvtwkeycjrladuf9fak0/Ramez.Level.AlWahsh.S01.E07.480p.mp4?rlkey=tnq4d5pke7z898xni7pdxxjtj&st=s67lz96z&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
             { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/vnvtwkeycjrladuf9fak0/Ramez.Level.AlWahsh.S01.E07.480p.mp4?rlkey=tnq4d5pke7z898xni7pdxxjtj&st=s67lz96z&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+        id: 8,
+        title: "Episode 8",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/gyvh5k0ciyz4l6xabidac/Ramez.Level.AlWahsh.S01.E08.mp4?rlkey=e6gz9bxd9gwq6a24ie8p9pmsc&st=uq4yajt0&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/gyvh5k0ciyz4l6xabidac/Ramez.Level.AlWahsh.S01.E08.mp4?rlkey=e6gz9bxd9gwq6a24ie8p9pmsc&st=uq4yajt0&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     }
    
