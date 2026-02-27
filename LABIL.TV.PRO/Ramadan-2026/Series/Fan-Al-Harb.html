@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مسلسل إفراج</title>
+    <title>Fan-Al-Harb </title>
     <link rel="icon" type="image/png" href="poster/logo.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -182,11 +182,11 @@
         }
         
         .btn-confirm-delete:hover {
-            background: red;
+            background: linear-gradient(90deg, #dc2626, #b91c1c);
         }
         
         .btn-confirm-delete:focus { 
-            background: red; 
+            background: #b91c1c; 
             border-color: white; 
             box-shadow: 0 0 10px rgba(220, 38, 38, 0.6);
         }
@@ -196,8 +196,72 @@
         .sg-server-panel { background:var(--modal-bg); padding:25px; border-radius:24px; border:1px solid var(--glass-border); width:90%; max-width:360px; text-align:center; animation:slideUp 0.4s ease; }
         @keyframes slideUp { from {transform:translateY(20px); opacity:0;} to {transform:translateY(0); opacity:1;} }
 
-        #toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:#ed1b76; color:white; padding:12px 25px; border-radius:50px; font-weight:700; z-index:5000; display:none; box-shadow:0 10px 20px rgba(0,0,0,0.5); animation:fadeIn 0.3s ease; }
-        @keyframes fadeIn { from{opacity:0; bottom:10px;} to{opacity:1; bottom:30px;} }
+ /* Toast أنيق ومتجدد */
+#toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100%);
+            background: #1e293b;  
+            color: white;
+    padding: 14px 30px;
+    border-radius: 50px;
+    font-weight: 700;
+    z-index: 5000;
+    display: none;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 10px 30px rgba(237, 27, 118, 0.4),
+                0 0 0 2px rgba(255, 255, 255, 0.1) inset;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);            border: 1px solid var(--primary-pink); box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    animation: slideUpToast 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+#toast i {
+    font-size: 1.2rem;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+#toast::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 10%;
+    width: 80%;
+    height: 10px;
+    background: rgba(237, 27, 118, 0.3);
+    filter: blur(8px);
+    border-radius: 50%;
+    z-index: -1;
+}
+
+@keyframes slideUpToast {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(30px);
+    }
+    20% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-5px);
+    }
+    40% {
+        transform: translateX(-50%) translateY(3px);
+    }
+    60% {
+        transform: translateX(-50%) translateY(-2px);
+    }
+    80% {
+        transform: translateX(-50%) translateY(1px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
 
         .sg-close-btn { width:100%; background: rgba(255,255,255,0.1); color:white; border:none; padding:12px; border-radius:10px; cursor:pointer; font-weight:600; margin-top:8px; font-size:0.9rem; transition:all 0.2s; }
         .sg-close-btn:hover { background: red; }
@@ -212,7 +276,7 @@
 
     <header class="sg-app-header">
         <button class="sg-nav-icon" onclick="handleExit()" tabindex="0"><i class="fas fa-chevron-right"></i></button>
-        <div style="font-weight:800; font-size:1.2rem;"><span style="color:var(--primary-pink)">إفراج</span></div>
+        <div style="font-weight:800; font-size:1.2rem;"><span style="color:#ed1b76"> فن الحرب</span></div>
         <button class="sg-nav-icon" onclick="toggleSearchBar(true)"><i class="fas fa-search"></i></button>
 
         <div id="search-container">
@@ -225,7 +289,7 @@
     <div class="section-header">
         <div class="section-title"><i class="fas fa-bolt"></i> <span>قائمة الحلقات</span></div>
         <button class="reset-history-btn" onclick="openResetModal()" tabindex="0">
-            <i class="fas fa-eye-slash"></i> حذف مشاهدة
+            <i class="fas fa-eye-slash"style="color:#ed1b76"></i> حذف مشاهدة
         </button>
     </div>
 
@@ -264,7 +328,7 @@
             <button class="sg-server-btn btn-confirm-delete" onclick="executeReset()" style="justify-content:center;">
                 <span>تأكيد الحذف</span> <i class="fas fa-trash"></i>
             </button>
-            <button class="sg-close-btn" onclick="closeModal('reset-modal')">تراجع</button>
+            <button tabindex="0"class="sg-close-btn" onclick="closeModal('reset-modal')">تراجع</button>
         </div>
     </div>
 
@@ -272,114 +336,107 @@
 /* ==================================================
          كود مسلسل علي كلاي - محدث بأزرار جميلة
 ================================================== */
-const STORAGE_KEY = "Efrag";
+const STORAGE_KEY = "Fan-Al-Harb";
 const INSTALL_PAGE_URL = "https://aminemk640.github.io/Labil-Tv-app/LABIL.TV.PRO/install.html";
 const FALLBACK_IMG = "Series/poster/logo.jpg";
-const thumb = "poster/Efrag.jpg";
+const thumb = "poster/Fan-Al-Harb.jpg";
 
 // بيانات الحلقات - تم إضافة المزيد من الحلقات
 const episodes = [
     {
-       id: 1,
+         id: 1,
         title: "Episode 1",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/or7b6tvigu9vr62r9af6w/Efrag.S01EP01.mp4?rlkey=4o8czu8nsj5zzzjdddhq4yw0x&st=0m402bjb&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/or7b6tvigu9vr62r9af6w/Efrag.S01EP01.mp4?rlkey=4o8czu8nsj5zzzjdddhq4yw0x&st=0m402bjb&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/wnnmvosroq2v1i57x9ixr/Fann_Al_Harb.E01.mp4?rlkey=f97jy6v42fbhfsxh6gi2vy9mf&st=2fcovt7t&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/wnnmvosroq2v1i57x9ixr/Fann_Al_Harb.E01.mp4?rlkey=f97jy6v42fbhfsxh6gi2vy9mf&st=2fcovt7t&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     },
-       {
-       id: 2,
+        {
+         id: 2,
         title: "Episode 2",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/tqli3kbvl8l6azlfakdb9/Efrag.S01EP02.mp4?rlkey=0b8rl8g1g2z2zf4bhn6sycfh6&st=7o26yllq&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/tqli3kbvl8l6azlfakdb9/Efrag.S01EP02.mp4?rlkey=0b8rl8g1g2z2zf4bhn6sycfh6&st=7o26yllq&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/dr7fwa0q1ae1sk0qizr9c/Fann_Al_Harb.EP02.mp4?rlkey=yyw4uwypgmw8mz810a7p78cbw&st=zanm0gfx&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/dr7fwa0q1ae1sk0qizr9c/Fann_Al_Harb.EP02.mp4?rlkey=yyw4uwypgmw8mz810a7p78cbw&st=zanm0gfx&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     },
-         {
-       id: 3,
+     {
+         id: 3,
         title: "Episode 3",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/lx9fn2nz18wwv6j9r1e1u/Efrag.S01EP03.mp4?rlkey=jq355x2nnynuv491ucihv0yiw&st=x1y03w14&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/lx9fn2nz18wwv6j9r1e1u/Efrag.S01EP03.mp4?rlkey=jq355x2nnynuv491ucihv0yiw&st=x1y03w14&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/90n8ti0q0a1s5q00latbd/Fann_Al_Harb.EP003.mp4?rlkey=xii60wc04osf5grxpkts8l6sn&st=x8bt12yb&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/90n8ti0q0a1s5q00latbd/Fann_Al_Harb.EP003.mp4?rlkey=xii60wc04osf5grxpkts8l6sn&st=x8bt12yb&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     },
-	{
-       id: 4,
-        title: "Episode 4",
+     {
+         id: 4,
+        title: "Episode 3",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/0eo6m4d2nikg7z6ra4uex/Efrag.S01EP04.mp4?rlkey=wwiilug3tt8y86whcs9us8kb1&st=iqlq8dqx&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/0eo6m4d2nikg7z6ra4uex/Efrag.S01EP04.mp4?rlkey=wwiilug3tt8y86whcs9us8kb1&st=iqlq8dqx&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/namg0ru3cu8uk47qg3c05/Fan.El.Harb.S01E04.mp4?rlkey=mn1kq6tvmn4tx4e7y6e2whpu4&st=emk1h9b3&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/namg0ru3cu8uk47qg3c05/Fan.El.Harb.S01E04.mp4?rlkey=mn1kq6tvmn4tx4e7y6e2whpu4&st=emk1h9b3&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     },
-         {
-       id: 5,
+     {
+         id: 5,
         title: "Episode 5",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/rhainayxyfl1452tcgy3l/Efrag.S01E05..mp4?rlkey=3n78w7pu8ip8l0ekh90belsdj&st=lkay1bcz&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/rhainayxyfl1452tcgy3l/Efrag.S01E05..mp4?rlkey=3n78w7pu8ip8l0ekh90belsdj&st=lkay1bcz&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/90ti5rwovnugx3cr0ow23/Fan.El.Harb.S01E05.mp4?rlkey=dw3e7mh691inhmijn4hbij66m&st=ifndds41&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/90ti5rwovnugx3cr0ow23/Fan.El.Harb.S01E05.mp4?rlkey=dw3e7mh691inhmijn4hbij66m&st=ifndds41&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
-    },
-      {
-       id: 6,
+    },   
+          {
+         id: 6,
         title: "Episode 6",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/itcdufphamo8un5d12mfw/Efrag.S01.E06.mp4?rlkey=mufcdz0jol5oekgooma6rgntp&st=3z04f3bu&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/itcdufphamo8un5d12mfw/Efrag.S01.E06.mp4?rlkey=mufcdz0jol5oekgooma6rgntp&st=3z04f3bu&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/qxkgavmobdi4gugofdrpo/.Fan.Al.Harb.S01.E06.mp4?rlkey=gs0c2c3cuvu6pjgslm5qfs37p&st=cuvdo20i&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/qxkgavmobdi4gugofdrpo/.Fan.Al.Harb.S01.E06.mp4?rlkey=gs0c2c3cuvu6pjgslm5qfs37p&st=cuvdo20i&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     },
-       {
-       id: 7,
+    {
+         id: 7,
         title: "Episode 7",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/s19fa28d0rtmkkskv59ok/Efrag.S01.E07.mp4?rlkey=zububg7zn0priokntl0xmfrq7&st=6tzxahbk&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/s19fa28d0rtmkkskv59ok/Efrag.S01.E07.mp4?rlkey=zububg7zn0priokntl0xmfrq7&st=6tzxahbk&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/gr7es8ez97twaqvlyog4c/Fan.Al.Harb.E07.mp4?rlkey=ecsqzq1ld9v10jc2rqpi15qo7&st=w2j5vmbk&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/gr7es8ez97twaqvlyog4c/Fan.Al.Harb.E07.mp4?rlkey=ecsqzq1ld9v10jc2rqpi15qo7&st=w2j5vmbk&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     },
-       {
-       id: 8,
+    {
+         id: 8,
         title: "Episode 8",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/yw0i7z0x3j8r4m3q8iaqu/Efrag.S01.E08.720p.mp4?rlkey=7qafzyy3tv0i3bcoxqb1af80q&st=911nr36j&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/yw0i7z0x3j8r4m3q8iaqu/Efrag.S01.E08.720p.mp4?rlkey=7qafzyy3tv0i3bcoxqb1af80q&st=911nr36j&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/nvhf6a4wa7kdxeu9mql5w/Fan.Al.Harb.S01.E08.480p.mp4?rlkey=atj10p5t27um78ftewwixspdt&st=2hytzzlw&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/nvhf6a4wa7kdxeu9mql5w/Fan.Al.Harb.S01.E08.480p.mp4?rlkey=atj10p5t27um78ftewwixspdt&st=2hytzzlw&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     },
-       {
-       id: 9,
+    {
+         id: 9,
         title: "Episode 9",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/bzs91am1l029f24kkhy03/Efrag.S01.E09.mp4?rlkey=jzvga1ngljytj3wkqu8sw71kx&st=nxcm7wol&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/bzs91am1l029f24kkhy03/Efrag.S01.E09.mp4?rlkey=jzvga1ngljytj3wkqu8sw71kx&st=nxcm7wol&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/7zmqgf7x7wyed6zupdjbm/Fan.Al.Harb.S01.E09.480p.mp4?rlkey=cgw68d3tzcewpeipy1efv86vk&st=xz1df4vt&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/7zmqgf7x7wyed6zupdjbm/Fan.Al.Harb.S01.E09.480p.mp4?rlkey=cgw68d3tzcewpeipy1efv86vk&st=xz1df4vt&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     },
-       {
-       id: 10,
+    {
+         id: 10,
         title: "Episode 10",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/ypas0k6lupu468w6wmm15/Efrag.S01.E10.720p.mp4?rlkey=2323yr8ibaxbfsuqulp724otv&st=7fksu2yp&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/4qs3zrgg6hzwnulrssp6r/Fan.Al.Harb.S01.E10.480p.mp4?rlkey=l4qipckfmcvfppgh01ne1ymre&st=5f64vy0a&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/4qs3zrgg6hzwnulrssp6r/Fan.Al.Harb.S01.E10.480p.mp4?rlkey=l4qipckfmcvfppgh01ne1ymre&st=ky32benm&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/4qs3zrgg6hzwnulrssp6r/Fan.Al.Harb.S01.E10.480p.mp4?rlkey=l4qipckfmcvfppgh01ne1ymre&st=ky32benm&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     }
-   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+      
+      
+      
+      
 ];
 
 let activeEpId = null;
@@ -594,6 +651,26 @@ window.onload = function() {
     }, 500);
     console.log("✅ تطبيق علي كلاي جاهز - مع أزرار سيرفرات أنيقة");
 };
+
+function showToast(message = "جاري رفع الحلقة حالياً...") {
+    const toast = document.getElementById("toast");
+    
+    // إضافة أيقونة حسب نوع الرسالة
+    let icon = "fa-hourglass-half";
+    if (message.includes("خطأ")) icon = "fa-exclamation-circle";
+    else if (message.includes("تم")) icon = "fa-check-circle";
+    
+    toast.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
+    toast.style.display = "flex";
+    
+    setTimeout(() => {
+        toast.style.animation = "slideUpToast 0.3s reverse forwards";
+        setTimeout(() => {
+            toast.style.display = "none";
+            toast.style.animation = ""; // إعادة تعيين الأنميشن
+        }, 300);
+    }, 3000);
+}
 </script>
 
 </body>
