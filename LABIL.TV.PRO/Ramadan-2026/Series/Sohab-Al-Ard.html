@@ -269,6 +269,28 @@
         .sg-close-btn:focus { background: red; outline:none; transform:scale(1.02); }
 
         @media(max-width:480px){ .sg-episodes-grid{grid-template-columns:repeat(3,1fr); gap:10px;} }
+        
+        
+       /* تنسيق خاص للحلقة الأخيرة فقط */
+.is-latest-episode {
+    border: 2px solid #ffeb3b !important; /* إطار ذهبي */
+    background: linear-gradient(145deg, rgba(237, 27, 118, 0.2), rgba(0, 0, 0, 0.8)) !important;
+}
+
+/* إضافة ملصق "الأخيرة" أو "جديد" فوق البطاقة */
+.is-latest-episode::before {
+    content: "الحلقة الأخيرة 🔥";
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    background: red;
+    color: #ffff;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 5px;
+    z-index: 20;
+} 
     </style>
 </head>
 <body>
@@ -449,8 +471,18 @@ const episodes = [
             { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/i5s8plm9zjylqsbst6xix/Sohab.Al.Ard.S01.E13.480p.mp4?rlkey=jl0z0rcajjyvzm5luhz6fi3l7&st=tr8k3m2u&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
             { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/i5s8plm9zjylqsbst6xix/Sohab.Al.Ard.S01.E13.480p.mp4?rlkey=jl0z0rcajjyvzm5luhz6fi3l7&st=tr8k3m2u&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
-    }
- 
+    },
+   {
+             id: 14,
+        title :  "14 والاخيره",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/hizg3fhc0xrypzdij5j1k/Sohab.Al.Ard.S01.E14.480p.mp4?rlkey=0scup78wzuwo16ywaxz3vsuf9&st=ed7ky91a&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/hizg3fhc0xrypzdij5j1k/Sohab.Al.Ard.S01.E14.480p.mp4?rlkey=0scup78wzuwo16ywaxz3vsuf9&st=ed7ky91a&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    }              
+    
+
  
     
 ];
@@ -512,8 +544,11 @@ function renderGrid(data = episodes) {
         return;
     }
     
-    grid.innerHTML = data.map(ep => 
-        `<div class="sg-card-item ${history.includes(ep.id) ? "is-watched" : ""}" 
+    grid.innerHTML = data.map((ep, index) => {
+        // سطر التغيير: نتحقق هل هذا العنصر هو الأخير في المصفوفة الأصلية
+        const isLast = (ep.id === episodes[episodes.length - 1].id);
+        
+        return `<div class="sg-card-item ${history.includes(ep.id) ? "is-watched" : ""} ${isLast ? "is-latest-episode" : ""}" 
             tabindex="0" 
             onclick="openServerMenu(${ep.id})" 
             onkeydown="if(event.key==='Enter') openServerMenu(${ep.id})">
@@ -524,10 +559,9 @@ function renderGrid(data = episodes) {
             <div class="sg-card-meta">
                 <div class="sg-episode-label">${ep.title}</div>
             </div>
-        </div>`
-    ).join("");
+        </div>`;
+    }).join("");
 }
-
 function showToast() {
     const t = document.getElementById("toast");
     t.style.display = "block";
@@ -691,3 +725,4 @@ function showToast(message = "جاري رفع الحلقة حالياً...") {
 
 </body>
 </html>
+
