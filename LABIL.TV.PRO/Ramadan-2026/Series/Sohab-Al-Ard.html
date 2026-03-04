@@ -113,6 +113,18 @@
         }
         .sg-card-item:focus,.sg-card-item:hover  { transform:scale(1.1); border:3px solid white; box-shadow:var(--focus-glow); z-index:50; }
 
+        /* كلاس للحلقة الأخيرة - سيتم إضافته عبر JavaScript */
+        .sg-card-item.last-episode .sg-episode-label {
+            color: #ff3333;
+            font-weight: 900;
+            text-shadow: 0 0 10px rgba(255, 51, 51, 0.5);
+        }
+        
+        .sg-card-item.last-episode {
+            border: 2px solid #ff3333;
+            box-shadow: 0 0 15px rgba(255, 51, 51, 0.3);
+        }
+
         .sg-poster-box { position:relative; width:100%; aspect-ratio:2/2.8; background:#0f172a; }
         .sg-poster-box img { width:100%; height:100%; object-fit:cover; }
 
@@ -269,28 +281,6 @@
         .sg-close-btn:focus { background: red; outline:none; transform:scale(1.02); }
 
         @media(max-width:480px){ .sg-episodes-grid{grid-template-columns:repeat(3,1fr); gap:10px;} }
-        
-        
-       /* تنسيق خاص للحلقة الأخيرة فقط */
-.is-latest-episode {
-    border: 2px solid #ffeb3b !important; /* إطار ذهبي */
-    background: linear-gradient(145deg, rgba(237, 27, 118, 0.2), rgba(0, 0, 0, 0.8)) !important;
-}
-
-/* إضافة ملصق "الأخيرة" أو "جديد" فوق البطاقة */
-.is-latest-episode::before {
-    content: "الحلقة الأخيرة 🔥";
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    background: red;
-    color: #ffff;
-    font-size: 10px;
-    font-weight: 800;
-    padding: 2px 8px;
-    border-radius: 5px;
-    z-index: 20;
-} 
     </style>
 </head>
 <body>
@@ -363,6 +353,12 @@ const STORAGE_KEY = "Sohab-Al-Ard";
 const INSTALL_PAGE_URL = "https://aminemk640.github.io/Labil-Tv-app/LABIL.TV.PRO/install.html";
 const FALLBACK_IMG = "Series/poster/logo.jpg";
 const thumb = "poster/Sohab-Al-Ard.jpg";
+
+// ==================================================
+// هنا يمكنك تحديد رقم الحلقة الأخيرة (قم بتغيير هذا الرقم)
+// ==================================================
+const LAST_EPISODE_NUMBER = 15; // غير هذا الرقم إلى 30 أو 60 أو أي رقم تريد
+// ==================================================
 
 // بيانات الحلقات - تم إضافة المزيد من الحلقات
 const episodes = [
@@ -480,7 +476,17 @@ const episodes = [
             { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/hizg3fhc0xrypzdij5j1k/Sohab.Al.Ard.S01.E14.480p.mp4?rlkey=0scup78wzuwo16ywaxz3vsuf9&st=ed7ky91a&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
             { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/hizg3fhc0xrypzdij5j1k/Sohab.Al.Ard.S01.E14.480p.mp4?rlkey=0scup78wzuwo16ywaxz3vsuf9&st=ed7ky91a&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
-    }              
+    } ,
+   {
+             id: 15,
+        title :  "15 شريط مصور",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/p1ksljg85p7loz3h1hujo/Sohab.Al.Ard.S1.Ep15.480p.mp4?rlkey=hkn22sb6291pfh4f0my7xyfrq&st=fsalroin&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/p1ksljg85p7loz3h1hujo/Sohab.Al.Ard.S1.Ep15.480p.mp4?rlkey=hkn22sb6291pfh4f0my7xyfrq&st=fsalroin&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    }                        
+    
     
 
  
@@ -544,11 +550,9 @@ function renderGrid(data = episodes) {
         return;
     }
     
-    grid.innerHTML = data.map((ep, index) => {
-        // سطر التغيير: نتحقق هل هذا العنصر هو الأخير في المصفوفة الأصلية
-        const isLast = (ep.id === episodes[episodes.length - 1].id);
-        
-        return `<div class="sg-card-item ${history.includes(ep.id) ? "is-watched" : ""} ${isLast ? "is-latest-episode" : ""}" 
+    grid.innerHTML = data.map(ep => 
+        `<div class="sg-card-item ${history.includes(ep.id) ? "is-watched" : ""}" 
+            data-episode-id="${ep.id}"
             tabindex="0" 
             onclick="openServerMenu(${ep.id})" 
             onkeydown="if(event.key==='Enter') openServerMenu(${ep.id})">
@@ -559,15 +563,35 @@ function renderGrid(data = episodes) {
             <div class="sg-card-meta">
                 <div class="sg-episode-label">${ep.title}</div>
             </div>
-        </div>`;
-    }).join("");
-}
-function showToast() {
-    const t = document.getElementById("toast");
-    t.style.display = "block";
+        </div>`
+    ).join("");
+    
+    // إضافة كلاس للحلقة الأخيرة بناءً على الرقم المحدد في LAST_EPISODE_NUMBER
     setTimeout(() => {
-        t.style.display = "none";
-    }, 3000);
+        const allCards = document.querySelectorAll('.sg-card-item');
+        if (allCards.length > 0) {
+            // إزالة كلاس last-episode من جميع البطاقات أولاً
+            allCards.forEach(card => card.classList.remove('last-episode'));
+            
+            // البحث عن الحلقة التي رقمها يساوي LAST_EPISODE_NUMBER
+            allCards.forEach(card => {
+                // البحث عن onclick attribute الذي يحتوي على رقم الحلقة
+                const onclickAttr = card.getAttribute('onclick');
+                if (onclickAttr) {
+                    // استخراج رقم الحلقة من onclick
+                    const match = onclickAttr.match(/openServerMenu\((\d+)\)/);
+                    if (match && match[1]) {
+                        const episodeId = parseInt(match[1]);
+                        // إذا كان رقم الحلقة يساوي LAST_EPISODE_NUMBER، أضف لها الكلاس
+                        if (episodeId === LAST_EPISODE_NUMBER) {
+                            card.classList.add('last-episode');
+                            console.log(`✅ تم تلوين الحلقة رقم ${LAST_EPISODE_NUMBER} (الحلقة الأخيرة)`);
+                        }
+                    }
+                }
+            });
+        }
+    }, 100);
 }
 
 function openServerMenu(id) {
@@ -699,7 +723,7 @@ window.onload = function() {
             if(firstCard) firstCard.focus();
         }
     }, 500);
-    console.log("✅ تطبيق علي كلاي جاهز - مع أزرار سيرفرات أنيقة");
+    console.log(`✅ تطبيق علي كلاي جاهز - الحلقة الأخيرة هي رقم ${LAST_EPISODE_NUMBER}`);
 };
 
 function showToast(message = "جاري رفع الحلقة حالياً...") {
@@ -725,4 +749,3 @@ function showToast(message = "جاري رفع الحلقة حالياً...") {
 
 </body>
 </html>
-
