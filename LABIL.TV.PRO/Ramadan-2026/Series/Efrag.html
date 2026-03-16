@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ramez_Level_El_Wahsh</title>
+    <title>مسلسل إفراج</title>
     <link rel="icon" type="image/png" href="poster/logo.jpg">
-	<link rel="manifest"href="https://aminemk640.github.io/Labil-Tv-app/LABIL.TV.PRO/manifest.json">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <meta name="theme-color" content="rgba(255,255,255,0.75)">
@@ -197,72 +196,8 @@
         .sg-server-panel { background:var(--modal-bg); padding:25px; border-radius:24px; border:1px solid var(--glass-border); width:90%; max-width:360px; text-align:center; animation:slideUp 0.4s ease; }
         @keyframes slideUp { from {transform:translateY(20px); opacity:0;} to {transform:translateY(0); opacity:1;} }
 
- /* Toast أنيق ومتجدد */
-#toast {
-    position: fixed;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%) translateY(100%);
-            background: #1e293b;  
-            color: white;
-    padding: 14px 30px;
-    border-radius: 50px;
-    font-weight: 700;
-    z-index: 5000;
-    display: none;
-    align-items: center;
-    gap: 12px;
-    box-shadow: 0 10px 30px rgba(237, 27, 118, 0.4),
-                0 0 0 2px rgba(255, 255, 255, 0.1) inset;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);            border: 1px solid var(--primary-pink); box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-    font-size: 1rem;
-    letter-spacing: 0.5px;
-    animation: slideUpToast 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-}
-
-#toast i {
-    font-size: 1.2rem;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-}
-
-#toast::after {
-    content: '';
-    position: absolute;
-    bottom: -3px;
-    left: 10%;
-    width: 80%;
-    height: 10px;
-    background: rgba(237, 27, 118, 0.3);
-    filter: blur(8px);
-    border-radius: 50%;
-    z-index: -1;
-}
-
-@keyframes slideUpToast {
-    0% {
-        opacity: 0;
-        transform: translateX(-50%) translateY(30px);
-    }
-    20% {
-        opacity: 1;
-        transform: translateX(-50%) translateY(-5px);
-    }
-    40% {
-        transform: translateX(-50%) translateY(3px);
-    }
-    60% {
-        transform: translateX(-50%) translateY(-2px);
-    }
-    80% {
-        transform: translateX(-50%) translateY(1px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
-    }
-}
+        #toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:#ed1b76; color:white; padding:12px 25px; border-radius:50px; font-weight:700; z-index:5000; display:none; box-shadow:0 10px 20px rgba(0,0,0,0.5); animation:fadeIn 0.3s ease; }
+        @keyframes fadeIn { from{opacity:0; bottom:10px;} to{opacity:1; bottom:30px;} }
 
         .sg-close-btn { width:100%; background: rgba(255,255,255,0.1); color:white; border:none; padding:12px; border-radius:10px; cursor:pointer; font-weight:600; margin-top:8px; font-size:0.9rem; transition:all 0.2s; }
         .sg-close-btn:hover { background: red; }
@@ -277,7 +212,7 @@
 
     <header class="sg-app-header">
         <button class="sg-nav-icon" onclick="handleExit()" tabindex="0"><i class="fas fa-chevron-right"></i></button>
-                <div style="font-weight:800; font-size:1.2rem;">رامز ليفل الوحش<span style="color:var(--primary-pink)"></span></div>
+        <div style="font-weight:800; font-size:1.2rem;"><span style="color:var(--primary-pink)">إفراج</span></div>
         <button class="sg-nav-icon" onclick="toggleSearchBar(true)"><i class="fas fa-search"></i></button>
 
         <div id="search-container">
@@ -290,7 +225,7 @@
     <div class="section-header">
         <div class="section-title"><i class="fas fa-bolt"></i> <span>قائمة الحلقات</span></div>
         <button class="reset-history-btn" onclick="openResetModal()" tabindex="0">
-            <i class="fas fa-eye-slash"style="color:#ed1b76"></i> حذف مشاهدة
+            <i class="fas fa-eye-slash"></i> حذف مشاهدة
         </button>
     </div>
 
@@ -337,249 +272,255 @@
 /* ==================================================
          كود مسلسل علي كلاي - محدث بأزرار جميلة
 ================================================== */
-const STORAGE_KEY = "Ramez_Level_El_Wahsh";
+const STORAGE_KEY = "Efrag";
 const INSTALL_PAGE_URL = "https://aminemk640.github.io/Labil-Tv-app/LABIL.TV.PRO/install.html";
 const FALLBACK_IMG = "Series/poster/logo.jpg";
-const thumb = "poster/Ramez_Level_El_Wahsh.jpg";
+const thumb = "poster/Efrag.jpg";
 
 // بيانات الحلقات - تم إضافة المزيد من الحلقات
 const episodes = [
     {
-        id: 1,
+       id: 1,
         title: "Episode 1",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/zmq9okasfkvzrqaq4tf7y/Ramez_Level_El_Wahsh.EP01.mp4?rlkey=hfbdnnb0h0twhaw5gml115mb4&st=mxp8frxc&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/zmq9okasfkvzrqaq4tf7y/Ramez_Level_El_Wahsh.EP01.mp4?rlkey=hfbdnnb0h0twhaw5gml115mb4&st=mxp8frxc&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/or7b6tvigu9vr62r9af6w/Efrag.S01EP01.mp4?rlkey=4o8czu8nsj5zzzjdddhq4yw0x&st=0m402bjb&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/or7b6tvigu9vr62r9af6w/Efrag.S01EP01.mp4?rlkey=4o8czu8nsj5zzzjdddhq4yw0x&st=0m402bjb&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     },
-    
-     {
-        id: 2,
+       {
+       id: 2,
         title: "Episode 2",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/xazss9od5xdfkmc3x8run/Ramez_Level_El_Wahsh.EP02.mp4?rlkey=c5huf5j4pne7c0s3vuftm86nf&st=72t4tccr&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/xazss9od5xdfkmc3x8run/Ramez_Level_El_Wahsh.EP02.mp4?rlkey=c5huf5j4pne7c0s3vuftm86nf&st=72t4tccr&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/tqli3kbvl8l6azlfakdb9/Efrag.S01EP02.mp4?rlkey=0b8rl8g1g2z2zf4bhn6sycfh6&st=7o26yllq&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/tqli3kbvl8l6azlfakdb9/Efrag.S01EP02.mp4?rlkey=0b8rl8g1g2z2zf4bhn6sycfh6&st=7o26yllq&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     },
-    {
-        id: 3,
+         {
+       id: 3,
         title: "Episode 3",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/xcp1tnoo039bb6j62fgng/Ramez_Level_El_Wahsh.EP03.mp4?rlkey=63e08mjoygaqalm7xajn9q8a4&st=rf8u031k&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/xcp1tnoo039bb6j62fgng/Ramez_Level_El_Wahsh.EP03.mp4?rlkey=63e08mjoygaqalm7xajn9q8a4&st=rf8u031k&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/lx9fn2nz18wwv6j9r1e1u/Efrag.S01EP03.mp4?rlkey=jq355x2nnynuv491ucihv0yiw&st=x1y03w14&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/lx9fn2nz18wwv6j9r1e1u/Efrag.S01EP03.mp4?rlkey=jq355x2nnynuv491ucihv0yiw&st=x1y03w14&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
-    }
-   ,
-    {
-        id: 4,
+    },
+	{
+       id: 4,
         title: "Episode 4",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/0qoqtvrn8xp6kb234wr41/Ramez.Level.El.Wahsh.S2026E04..mp4?rlkey=82p44vfnmdavih2fzshrlzwg9&st=4k30rcw5&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/0qoqtvrn8xp6kb234wr41/Ramez.Level.El.Wahsh.S2026E04..mp4?rlkey=82p44vfnmdavih2fzshrlzwg9&st=4k30rcw5&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/0eo6m4d2nikg7z6ra4uex/Efrag.S01EP04.mp4?rlkey=wwiilug3tt8y86whcs9us8kb1&st=iqlq8dqx&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/0eo6m4d2nikg7z6ra4uex/Efrag.S01EP04.mp4?rlkey=wwiilug3tt8y86whcs9us8kb1&st=iqlq8dqx&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
-    }
-   ,
-    {
-        id: 5,
+    },
+         {
+       id: 5,
         title: "Episode 5",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/9bibysem9hubvqd22l5yc/Ramez_Level_El_Wahsh.EP05.mp4?rlkey=1vegj9f2y41n1iyqd31adm46z&st=pltwdlna&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/9bibysem9hubvqd22l5yc/Ramez_Level_El_Wahsh.EP05.mp4?rlkey=1vegj9f2y41n1iyqd31adm46z&st=pltwdlna&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/rhainayxyfl1452tcgy3l/Efrag.S01E05..mp4?rlkey=3n78w7pu8ip8l0ekh90belsdj&st=lkay1bcz&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/rhainayxyfl1452tcgy3l/Efrag.S01E05..mp4?rlkey=3n78w7pu8ip8l0ekh90belsdj&st=lkay1bcz&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
-    }
-      ,
-    {
-        id: 6,
+    },
+      {
+       id: 6,
         title: "Episode 6",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/4fc6klqdcqjot777lqbty/Ramez.Level.AlWahsh.S01.E06.480p.mp4?rlkey=qpeb09o925cmw8jfsz7lmygbr&st=wfnefm9v&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/4fc6klqdcqjot777lqbty/Ramez.Level.AlWahsh.S01.E06.480p.mp4?rlkey=qpeb09o925cmw8jfsz7lmygbr&st=wfnefm9v&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/itcdufphamo8un5d12mfw/Efrag.S01.E06.mp4?rlkey=mufcdz0jol5oekgooma6rgntp&st=3z04f3bu&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/itcdufphamo8un5d12mfw/Efrag.S01.E06.mp4?rlkey=mufcdz0jol5oekgooma6rgntp&st=3z04f3bu&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
-    }    ,
-    {
-        id: 7,
+    },
+       {
+       id: 7,
         title: "Episode 7",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/vnvtwkeycjrladuf9fak0/Ramez.Level.AlWahsh.S01.E07.480p.mp4?rlkey=tnq4d5pke7z898xni7pdxxjtj&st=s67lz96z&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/vnvtwkeycjrladuf9fak0/Ramez.Level.AlWahsh.S01.E07.480p.mp4?rlkey=tnq4d5pke7z898xni7pdxxjtj&st=s67lz96z&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/s19fa28d0rtmkkskv59ok/Efrag.S01.E07.mp4?rlkey=zububg7zn0priokntl0xmfrq7&st=6tzxahbk&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/s19fa28d0rtmkkskv59ok/Efrag.S01.E07.mp4?rlkey=zububg7zn0priokntl0xmfrq7&st=6tzxahbk&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     },
-    {
-        id: 8,
+       {
+       id: 8,
         title: "Episode 8",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/gyvh5k0ciyz4l6xabidac/Ramez.Level.AlWahsh.S01.E08.mp4?rlkey=e6gz9bxd9gwq6a24ie8p9pmsc&st=uq4yajt0&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/gyvh5k0ciyz4l6xabidac/Ramez.Level.AlWahsh.S01.E08.mp4?rlkey=e6gz9bxd9gwq6a24ie8p9pmsc&st=uq4yajt0&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/yw0i7z0x3j8r4m3q8iaqu/Efrag.S01.E08.720p.mp4?rlkey=7qafzyy3tv0i3bcoxqb1af80q&st=911nr36j&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/yw0i7z0x3j8r4m3q8iaqu/Efrag.S01.E08.720p.mp4?rlkey=7qafzyy3tv0i3bcoxqb1af80q&st=911nr36j&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     },
-    {
-        id: 9,
+       {
+       id: 9,
         title: "Episode 9",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/9o905cqdobejgz1746xzz/Ramez.Level.AlWahsh.S01.E09.480p.mp4?rlkey=1yb58m8k6loccxiarwj37115t&st=lub1ihfj&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/9o905cqdobejgz1746xzz/Ramez.Level.AlWahsh.S01.E09.480p.mp4?rlkey=1yb58m8k6loccxiarwj37115t&st=lub1ihfj&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/bzs91am1l029f24kkhy03/Efrag.S01.E09.mp4?rlkey=jzvga1ngljytj3wkqu8sw71kx&st=nxcm7wol&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/bzs91am1l029f24kkhy03/Efrag.S01.E09.mp4?rlkey=jzvga1ngljytj3wkqu8sw71kx&st=nxcm7wol&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     },
-    {
-        id: 10,
+       {
+       id: 10,
         title: "Episode 10",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/q0kejue62owoh8m3kce0q/Ramez.Level.AlWahsh.S01.E10.480p.mp4?rlkey=n98ht90c4xzpkgpjxezfhfouc&st=haipozrc&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/q0kejue62owoh8m3kce0q/Ramez.Level.AlWahsh.S01.E10.480p.mp4?rlkey=n98ht90c4xzpkgpjxezfhfouc&st=haipozrc&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/ypas0k6lupu468w6wmm15/Efrag.S01.E10.720p.mp4?rlkey=2323yr8ibaxbfsuqulp724otv&st=7fksu2yp&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/ypas0k6lupu468w6wmm15/Efrag.S01.E10.720p.mp4?rlkey=2323yr8ibaxbfsuqulp724otv&st=7fksu2yp&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     },
-    {
-        id: 11,
+       {
+       id: 11,
         title: "Episode 11",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/czx7bpau88sucaryspkka/Ramez.Level.AlWahsh.S01.E11.480p.mp4?rlkey=48tb57973gv0w483zlp7cykzu&st=ibxkfx0z&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/czx7bpau88sucaryspkka/Ramez.Level.AlWahsh.S01.E11.480p.mp4?rlkey=48tb57973gv0w483zlp7cykzu&st=ibxkfx0z&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/u4x80svkjjsae59a2to31/Efrag.S01.E11.720p.mp4?rlkey=gijhoe925hpv0rafbsntixvx1&st=ynun84if&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/u4x80svkjjsae59a2to31/Efrag.S01.E11.720p.mp4?rlkey=gijhoe925hpv0rafbsntixvx1&st=ynun84if&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     },
-    {
-        id: 12,
+       {
+       id: 12,
         title: "Episode 12",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/f94j7e9loih630a70jy9z/Ramez.Level.AlWahsh.S01.E12.480p.mp4?rlkey=v52w4o3rlummot37u07i8qljr&st=15z4p3kw&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/f94j7e9loih630a70jy9z/Ramez.Level.AlWahsh.S01.E12.480p.mp4?rlkey=v52w4o3rlummot37u07i8qljr&st=15z4p3kw&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/0s133zg398eti8f894gl8/Efrag.S01.E12.720p.mp4?rlkey=gu4rjknipvwgnkfj5arfwg912&st=o6mxica3&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/0s133zg398eti8f894gl8/Efrag.S01.E12.720p.mp4?rlkey=gu4rjknipvwgnkfj5arfwg912&st=o6mxica3&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     },
-    {
-        id: 13,
+       {
+       id: 13,
         title: "Episode 13",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/voe6n60avyi9csvu64v7i/Ramez.Level.AlWahsh.S01.E13.mp4?rlkey=l64km8r9mrmg3ju1h20gubm33&st=ipvgcsmg&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/voe6n60avyi9csvu64v7i/Ramez.Level.AlWahsh.S01.E13.mp4?rlkey=l64km8r9mrmg3ju1h20gubm33&st=ipvgcsmg&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/1b8rqhzgohgowwtuczrxq/Efrag.S01.E13.720p.mp4?rlkey=297tunczswhfe9399an0ogcxb&st=vss5ey7j&dl=0#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/1b8rqhzgohgowwtuczrxq/Efrag.S01.E13.720p.mp4?rlkey=297tunczswhfe9399an0ogcxb&st=vss5ey7j&dl=0#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     },
-    {
-        id: 14,
+       {
+       id: 14,
         title: "Episode 14",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/t1v1bbppih1q27ilbccpe/Ramez.Level.AlWahsh.S01.E14.480p.mp4?rlkey=31ao71jtovm384fklx454l3tm&st=y8h966v3&dl=1=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/t1v1bbppih1q27ilbccpe/Ramez.Level.AlWahsh.S01.E14.480p.mp4?rlkey=31ao71jtovm384fklx454l3tm&st=y8h966v3&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/5o6x7gmarthozqesv4h6j/Efrag.S01.E14.720p.mp4?rlkey=si8ppzybp7o62772k3g6b2t0v&st=fk9pnmep&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/5o6x7gmarthozqesv4h6j/Efrag.S01.E14.720p.mp4?rlkey=si8ppzybp7o62772k3g6b2t0v&st=fk9pnmep&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     },
-    {
-        id: 15,
+       {
+       id: 15,
         title: "Episode 15",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/qbmf75wpsvz0q9a2mk6bn/Level.AlWahsh.S01.E15.480p.mp4?rlkey=u2a97ieg93nw4lnnjyyrzq6fl&st=ymmasuwx&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/qbmf75wpsvz0q9a2mk6bn/Level.AlWahsh.S01.E15.480p.mp4?rlkey=u2a97ieg93nw4lnnjyyrzq6fl&st=ymmasuwx&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/cjh8d9di4wmipks7pwhok/Efrag.S01.E15.720p.mp4?rlkey=ns8prmywre4k9u2avcdyluwvh&st=equlsxxt&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/cjh8d9di4wmipks7pwhok/Efrag.S01.E15.720p.mp4?rlkey=ns8prmywre4k9u2avcdyluwvh&st=equlsxxt&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     },
-    {
-        id: 16,
+       {
+       id: 16,
         title: "Episode 16",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/pjrmk7ui8rlaamm0ifdw7/Ramez.Level.AlWahsh.S01.E16.480p.mp4?rlkey=vik36nzki9183ng4j15of71w0&st=suaccecm&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/pjrmk7ui8rlaamm0ifdw7/Ramez.Level.AlWahsh.S01.E16.480p.mp4?rlkey=vik36nzki9183ng4j15of71w0&st=suaccecm&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/bs21hker12wfzd6mvmb22/Efrag.S01.E16.720p.mp4?rlkey=3a5j6g20f72f0epaf55cpi043&st=mn16br9v&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/bs21hker12wfzd6mvmb22/Efrag.S01.E16.720p.mp4?rlkey=3a5j6g20f72f0epaf55cpi043&st=mn16br9v&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     },
-    {
-        id: 17,
+       {
+       id: 17,
         title: "Episode 17",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/0givocit1g0lpz5v7d6br/Ramez.Level.AlWahsh.S01.E17.480p.mp4?rlkey=oso6l12duw4wjtu1b0fmweimq&st=1mdxxewo&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/0givocit1g0lpz5v7d6br/Ramez.Level.AlWahsh.S01.E17.480p.mp4?rlkey=oso6l12duw4wjtu1b0fmweimq&st=1mdxxewo&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/9p710o8u5tb46yeqmevj7/Efrag.S01.E17.720p.mp4?rlkey=6i64vr49e2iqyrcrq4vmytqpd&st=qfwtwdzi&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/9p710o8u5tb46yeqmevj7/Efrag.S01.E17.720p.mp4?rlkey=6i64vr49e2iqyrcrq4vmytqpd&st=qfwtwdzi&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
-    },
-    {
-        id: 18,
+    }
+   ,
+       {
+       id: 18,
         title: "Episode 18",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/25l1d9iu36a0v9hkfutw6/.Ramez.Level.AlWahsh.S01.E18.480p.mp4?rlkey=mbarwn3xi0hm2re2dcb9jtam5&st=jfwnufw2&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/25l1d9iu36a0v9hkfutw6/.Ramez.Level.AlWahsh.S01.E18.480p.mp4?rlkey=mbarwn3xi0hm2re2dcb9jtam5&st=jfwnufw2&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/jnotsoz1acghj678028b5/Efrag.S01.E18.720p.mp4?rlkey=xp1beef2pxiqr2lun8oycpii4&st=tn43btiv&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/jnotsoz1acghj678028b5/Efrag.S01.E18.720p.mp4?rlkey=xp1beef2pxiqr2lun8oycpii4&st=tn43btiv&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     },
-    {
-        id: 19,
+       {
+       id: 19,
         title: "Episode 19",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/y39e5pzp1oleghbpvgfwv/arabseed-.Ramez.Level.AlWahsh.S01.E19.480p.mp4?rlkey=i3dwk610qijabk5yrsv9b477h&st=hvfzt1by&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/y39e5pzp1oleghbpvgfwv/arabseed-.Ramez.Level.AlWahsh.S01.E19.480p.mp4?rlkey=i3dwk610qijabk5yrsv9b477h&st=hvfzt1by&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/nzg52l2vi31ha96lfamxj/Efrag.S01.E19.720p.mp4?rlkey=elzwqyyohx77mi6uvq2blk8b5&st=0c9c5lop&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/nzg52l2vi31ha96lfamxj/Efrag.S01.E19.720p.mp4?rlkey=elzwqyyohx77mi6uvq2blk8b5&st=0c9c5lop&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     },
-    {
-        id: 20,
+       {
+       id: 20,
         title: "Episode 20",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/j9s8w6wm3swaofxwgeptt/Ramez.Level.AlWahsh.S01.E20.480p.mp4?rlkey=8fmxt7zktjjpxp7nr9j6xikg4&st=lvy2ydpm&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/j9s8w6wm3swaofxwgeptt/Ramez.Level.AlWahsh.S01.E20.480p.mp4?rlkey=8fmxt7zktjjpxp7nr9j6xikg4&st=lvy2ydpm&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/f5u7qtuevxl1pssmkduej/Efrag.S01.E20.720p.mp4?rlkey=jf9pz1zl5rt9dkdvl562pn679&st=ggykz6df&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/f5u7qtuevxl1pssmkduej/Efrag.S01.E20.720p.mp4?rlkey=jf9pz1zl5rt9dkdvl562pn679&st=ggykz6df&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     },
-    {
-        id: 21,
+       {
+       id: 21,
         title: "Episode 21",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/2lyqtzweuoxka9bua30gs/Ramez.Level.AlWahsh.S01.E21.480p.mp4?rlkey=aibow65of9kmr1pcdu6jwm2rm&st=xfb6zhje&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/2lyqtzweuoxka9bua30gs/Ramez.Level.AlWahsh.S01.E21.480p.mp4?rlkey=aibow65of9kmr1pcdu6jwm2rm&st=xfb6zhje&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/rjgqzziyr01q4gl1ov9ch/Efrag.S01.E21.720p.mp4?rlkey=zepkyl3fpeecbqpsaw1wjrkol&st=k8i4ctwe&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/rjgqzziyr01q4gl1ov9ch/Efrag.S01.E21.720p.mp4?rlkey=zepkyl3fpeecbqpsaw1wjrkol&st=k8i4ctwe&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     },
     {
-        id: 22,
+       id: 22,
         title: "Episode 22",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/3jgtrgr7vnr4ptnhg4j9h/Ramez.Level.AlWahsh.S01.E22.480p.mp4?rlkey=kcao5250m32fp43murknfrpn5&st=swwpl7k6&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/3jgtrgr7vnr4ptnhg4j9h/Ramez.Level.AlWahsh.S01.E22.480p.mp4?rlkey=kcao5250m32fp43murknfrpn5&st=swwpl7k6&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/86ljexg1i310eplnu67gw/Efrag.S01.E22.720p.mp4?rlkey=ki3281rbdbrpm7tyawgdbxz8z&st=uh8pywv8&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/86ljexg1i310eplnu67gw/Efrag.S01.E22.720p.mp4?rlkey=ki3281rbdbrpm7tyawgdbxz8z&st=uh8pywv8&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     },
     {
-        id: 23,
+       id: 23,
         title: "Episode 23",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/nzrco3nrqtlpqusgexjaw/.Ramez.Level.AlWahsh.S01.E23.480p.mp4?rlkey=rms5m3kgw2u05zmwlkfkz5d1b&st=shgk06a6&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/nzrco3nrqtlpqusgexjaw/.Ramez.Level.AlWahsh.S01.E23.480p.mp4?rlkey=rms5m3kgw2u05zmwlkfkz5d1b&st=shgk06a6&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/euqzh0twl8g1vbv458fue/Efrag.S01.E23.720p.mp4?rlkey=ms6hqnd86ozx2ma2ziso8dl26&st=4ewqtqes&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/euqzh0twl8g1vbv458fue/Efrag.S01.E23.720p.mp4?rlkey=ms6hqnd86ozx2ma2ziso8dl26&st=4ewqtqes&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     },
     {
-        id: 24,
+       id: 24,
         title: "Episode 24",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/28y8i833ul2nbfe5rxcef/Ramez.Level.AlWahsh.S01.E24.480p.mp4?rlkey=5ami5t25vsv484nnmwv3i6e49&st=2v9xkpla&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/28y8i833ul2nbfe5rxcef/Ramez.Level.AlWahsh.S01.E24.480p.mp4?rlkey=5ami5t25vsv484nnmwv3i6e49&st=2v9xkpla&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/x09qpuq2dfamb9gz11wtb/Efrag.S01.E24.720p.mp4?rlkey=bgu1chxtj43vsuqpyy4era8ym&st=2w2wryni&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/x09qpuq2dfamb9gz11wtb/Efrag.S01.E24.720p.mp4?rlkey=bgu1chxtj43vsuqpyy4era8ym&st=2w2wryni&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     },
     {
-        id: 25,
+       id: 25,
         title: "Episode 25",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/5lcgp184fbcrcjmrp4jzm/Ramez.Level.El.Wahsh.S2026E25.mp4?rlkey=5iivysybsji08m48d382nbptj&st=12trylne&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/5lcgp184fbcrcjmrp4jzm/Ramez.Level.El.Wahsh.S2026E25.mp4?rlkey=5iivysybsji08m48d382nbptj&st=12trylne&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/i1anz1ghgawab0rc1mh92/Efrag.S01.E25.720p.mp4?rlkey=oc9xmb45jsy5jq5p71sbyfc29&st=t9bhf3my&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/i1anz1ghgawab0rc1mh92/Efrag.S01.E25.720p.mp4?rlkey=oc9xmb45jsy5jq5p71sbyfc29&st=t9bhf3my&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     },
     {
-        id: 26,
+       id: 26,
         title: "Episode 26",
         poster: thumb,
         servers: [
-            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/cp526a5u6ovb9bc18ia8o/Ramez_Level_El_Wahsh.EP26.mp4?rlkey=cihzouqwlpej8igmxhcjvajpf&st=omi8w3tc&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
-            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/cp526a5u6ovb9bc18ia8o/Ramez_Level_El_Wahsh.EP26.mp4?rlkey=cihzouqwlpej8igmxhcjvajpf&st=omi8w3tc&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/jr3j9rccxarkrr5uizdk0/Efrag.S01EP26.mp4?rlkey=mx52gkl4jd360vvl3iib5fw7n&st=kkeqjjum&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/jr3j9rccxarkrr5uizdk0/Efrag.S01EP26.mp4?rlkey=mx52gkl4jd360vvl3iib5fw7n&st=kkeqjjum&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+        ]
+    },
+    {
+       id: 27,
+        title: "Episode 27",
+        poster: thumb,
+        servers: [
+            { name: "Server SD", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/bdrmgss1vdkhhibap6ih2/Efrag27.mp4?rlkey=mcqvrxtuvmgxlnq97rjvyl343&st=n1ejpgsd&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "Server HD", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/bdrmgss1vdkhhibap6ih2/Efrag27.mp4?rlkey=mcqvrxtuvmgxlnq97rjvyl343&st=n1ejpgsd&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
         ]
     }
    
@@ -587,8 +528,16 @@ const episodes = [
    
    
    
-   
-   
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 ];
 
 let activeEpId = null;
@@ -803,28 +752,10 @@ window.onload = function() {
     }, 500);
     console.log("✅ تطبيق علي كلاي جاهز - مع أزرار سيرفرات أنيقة");
 };
-
-function showToast(message = "جاري رفع الحلقة حالياً...") {
-    const toast = document.getElementById("toast");
-    
-    // إضافة أيقونة حسب نوع الرسالة
-    let icon = "fa-hourglass-half";
-    if (message.includes("خطأ")) icon = "fa-exclamation-circle";
-    else if (message.includes("تم")) icon = "fa-check-circle";
-    
-    toast.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
-    toast.style.display = "flex";
-    
-    setTimeout(() => {
-        toast.style.animation = "slideUpToast 0.3s reverse forwards";
-        setTimeout(() => {
-            toast.style.display = "none";
-            toast.style.animation = ""; // إعادة تعيين الأنميشن
-        }, 300);
-    }, 3000);
-}
 </script>
 
 </body>
 </html>
+
+
 
