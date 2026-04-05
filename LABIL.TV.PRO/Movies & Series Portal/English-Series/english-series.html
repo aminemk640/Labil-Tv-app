@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مسلسلات أجنبية</title>
+    <link rel="icon" type="image/png" href="Series/poster/logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-pink: #ed1b76;
+            --primary-red: #ef4444;
+            --bg-dark: #020617;
+            --card-bg: rgba(30, 41, 59, 0.5);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --focus-glow: 0 0 25px rgba(237, 27, 118, 0.6);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Tajawal', sans-serif;
+            background: var(--bg-dark);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Header Navigation */
+        .app-header {
+            height: 70px;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(15px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 2000;
+            border-bottom: 1px solid var(--glass-border);
+            box-sizing: border-box;
+        }
+
+        .header-brand {
+            font-weight: 800;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-brand span {
+            color: var(--primary-pink);
+        }
+
+        #search-container {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: #0f172a;
+            display: none;
+            align-items: center;
+            padding: 0 5%;
+            box-sizing: border-box;
+            z-index: 2100;
+        }
+
+        #search-container.active {
+            display: flex;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+
+        #search-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            font-family: 'Tajawal';
+            font-size: 1.1rem;
+            padding: 10px;
+            outline: none;
+        }
+
+        .icon-btn {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.05);
+            color: white;
+            border: 1px solid transparent;
+            transition: 0.3s;
+            outline: none;
+        }
+
+        .icon-btn:focus, .icon-btn:hover {
+            background: var(--primary-pink);
+            border-color: white;
+            transform: scale(1.1);
+        }
+
+        /* Main Layout */
+        .page-content {
+            margin-top: 90px;
+            padding-bottom: 50px;
+        }
+
+        .section-header {
+            padding: 10px 6%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.3rem;
+            font-weight: 800;
+        }
+
+        .section-title i {
+            color: var(--primary-pink);
+        }
+
+        /* Grid System */
+        .content-grid {
+            padding: 0 5%;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 15px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .card-item {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            outline: none;
+        }
+
+        /* TV Focus State */
+        .card-item:focus, .card-item:hover {
+            transform: translateY(-8px) scale(1.05);
+            border-color: var(--primary-pink);
+            box-shadow: var(--focus-glow);
+            z-index: 10;
+        }
+
+        .poster-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 2/3;
+            background: #1e293b;
+        }
+
+        /* Skeleton */
+        .skeleton {
+            background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .poster-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .poster-wrapper img.loaded {
+            opacity: 1;
+        }
+
+        .card-info {
+            padding: 10px 8px;
+            text-align: center;
+            background: linear-gradient(to top, rgba(15,23,42,1), transparent);
+        }
+
+        .card-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--primary-pink);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            z-index: 2;
+        }
+
+        /* Search Empty State */
+        .empty-state {
+            grid-column: 1 / -1;
+            padding: 100px 20px;
+            text-align: center;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: #334155;
+            margin-bottom: 20px;
+        }
+
+        .btn-reset {
+            margin-top: 20px;
+            padding: 12px 25px;
+            background: var(--primary-pink);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-family: 'Tajawal';
+            font-weight: 700;
+            cursor: pointer;
+            outline: none;
+        }
+        
+        .btn-reset:focus {
+            box-shadow: 0 0 0 3px white;
+        }
+
+        /* Toast Styling */
+        #custom-toast {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%) translateY(150%);
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--primary-pink);
+            padding: 14px 28px;
+            border-radius: 50px;
+            z-index: 9999;
+            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: none;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            white-space: nowrap;
+            pointer-events: none;
+        }
+
+        #custom-toast.active {
+            display: flex;
+            animation: toastIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes toastIn {
+            from { transform: translateX(-50%) translateY(150%); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .content-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+                padding: 0 3%;
+            }
+            .section-header { padding: 10px 4%; }
+            .section-title { font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="app-header">
+        <button class="icon-btn" onclick="window.history.back()" aria-label="Back">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+        
+        <div class="header-brand">
+            مسلسلات <span>أجنبية</span>
+        </div>
+
+        <button class="icon-btn" onclick="toggleSearch(true)" aria-label="Search">
+            <i class="fas fa-search"></i>
+        </button>
+
+        <div id="search-container">
+            <button class="icon-btn" onclick="toggleSearch(false)">
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            <input type="text" id="search-input" placeholder="ابحث عن مسلسل أو تصنيف..." oninput="filterData(this.value)">
+            <button class="icon-btn" onclick="clearSearch()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <div class="section-header">
+            <div class="section-title">
+                <i class="fas fa-fire"></i>
+                <span>أحدث المسلسلات</span>
+            </div>
+        </div>
+
+        <div class="content-grid" id="grid-container">
+            <!-- سيتم ملء البيانات هنا بواسطة JS -->
+        </div>
+    </main>
+
+    <div id="custom-toast">
+        <i class="fas fa-info-circle" style="color: var(--primary-pink); font-size: 1.2rem;"></i>
+        <span id="toast-message" style="font-weight: 600; font-size: 0.95rem;">قريباً في التحديث القادم</span>
+    </div>
+
+    <audio id="clickSound" src="https://github.com/ahmadmk2023/Movies-free1/raw/refs/heads/main/mp3/btn-hover01.mp3" preload="auto"></audio>
+
+    <script>
+        const FALLBACK_POSTER = "Series/poster/logo.jpg";
+
+        const seriesData = [
+            { id: 1, title: "Man vs Baby",
+			poster: "Series/poster/Man.vs.Baby.jpg",
+			url: "Series/Man.vs.Baby.html",
+			badge: "جديد" },
+			
+            { id: 2, title: "Alien Earth", 
+			poster: "Series/poster/Alien.Earth.jpg",
+			url: "Series/Alien.Earth.html",
+			badge: "FX" },
+			
+            { id: 3, title: "Man vs Bee",
+			poster: "Series/poster/Man.vs.Bee.jpg",
+			url: "Series/Man.vs.Bee.html", badge: "NETFLIX" },
+			
+            { id: 4, title: "Squid.GameS03لعبة الحبار ج ",
+			poster: "Series/poster/Squid.GameS03.jpg",
+			url: "Series/Squid.GameS03.html", badge: "S3" },
+			
+            { id: 5, title: "Squid.GameS02لعبة الحبار ج",
+			poster: "Series/poster/Squid.GameS02.jpg",
+			url: "Series/Squid.GameS02.html", badge: "S2" },
+			
+            { id: 6, title: "Squid.GameS01لعبة الحبار ج",
+			poster: "Series/poster/Squid.GameS01.jpg", 
+			url: "Series/Squid.GameS01.html", badge: "S1" },
+			
+        ];
+
+        const grid = document.getElementById('grid-container');
+        const searchInput = document.getElementById('search-input');
+        const clickSound = document.getElementById('clickSound');
+
+        function render(data) {
+            if (data.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-film"></i>
+                        <h2>لا توجد نتائج مطابقة</h2>
+                        <p>جرب كلمات أخرى مثل اسم المسلسل أو التصنيف</p>
+                        <button class="btn-reset" id="btn-reset" onclick="clearSearch()">العودة للكل</button>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = data.map((item, index) => `
+                <div class="card-item" 
+                     tabindex="0" 
+                     role="button"
+                     data-index="${index}"
+                     onclick="handleNavigation('${item.url}')" 
+                     onfocus="playSfx()">
+                    ${item.badge ? `<div class="badge">${item.badge}</div>` : ''}
+                    <div class="poster-wrapper skeleton">
+                        <img src="${item.poster}" 
+                             alt="${item.title}" 
+                             onload="this.classList.add('loaded'); this.parentElement.classList.remove('skeleton')"
+                             onerror="this.src='${FALLBACK_POSTER}'; this.classList.add('loaded'); this.parentElement.classList.remove('skeleton')">
+                    </div>
+                    <div class="card-info">
+                        <div class="card-title">${item.title}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // دعم أزرار الريموت (Android TV)
+        document.addEventListener('keydown', function(e) {
+            const active = document.activeElement;
+            
+            // زر "موافق" أو "Enter"
+            if (e.key === 'Enter') {
+                if (active.classList.contains('card-item') || active.classList.contains('icon-btn') || active.classList.contains('btn-reset')) {
+                    active.click();
+                }
+            }
+            
+            // التنقل باستخدام الأسهم
+            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                // المتصفح عادةً يدير التنقل الافتراضي بين العناصر التي تملك tabindex
+                // نضمن هنا تشغيل الصوت عند التركيز
+                if (active.classList.contains('card-item')) {
+                    playSfx();
+                }
+            }
+        });
+
+        function handleNavigation(url) {
+            if (url === "#" || !url) {
+                showToast("هذا المسلسل سيتم توفيره في التحديثات القادمة");
+            } else {
+                window.location.href = url;
+            }
+        }
+
+        function toggleSearch(show) {
+            const container = document.getElementById('search-container');
+            container.classList.toggle('active', show);
+            if (show) searchInput.focus();
+        }
+
+        function filterData(query) {
+            const filtered = seriesData.filter(s => 
+                s.title.toLowerCase().includes(query.toLowerCase())
+            );
+            render(filtered);
+        }
+
+        function clearSearch() {
+            searchInput.value = '';
+            toggleSearch(false);
+            render(seriesData);
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('custom-toast');
+            const messageEl = document.getElementById('toast-message');
+            messageEl.innerText = msg;
+            toast.classList.add('active');
+            setTimeout(() => {
+                toast.classList.remove('active');
+            }, 3000);
+        }
+
+        function playSfx() {
+            clickSound.currentTime = 0;
+            clickSound.play().catch(() => {});
+        }
+
+        window.onload = () => render(seriesData);
+    </script>
+</body>
+</html>
