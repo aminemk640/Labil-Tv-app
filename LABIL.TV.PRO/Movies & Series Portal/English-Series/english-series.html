@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مسلسلات أجنبية - تصفح ذكي</title>
+    <title>مسلسلات أجنبية</title>
     <link rel="icon" type="image/png" href="Series/poster/logo.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -144,8 +144,8 @@
         .content-grid {
             padding: 0 5%;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 15px;
             max-width: 1400px;
             margin: 0 auto;
         }
@@ -154,7 +154,7 @@
             background: var(--card-bg);
             border-radius: 15px;
             overflow: hidden;
-            border: 3px solid transparent;
+            border: 2px solid transparent;
             transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             position: relative;
@@ -162,12 +162,11 @@
         }
 
         /* TV Focus State */
-        .card-item.focused, .card-item:hover, .btn-reset.focused, .btn-reset:hover {
-            transform: translateY(-8px) scale(1.08);
+        .card-item:focus, .card-item:hover {
+            transform: translateY(-8px) scale(1.05);
             border-color: var(--primary-pink);
             box-shadow: var(--focus-glow);
             z-index: 10;
-            background: rgba(30, 41, 59, 0.8);
         }
 
         .poster-wrapper {
@@ -177,6 +176,7 @@
             background: #1e293b;
         }
 
+        /* Skeleton */
         .skeleton {
             background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
             background-size: 200% 100%;
@@ -201,22 +201,17 @@
         }
 
         .card-info {
-            padding: 12px 8px;
+            padding: 10px 8px;
             text-align: center;
             background: linear-gradient(to top, rgba(15,23,42,1), transparent);
         }
 
-        /* معالجة الاسم الطويل */
         .card-title {
             font-size: 0.85rem;
             font-weight: 700;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
+            white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            height: 2.4rem;
-            line-height: 1.2rem;
         }
 
         .badge {
@@ -231,32 +226,34 @@
             z-index: 2;
         }
 
-        /* Empty State */
+        /* Search Empty State */
         .empty-state {
             grid-column: 1 / -1;
+            padding: 100px 20px;
             text-align: center;
-            padding: 50px 20px;
         }
 
         .empty-state i {
             font-size: 4rem;
-            color: var(--primary-pink);
+            color: #334155;
             margin-bottom: 20px;
-            opacity: 0.5;
         }
 
         .btn-reset {
-            display: inline-block;
             margin-top: 20px;
-            padding: 12px 30px;
+            padding: 12px 25px;
             background: var(--primary-pink);
-            color: white;
-            font-weight: bold;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
+            color: white;
+            font-family: 'Tajawal';
+            font-weight: 700;
             cursor: pointer;
-            text-decoration: none;
             outline: none;
+        }
+        
+        .btn-reset:focus {
+            box-shadow: 0 0 0 3px white;
         }
 
         /* Toast Styling */
@@ -290,18 +287,22 @@
             to { transform: translateX(-50%) translateY(0); opacity: 1; }
         }
 
+        /* Responsive */
         @media (max-width: 600px) {
             .content-grid {
                 grid-template-columns: repeat(3, 1fr);
                 gap: 10px;
+                padding: 0 3%;
             }
+            .section-header { padding: 10px 4%; }
+            .section-title { font-size: 1.1rem; }
         }
     </style>
 </head>
 <body>
 
     <header class="app-header">
-        <button class="icon-btn" onclick="window.history.back()">
+        <button class="icon-btn" onclick="window.history.back()" aria-label="Back">
             <i class="fas fa-chevron-right"></i>
         </button>
         
@@ -309,7 +310,7 @@
             مسلسلات <span>أجنبية</span>
         </div>
 
-        <button class="icon-btn" onclick="toggleSearch(true)">
+        <button class="icon-btn" onclick="toggleSearch(true)" aria-label="Search">
             <i class="fas fa-search"></i>
         </button>
 
@@ -317,7 +318,7 @@
             <button class="icon-btn" onclick="toggleSearch(false)">
                 <i class="fas fa-arrow-right"></i>
             </button>
-            <input type="text" id="search-input" placeholder="ابحث هنا..." oninput="filterData(this.value)">
+            <input type="text" id="search-input" placeholder="ابحث عن مسلسل أو تصنيف..." oninput="filterData(this.value)">
             <button class="icon-btn" onclick="clearSearch()">
                 <i class="fas fa-times"></i>
             </button>
@@ -332,29 +333,48 @@
             </div>
         </div>
 
-        <div class="content-grid" id="grid-container"></div>
+        <div class="content-grid" id="grid-container">
+            <!-- سيتم ملء البيانات هنا بواسطة JS -->
+        </div>
     </main>
 
     <div id="custom-toast">
         <i class="fas fa-info-circle" style="color: var(--primary-pink); font-size: 1.2rem;"></i>
-        <span id="toast-message"></span>
+        <span id="toast-message" style="font-weight: 600; font-size: 0.95rem;">قريباً في التحديث القادم</span>
     </div>
 
     <audio id="clickSound" src="https://github.com/ahmadmk2023/Movies-free1/raw/refs/heads/main/mp3/btn-hover01.mp3" preload="auto"></audio>
 
     <script>
         const FALLBACK_POSTER = "Series/poster/logo.jpg";
-        let currentIndex = 0;
-        let filteredData = [];
-        let isSearching = false;
 
         const seriesData = [
-            { id: 1, title: "رجل ضد طفل Man vs Baby", poster: "Series/poster/Man.vs.Baby.jpg", url: "Series/Man.vs.Baby.html", badge: "جديد" },
-            { id: 2, title: "Alien Earth  فضائي أرض", poster: "Series/poster/Alien.Earth.jpg", url: "Series/Alien.Earth.html", badge: "FX" },
-            { id: 3, title: "رجل ضد النحله Man vs Bee", poster: "Series/poster/Man.vs.Bee.jpg", url: "Series/Man.vs.Bee.html", badge: "NETFLIX" },
-            { id: 4, title: "Squid Game S03 - لعبة الحبار", poster: "Series/poster/Squid.GameS03.jpg", url: "Series/Squid.GameS03.html", badge: "S3" },
-            { id: 5, title: "Squid Game S02 - لعبة الحبار", poster: "Series/poster/Squid.GameS02.jpg", url: "Series/Squid.GameS02.html", badge: "S2" },
-            { id: 6, title: "Squid Game S01- لعبة الحبار ", poster: "Series/poster/Squid.GameS01.jpg", url: "Series/Squid.GameS01.html", badge: "S1" }
+            { id: 1, title: "Man vs Baby",
+			poster: "Series/poster/Man.vs.Baby.jpg",
+			url: "Series/Man.vs.Baby.html",
+			badge: "جديد" },
+			
+            { id: 2, title: "Alien Earth", 
+			poster: "Series/poster/Alien.Earth.jpg",
+			url: "Series/Alien.Earth.html",
+			badge: "FX" },
+			
+            { id: 3, title: "Man vs Bee",
+			poster: "Series/poster/Man.vs.Bee.jpg",
+			url: "Series/Man.vs.Bee.html", badge: "NETFLIX" },
+			
+            { id: 4, title: "Squid.GameS03لعبة الحبار ج ",
+			poster: "Series/poster/Squid.GameS03.jpg",
+			url: "Series/Squid.GameS03.html", badge: "S3" },
+			
+            { id: 5, title: "Squid.GameS02لعبة الحبار ج",
+			poster: "Series/poster/Squid.GameS02.jpg",
+			url: "Series/Squid.GameS02.html", badge: "S2" },
+			
+            { id: 6, title: "Squid.GameS01لعبة الحبار ج",
+			poster: "Series/poster/Squid.GameS01.jpg", 
+			url: "Series/Squid.GameS01.html", badge: "S1" },
+			
         ];
 
         const grid = document.getElementById('grid-container');
@@ -362,121 +382,95 @@
         const clickSound = document.getElementById('clickSound');
 
         function render(data) {
-            filteredData = data;
             if (data.length === 0) {
                 grid.innerHTML = `
                     <div class="empty-state">
-                        <i class="fas fa-search-minus"></i>
-                        <h2>عذراً، لم نجد نتائج!</h2>
-                        <button class="btn-reset focused" id="resetBtn" onclick="clearSearch()">العودة للكل</button>
-                    </div>`;
-                currentIndex = 0;
+                        <i class="fas fa-film"></i>
+                        <h2>لا توجد نتائج مطابقة</h2>
+                        <p>جرب كلمات أخرى مثل اسم المسلسل أو التصنيف</p>
+                        <button class="btn-reset" id="btn-reset" onclick="clearSearch()">العودة للكل</button>
+                    </div>
+                `;
                 return;
             }
 
             grid.innerHTML = data.map((item, index) => `
-                <div class="card-item ${index === 0 ? 'focused' : ''}" 
+                <div class="card-item" 
+                     tabindex="0" 
+                     role="button"
                      data-index="${index}"
-                     onclick="handleNavigation('${item.url}')">
+                     onclick="handleNavigation('${item.url}')" 
+                     onfocus="playSfx()">
                     ${item.badge ? `<div class="badge">${item.badge}</div>` : ''}
                     <div class="poster-wrapper skeleton">
-                        <img src="${item.poster}" alt="${item.title}" 
+                        <img src="${item.poster}" 
+                             alt="${item.title}" 
                              onload="this.classList.add('loaded'); this.parentElement.classList.remove('skeleton')"
-                             onerror="this.src='${FALLBACK_POSTER}'; this.classList.add('loaded');">
+                             onerror="this.src='${FALLBACK_POSTER}'; this.classList.add('loaded'); this.parentElement.classList.remove('skeleton')">
                     </div>
                     <div class="card-info">
                         <div class="card-title">${item.title}</div>
                     </div>
                 </div>
             `).join('');
-            
-            currentIndex = 0;
         }
 
-        // منطق التحكم بالريموت
+        // دعم أزرار الريموت (Android TV)
         document.addEventListener('keydown', function(e) {
-            const resetBtn = document.getElementById('resetBtn');
-            if (resetBtn && filteredData.length === 0) {
-                if (e.key === 'Enter') resetBtn.click();
-                return;
+            const active = document.activeElement;
+            
+            // زر "موافق" أو "Enter"
+            if (e.key === 'Enter') {
+                if (active.classList.contains('card-item') || active.classList.contains('icon-btn') || active.classList.contains('btn-reset')) {
+                    active.click();
+                }
             }
-
-            const cards = document.querySelectorAll('.card-item');
-            if (cards.length === 0) return;
-
-            const gridStyle = window.getComputedStyle(grid);
-            const columns = gridStyle.getPropertyValue('grid-template-columns').split(' ').length;
-
-            let newIndex = currentIndex;
-
-            switch(e.key) {
-                case 'ArrowRight': if (currentIndex < filteredData.length - 1) newIndex++; break;
-                case 'ArrowLeft': if (currentIndex > 0) newIndex--; break;
-                case 'ArrowDown': if (currentIndex + columns < filteredData.length) newIndex += columns; break;
-                case 'ArrowUp': if (currentIndex - columns >= 0) newIndex -= columns; break;
-                case 'Enter': handleNavigation(filteredData[currentIndex].url); return;
-                case 'Escape': if (isSearching) toggleSearch(false); break;
-            }
-
-            if (newIndex !== currentIndex) {
-                e.preventDefault();
-                updateFocus(newIndex);
+            
+            // التنقل باستخدام الأسهم
+            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                // المتصفح عادةً يدير التنقل الافتراضي بين العناصر التي تملك tabindex
+                // نضمن هنا تشغيل الصوت عند التركيز
+                if (active.classList.contains('card-item')) {
+                    playSfx();
+                }
             }
         });
 
-        function updateFocus(index) {
-            const cards = document.querySelectorAll('.card-item');
-            if (!cards[currentIndex]) return;
-            
-            cards[currentIndex].classList.remove('focused');
-            currentIndex = index;
-            const activeCard = cards[currentIndex];
-            activeCard.classList.add('focused');
-            
-            playSfx();
-            activeCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-
         function handleNavigation(url) {
-            if (!url || url === "#") {
-                showToast("سيتم التوفر قريباً");
+            if (url === "#" || !url) {
+                showToast("هذا المسلسل سيتم توفيره في التحديثات القادمة");
             } else {
                 window.location.href = url;
             }
         }
 
         function toggleSearch(show) {
-            isSearching = show;
             const container = document.getElementById('search-container');
             container.classList.toggle('active', show);
-            if (show) {
-                searchInput.focus();
-            } else {
-                clearSearch();
-            }
+            if (show) searchInput.focus();
         }
 
         function filterData(query) {
-            if (!query.trim()) {
-                render(seriesData);
-                return;
-            }
-            const filtered = seriesData.filter(s => s.title.toLowerCase().includes(query.toLowerCase()));
+            const filtered = seriesData.filter(s => 
+                s.title.toLowerCase().includes(query.toLowerCase())
+            );
             render(filtered);
         }
 
         function clearSearch() {
             searchInput.value = '';
-            isSearching = false;
-            document.getElementById('search-container').classList.remove('active');
+            toggleSearch(false);
             render(seriesData);
         }
 
         function showToast(msg) {
             const toast = document.getElementById('custom-toast');
-            document.getElementById('toast-message').innerText = msg;
+            const messageEl = document.getElementById('toast-message');
+            messageEl.innerText = msg;
             toast.classList.add('active');
-            setTimeout(() => toast.classList.remove('active'), 3000);
+            setTimeout(() => {
+                toast.classList.remove('active');
+            }, 3000);
         }
 
         function playSfx() {
