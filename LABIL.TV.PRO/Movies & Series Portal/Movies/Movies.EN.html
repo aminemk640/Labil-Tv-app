@@ -129,7 +129,7 @@
         .sg-watched-eye { 
             position:absolute; 
             top:8px; 
-            left:8px;  /* تغيير من right إلى left عكس أيقونة المشاهدة */
+            left:8px;  /* يسار الصورة (عكس السنة) */
             background:var(--watched-bg); 
             width:28px; 
             height:28px; 
@@ -143,11 +143,11 @@
         .is-watched .sg-watched-eye { display:flex; }
         .is-watched .sg-poster-box img { opacity:0.5; }
 
-        /* إضافة عنصر السنة في الجهة اليسرى */
+        /* عنصر السنة في الجهة اليسرى (يمين الصورة) */
         .sg-year-badge {
             position:absolute;
             top:8px;
-            right:8px;  /* في الجهة اليسرى (يمين الصورة لأن الموقع RTL) */
+            right:8px;  /* يمين الصورة (يسار الشاشة في RTL) */
             background: rgba(237, 27, 118, 0.9);
             color: white;
             padding: 4px 8px;
@@ -177,19 +177,18 @@
             max-width: 100%;
             word-break: break-word;
             display: -webkit-box;
-            -webkit-line-clamp: 2;  /* عرض سطرين كحد أقصى */
+            -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
             text-overflow: ellipsis;
             transition: font-size 0.2s ease;
         }
         
-        /* تصغير الخط إذا كان العنوان طويلاً */
+        /* تصغير الخط للعناوين الطويلة */
         .sg-movie-title.long-title {
             font-size: 0.75rem;
         }
         
-        /* تصغير أكثر للعناوين الطويلة جداً */
         .sg-movie-title.very-long-title {
             font-size: 0.65rem;
         }
@@ -199,29 +198,69 @@
         .back-home-btn { background:var(--primary-pink); color:white; border:none; padding:12px 30px; border-radius:12px; font-weight:700; cursor:pointer; transition:0.3s; }
         .back-home-btn:focus { transform:scale(1.1); box-shadow:var(--focus-glow); }
 
-        .modern-server-btn {
-            display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-radius:16px; margin-bottom:12px; cursor:pointer;
-            border:none; color:white; font-weight:700; width:100%; transition:all 0.3s ease; position:relative; overflow:hidden;
-            box-shadow:0 4px 15px rgba(0,0,0,0.3);
+        /* أزرار السيرفرات الجميلة - مأخوذة من الكود الثاني */
+        .sg-server-btn {
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between;
+            background: rgba(255,255,255,0.05);
+            padding: 12px 15px;
+            border-radius: 10px; 
+            margin-bottom: 10px;
+            cursor: pointer; 
+            border: 2px solid transparent; 
+            color: white;
+            font-family: 'Tajawal'; 
+            width: 100%;
+            height: 52px;
+            box-sizing: border-box;
+            transition: all 0.2s;
+            font-size: 0.9rem;
         }
-        .modern-server-btn::before {
-            content:''; position:absolute; top:0; left:-100%; width:100%; height:100%;
-            background:linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition:left 0.6s ease;
+
+        .sg-server-btn:hover {
+            background: rgba(237, 27, 118, 0.1);
+            transform: translateY(-2px);
         }
-        .modern-server-btn:hover::before { left:100%; }
-        .modern-server-btn:hover { transform:translateY(-3px) scale(1.02); filter:brightness(1.1); }
-        .modern-server-btn:focus { outline:none; transform:scale(1.05); box-shadow:0 0 20px currentColor; border:2px solid white; }
 
-        .btn-icon { width:40px; height:40px; border-radius:50%; background: rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-size:1.2rem; backdrop-filter:blur(5px); margin-left:12px; }
-        .btn-left { display:flex; align-items:center; }
-        .btn-right { display:flex; align-items:center; gap:10px; }
-        .quality-badge { padding:5px 12px; border-radius:30px; font-size:0.8rem; font-weight:800; background:rgba(0,0,0,0.4); backdrop-filter:blur(4px); letter-spacing:0.5px; }
+        .sg-server-btn:focus { 
+            border-color: var(--primary-pink); 
+            background: rgba(237, 27, 118, 0.2); 
+            outline: none;
+            transform: scale(1.02);
+            box-shadow: 0 0 10px rgba(237, 27, 118, 0.4);
+        }
 
-        .server-fhd { background:linear-gradient(135deg,#ed1b76,#ff4d97,#ff7eb3); border-right:5px solid #ffd700; }
-        .server-hd { background:linear-gradient(135deg,#2563eb,#3b82f6,#60a5fa); border-right:5px solid #ffd700; }
-        .server-sd { background:linear-gradient(135deg,#059669,#10b981,#34d399); border-right:5px solid #ffd700; }
-        .server-4k { background:linear-gradient(135deg,#7c3aed,#8b5cf6,#a78bfa); border-right:5px solid #ffd700; }
-        .server-premium { background:linear-gradient(135deg,#b45309,#d97706,#f59e0b); border-right:5px solid #ffd700; }
+        .sg-quality { 
+            padding: 4px 10px; 
+            border-radius: 6px; 
+            font-size: 0.75rem; 
+            font-weight: bold;
+            min-width: 45px;
+            text-align: center;
+        }
+        
+        .q-fhd { background: #ed1b76; }
+        .q-hd { background: #249f9c; }
+        .q-sd { background: #fbbf24; color: #000; }
+        .q-4k { background: #7c3aed; }
+
+        .btn-confirm-delete { 
+            background: linear-gradient(90deg, #ef4444, #dc2626); 
+            color: white; 
+            border: none; 
+            font-weight: bold; 
+        }
+        
+        .btn-confirm-delete:hover {
+            background: linear-gradient(90deg, #dc2626, #b91c1c);
+        }
+        
+        .btn-confirm-delete:focus { 
+            background: #b91c1c; 
+            border-color: white; 
+            box-shadow: 0 0 10px rgba(220, 38, 38, 0.6);
+        }
 
         .sg-modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.92); display:none; justify-content:center; align-items:center; z-index:3000; backdrop-filter:blur(10px); }
         .sg-modal-overlay.active { display:flex; }
@@ -259,7 +298,7 @@
 
     <header class="sg-app-header">
         <button class="sg-nav-icon" onclick="handleExit()" tabindex="0"><i class="fas fa-chevron-right"></i></button>
-        <div style="font-weight:800; font-size:1.2rem;">  أفلام<span style="color:var(--primary-pink)"> أجنبية </span></div>
+        <div style="font-weight:800; font-size:1.2rem;"><span style="color:var(--primary-pink)">أفلام</span></div>
         <button class="sg-nav-icon" onclick="toggleSearchBar(true)"><i class="fas fa-search"></i></button>
 
         <div id="search-container">
@@ -270,7 +309,7 @@
     </header>
 
     <div class="section-header">
-        <div class="section-title"><i class="fas fa-film"></i> <span> مترجمة</span></div>
+        <div class="section-title"><i class="fas fa-film"></i> <span>أجنبية مترجمة</span></div>
         <button class="reset-history-btn" onclick="openResetModal()" tabindex="0">
             <i class="fas fa-eye-slash"></i> حذف مشاهدة
         </button>
@@ -280,7 +319,7 @@
 
     <div id="toast">جاري رفع الفيلم حالياً...</div>
 
-    <!-- Modal جودة السيرفرات -->
+    <!-- Modal اختيار السيرفرات -->
     <div class="sg-modal-overlay" id="quality-modal">
         <div class="sg-server-panel">
             <h3 id="modal-title" style="margin-bottom:20px; color: var(--primary-pink);"></h3>
@@ -295,8 +334,8 @@
             <i class="fas fa-download" style="font-size:3rem; color:var(--primary-pink); margin-bottom:20px;"></i>
             <h3 style="font-weight:800;">المشغل غير مثبت</h3>
             <p style="font-size:0.9rem; color:#94a3b8; margin-bottom:25px;">لم نتمكن من فتح الفيلم. يبدو أن مشغل Wuffy Player غير مثبت على جهازك.</p>
-            <button class="modern-server-btn server-premium" onclick="goToInstallPage()" style="justify-content:center;">
-                <i class="fas fa-download"></i> صفحة التحميل المتكاملة
+            <button class="sg-server-btn" onclick="goToInstallPage()" style="justify-content:center; background: linear-gradient(90deg, #3b82f6, #60a5fa);">
+                <i class="fas fa-download"></i> صفحة التحميل
             </button>
             <button class="sg-close-btn" onclick="closeModal('install-modal')">تراجع</button>
         </div>
@@ -308,7 +347,7 @@
             <i class="fas fa-eye-slash" style="font-size:3rem; color:var(--primary-pink); margin-bottom:20px;"></i>
             <h3 style="font-weight:800;">حذف علامات المشاهدة؟</h3>
             <p style="font-size:0.9rem; color:#94a3b8; margin-bottom:25px;">سيتم إخفاء أيقونات العين من الأفلام التي شاهدتها سابقاً.</p>
-            <button class="modern-server-btn server-sd" onclick="executeReset()" style="justify-content:center;">
+            <button class="sg-server-btn btn-confirm-delete" onclick="executeReset()" style="justify-content:center;">
                 <span>تأكيد الحذف</span> <i class="fas fa-trash"></i>
             </button>
             <button class="sg-close-btn" onclick="closeModal('reset-modal')">تراجع</button>
@@ -317,115 +356,60 @@
 
 <script>
 /* ==================================================
-         كود عرض الأفلام الأجنبية المترجمة
+         كود الأفلام الأجنبية - نسخة معدلة
 ================================================== */
-const STORAGE_KEY="Movies-English00";
-const INSTALL_PAGE_URL="https://aminemk640.github.io/Labil-Tv-app/LABIL.TV.PRO/install.html";
-const FALLBACK_IMG="Series/poster/logo.jpg";
+const STORAGE_KEY = "Movies.EN";
+const INSTALL_PAGE_URL = "https://aminemk640.github.io/Labil-Tv-app/LABIL.TV.PRO/install.html";
+const FALLBACK_IMG = "poster/logo.jpg";
 
-// بيانات الأفلام الأجنبية المترجمة
+// بيانات الأفلام - عناوين إنجليزية فقط (بدون أسماء عربية)
 const movies = [
+  
     {
-        id: 1,
-        title: "The Dark Knight",
-        year: 2008,
-        poster: "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
+        id: 5,
+        title: "War Machine",
+        year: 2026,
+        poster: "https://resizing.flixster.com/60M7yjw10inqiv5ev4GBT28ZvZY=/fit-in/705x460/v2/https://resizing.flixster.com/DkA0OKLZ81X6lV3y7EBUkP1hZOM=/ems.cHJkLWVtcy1hc3NldHMvbW92aWVzLzBlOWNiZDM3LTEyNGMtNGUzMi1hMDk3LTk0ZmE2ZWI1MTc1My5qcGc=",
         servers: [
-            {name: "SERVER 1", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/629/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end"},
-            {name: "SERVER 2", quality: "HD", url: "intent://pegasus.5387692.xyz/api/hls/629/720p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end"}
-        ]
-    },
-    {
-        id: 2,
-        title: "Inception",
-        arabicTitle: "بداية",
-        year: 2010,
-        poster: "https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg",
-        servers: [
-            {name: "SERVER 1", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/630/2160p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end"},
-            {name: "SERVER 2", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/630/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end"}
-        ]
-    },
-    {
-        id: 3,
-        title: "Interstellar",
-        arabicTitle: "بين النجوم",
-        year: 2014,
-        poster: "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
-        servers: [
-            {name: "SERVER 1", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/631/2160p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end"},
-            {name: "SERVER 2", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/631/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end"}
+            {name: "SERVER 2", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/sipd0t5dujlj5ng0xldta/War.Machine.2026.mp4?rlkey=zwby91es02kaq81nuabhf6b8w&st=56m3wvlf&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/sipd0t5dujlj5ng0xldta/War.Machine.2026.mp4?rlkey=zwby91es02kaq81nuabhf6b8w&st=56m3wvlf&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
         ]
     },
     {
         id: 4,
-        title: "The Godfather",
-        arabicTitle: "العراب",
-        year: 1972,
-        poster: "https://image.tmdb.org/t/p/w500/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
+        title: "Hitman",
+        year: 2007,
+        poster: "https://fr.web.img3.acsta.net/c_310_420/medias/nmedia/18/64/61/90/18869053.jpg",
         servers: [
-            {name: "SERVER 1", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/632/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end"}
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/5tt7k16aqbty2hcay7l82/Hitman_2007_2.mp4?rlkey=o6lgayssvyvx76q7oj89p81g1&st=dhb1sq33&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
         ]
     },
     {
-        id: 5,
-        title: "Pulp Fiction",
-        arabicTitle: "خيال رخيص",
+        id: 3,
+        title: "The Mask",
         year: 1994,
-        poster: "https://image.tmdb.org/t/p/w500/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg",
+        poster: "https://resizing.flixster.com/mCb-H_JBNqzFcY9pIlcyPKZFyE4=/206x305/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p15854_p_v12_aa.jpg",
         servers: [
-            {name: "SERVER 1", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/633/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end"}
+            {name: "SERVER 1", quality: "4K", url: "intent://dl.dropbox.com/scl/fi/izl3asxoijyuo39ywm87n/T.he.Mask.1994.mp4?rlkey=xhrhppnkar2ird8bkjvhdw614&st=h9afzw2r&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
         ]
     },
     {
-        id: 6,
-        title: "The Lord of the Rings: The Return of the King",
-        arabicTitle: "سيد الخواتم: عودة الملك",
-        year: 2003,
-        poster: "https://image.tmdb.org/t/p/w500/rCzpDGLbOoPwLjy3OAm5NUPOTrC.jpg",
+        id: 2,
+        title: "Transformers: Dark of the Moon",
+        year: 2011,
+        poster: "https://resizing.flixster.com/TvZkB8ErcFpoUpxeagXI0NTT1vw=/fit-in/705x460/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p8176375_p_v8_ab.jpg",
         servers: [
-            {name: "SERVER 1", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/634/2160p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end"},
-            {name: "SERVER 2", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/634/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end"}
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/cf66msm1ql8mncm73giwv/Tr.ansf.orm.er.3.2011.mp4?rlkey=vefee85opqp8lxvfl0d2irud5&st=io8s4sz9&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
         ]
     },
     {
-        id: 7,
-        title: "Forrest Gump",
-        arabicTitle: "فورست غامب",
-        year: 1994,
-        poster: "https://image.tmdb.org/t/p/w500/arw2vcBveWOVZr6pxd9XTd1TdQa.jpg",
+        id: 1,
+        title: "Cast Away",
+        year: 2000,
+        poster: "https://resizing.flixster.com/M7pQM1V7APt-fIKzuUE8iGcrXzc=/fit-in/705x460/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p26553_v_v8_aw.jpg",
         servers: [
-            {name: "SERVER 1", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/635/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end"}
-        ]
-    },
-    {
-        id: 8,
-        title: "The Matrix",
-        arabicTitle: "ماتريكس",
-        year: 1999,
-        poster: "https://image.tmdb.org/t/p/w500/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
-        servers: [
-            {name: "SERVER 1", quality: "4K", url: "intent://pegasus.5387692.xyz/api/hls/636/2160p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end"}
-        ]
-    },
-    {
-        id: 9,
-        title: "Goodfellas",
-        arabicTitle: "رفاق حسنيون",
-        year: 1990,
-        poster: "https://image.tmdb.org/t/p/w500/aKuFiU82s5ISJpGZp7YkIr3kCUd.jpg",
-        servers: [
-            {name: "SERVER 1", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/637/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end"}
-        ]
-    },
-    {
-        id: 10,
-        title: "The Shawshank Redemption",
-        arabicTitle: "الخلاص من شوشانك",
-        year: 1994,
-        poster: "https://image.tmdb.org/t/p/w500/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg",
-        servers: [
-            {name: "SERVER 1", quality: "FHD", url: "intent://pegasus.5387692.xyz/api/hls/638/1080p/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end"}
+            {name: "SERVER 1", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/7s5mutw4f08sv6r2xjmsx/Cimawbas-Cast_Away_2000.mp4?rlkey=hidns20zae5nppjfte23ikzts&st=pnnsdyk4&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
         ]
     }
 ];
@@ -464,10 +448,8 @@ function handleSearch(val){
         renderGrid();
         return;
     }
-    // البحث في العنوان الإنجليزي والعربي
     const filtered = movies.filter(movie => 
         movie.title.toLowerCase().includes(val) || 
-        movie.arabicTitle.includes(val) ||
         movie.year.toString().includes(val)
     );
     renderGrid(filtered);
@@ -479,7 +461,7 @@ function clearSearchField(){
     toggleSearchBar(false);
 }
 
-// دالة لتحديد إذا كان العنوان طويلاً وإضافة الكلاس المناسب
+// دالة لتحديد حجم الخط حسب طول العنوان
 function getTitleClass(title) {
     if (title.length > 30) {
         return "very-long-title";
@@ -517,8 +499,7 @@ function renderGrid(data = movies){
             </div>
             <div class="sg-card-meta">
                 <div class="sg-movie-title ${titleClass}">
-                    ${movie.title}<br>
-                    <span style="font-size:0.75em; color:var(--primary-pink);">${movie.arabicTitle}</span>
+                    ${movie.title}
                 </div>
             </div>
         </div>`;
@@ -541,38 +522,13 @@ function openServerMenu(id){
     
     const list = document.getElementById("servers-list");
     
-    const getServerClass = quality => {
-        switch(quality.toUpperCase()){
-            case "FHD": return "server-fhd";
-            case "HD": return "server-hd";
-            case "SD": return "server-sd";
-            case "4K": return "server-4k";
-            default: return "server-premium";
-        }
-    };
-    
-    const getIcon = quality => {
-        switch(quality.toUpperCase()){
-            case "FHD": return "fa-star";
-            case "HD": return "fa-bolt";
-            case "SD": return "fa-play";
-            case "4K": return "fa-gem";
-            default: return "fa-play-circle";
-        }
-    };
-    
+    // أزرار السيرفرات الجميلة من الكود الثاني
     list.innerHTML = movie.servers.map(s => 
-        `<button class="modern-server-btn ${getServerClass(s.quality)}" 
+        `<button class="sg-server-btn" 
                   onclick="playVideo('${s.url}')" 
                   tabindex="0">
-            <span class="btn-left">
-                <span class="btn-icon"><i class="fas ${getIcon(s.quality)}"></i></span>
-                <span style="font-size: 1rem;">${s.name}</span>
-            </span>
-            <span class="btn-right">
-                <span class="quality-badge">${s.quality}</span>
-                <i class="fas fa-chevron-left"></i>
-            </span>
+            <span><i class="fas fa-play" style="margin-left: 8px;"></i> ${s.name}</span>
+            <span class="sg-quality q-${s.quality.toLowerCase()}">${s.quality}</span>
         </button>`
     ).join("");
     
