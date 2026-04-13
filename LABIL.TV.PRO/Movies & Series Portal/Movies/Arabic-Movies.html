@@ -15,6 +15,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
 
+   
     <style>
         :root {
             --primary-pink: #ed1b76;
@@ -82,7 +83,7 @@
             transition: 0.2s;
         }
 
-        .sg-nav-icon:focus { 
+        .sg-nav-icon:focus,.sg-nav-icon:hover { 
             background: var(--primary-pink); outline: none; 
             transform: scale(1.1); box-shadow: var(--focus-glow);
         }
@@ -97,7 +98,7 @@
             cursor: pointer; font-family: 'Tajawal'; padding: 8px 15px; border-radius: 10px;
             transition: 0.3s;
         }
-        .reset-history-btn:focus { color:white; background:var(--primary-pink); border-color:white; outline:none; transform:scale(1.05); }
+        .reset-history-btn:focus,.reset-history-btn:hover { color:white; background:var(--primary-pink); border-color:white; outline:none; transform:scale(1.05); }
 
         .sg-movies-grid {
             padding:10px 5% 40px; display:grid;
@@ -111,7 +112,7 @@
             cursor:pointer; position:relative; outline:none;
             height: fit-content;
         }
-        .sg-card-item:focus { transform:scale(1.1); border:3px solid white; box-shadow:var(--focus-glow); z-index:50; }
+        .sg-card-item:focus,.sg-card-item:hover { transform:scale(1.1); border:3px solid white; box-shadow:var(--focus-glow); z-index:50; }
 
         .sg-poster-box { 
             position:relative; 
@@ -196,7 +197,7 @@
         .no-results { grid-column:1/-1; text-align:center; padding:60px 20px; display:flex; flex-direction:column; align-items:center; gap:20px; }
         .no-results i { font-size:4rem; color:rgba(255,255,255,0.1); }
         .back-home-btn { background:var(--primary-pink); color:white; border:none; padding:12px 30px; border-radius:12px; font-weight:700; cursor:pointer; transition:0.3s; }
-        .back-home-btn:focus { transform:scale(1.1); box-shadow:var(--focus-glow); }
+        .back-home-btn:focus,.back-home-btn:hover { transform:scale(1.1); box-shadow:var(--focus-glow); }
 
         /* أزرار السيرفرات الجميلة - مأخوذة من الكود الثاني */
         .sg-server-btn {
@@ -262,23 +263,10 @@
             box-shadow: 0 0 10px rgba(220, 38, 38, 0.6);
         }
 
-        .sg-modal-overlay
-        { position:fixed;
-        top:0; left:0;
-        width:100%; height:100%;
-        background:rgba(0,0,0,0.92); display:none;
-        justify-content:center;
-        align-items:center; z-index:3000;
-        backdrop-filter:blur(10px); }
-        
+        .sg-modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.92); display:none; justify-content:center; align-items:center; z-index:3000; backdrop-filter:blur(10px); }
         .sg-modal-overlay.active { display:flex; }
-        .sg-server-panel { background:var(--modal-bg); 
-        padding:25px; border-radius:24px;
-        border:1px solid var(--glass-border); width:90%; max-width:360px;
-        text-align:center; animation:slideUp 0.4s ease; }
-        
-        @keyframes slideUp { from {transform:translateY(20px); opacity:0;}
-        to {transform:translateY(0); opacity:1;} }
+        .sg-server-panel { background:var(--modal-bg); padding:25px; border-radius:24px; border:1px solid var(--glass-border); width:90%; max-width:360px; text-align:center; animation:slideUp 0.4s ease; }
+        @keyframes slideUp { from {transform:translateY(20px); opacity:0;} to {transform:translateY(0); opacity:1;} }
 
         #toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:#ed1b76; color:white; padding:12px 25px; border-radius:50px; font-weight:700; z-index:5000; display:none; box-shadow:0 10px 20px rgba(0,0,0,0.5); animation:fadeIn 0.3s ease; }
         @keyframes fadeIn { from{opacity:0; bottom:10px;} to{opacity:1; bottom:30px;} }
@@ -376,6 +364,21 @@ const INSTALL_PAGE_URL = "https://aminemk640.github.io/Labil-Tv-app/LABIL.TV.PRO
 const FALLBACK_IMG = "Series/poster/logo.jpg";
 
 const movies = [
+
+
+
+ {
+        id: 21,
+        title: "فيلم السنيور",
+        year: 2024,
+        poster: "https://mycima.cc/uploads/articles/4eca6412.jpg",
+        servers: [
+            { name: "SERVER 1", quality: "FHD",
+            url: "intent://dl.dropbox.com/scl/fi/z3b1rqnisqrf7f6pr06m9/El.Seniour.2024.mp4?rlkey=14g31kohqt4kied4ncq4id9j7&st=rvqsampq&dl=1#Intent;scheme=https;package=co.wuffy.player;S.title=Arabic-Movies (2025);end" },
+            
+            { name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/z3b1rqnisqrf7f6pr06m9/El.Seniour.2024.mp4?rlkey=14g31kohqt4kied4ncq4id9j7&st=rvqsampq&dl=1#Intent;scheme=https;package=co.wuffy.player;S.title=Arabic-Movies (2025);end" }
+        ]
+    },
  {
         id: 20,
         title: "فيلم بث مباشر",
@@ -385,7 +388,7 @@ const movies = [
             { name: "SERVER 1", quality: "FHD",
             url: "intent://dl.dropbox.com/scl/fi/45vgcx26rppy27ghk607z/Bath.Mobasher.mp4?rlkey=1st3g18at8jrxc708yrwtu1dh&st=2vjhuppf&dl=1#Intent;scheme=https;package=co.wuffy.player;S.title=Arabic-Movies (2025);end" },
             
-            { name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/45vgcx26rppy27ghk607z/Bath.Mobasher.mp4?rlkey=1st3g18at8jrxc708yrwtu1dh&st=2vjhuppf&dl=1#Intent;scheme=https;package=co.wuffy.player;S.title=Arabic-Movies (2025);endd" }
+            { name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/45vgcx26rppy27ghk607z/Bath.Mobasher.mp4?rlkey=1st3g18at8jrxc708yrwtu1dh&st=2vjhuppf&dl=1#Intent;scheme=https;package=co.wuffy.player;S.title=Arabic-Movies (2025);end" }
         ]
     },
   {
