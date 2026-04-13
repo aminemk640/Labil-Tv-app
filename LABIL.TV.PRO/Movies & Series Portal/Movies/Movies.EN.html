@@ -82,7 +82,7 @@
             transition: 0.2s;
         }
 
-        .sg-nav-icon:focus { 
+        .sg-nav-icon:focus,.sg-nav-icon:hover { 
             background: var(--primary-pink); outline: none; 
             transform: scale(1.1); box-shadow: var(--focus-glow);
         }
@@ -97,7 +97,7 @@
             cursor: pointer; font-family: 'Tajawal'; padding: 8px 15px; border-radius: 10px;
             transition: 0.3s;
         }
-        .reset-history-btn:focus { color:white; background:var(--primary-pink); border-color:white; outline:none; transform:scale(1.05); }
+        .reset-history-btn:focus,.reset-history-btn:hover { color:white; background:var(--primary-pink); border-color:white; outline:none; transform:scale(1.05); }
 
         .sg-movies-grid {
             padding:10px 5% 40px; display:grid;
@@ -111,7 +111,7 @@
             cursor:pointer; position:relative; outline:none;
             height: fit-content;
         }
-        .sg-card-item:focus { transform:scale(1.1); border:3px solid white; box-shadow:var(--focus-glow); z-index:50; }
+        .sg-card-item:focus,.sg-card-item:hover { transform:scale(1.1); border:3px solid white; box-shadow:var(--focus-glow); z-index:50; }
 
         .sg-poster-box { 
             position:relative; 
@@ -196,7 +196,7 @@
         .no-results { grid-column:1/-1; text-align:center; padding:60px 20px; display:flex; flex-direction:column; align-items:center; gap:20px; }
         .no-results i { font-size:4rem; color:rgba(255,255,255,0.1); }
         .back-home-btn { background:var(--primary-pink); color:white; border:none; padding:12px 30px; border-radius:12px; font-weight:700; cursor:pointer; transition:0.3s; }
-        .back-home-btn:focus { transform:scale(1.1); box-shadow:var(--focus-glow); }
+        .back-home-btn:focus,.back-home-btn:hover { transform:scale(1.1); box-shadow:var(--focus-glow); }
 
         /* أزرار السيرفرات الجميلة - مأخوذة من الكود الثاني */
         .sg-server-btn {
@@ -271,8 +271,8 @@
         @keyframes fadeIn { from{opacity:0; bottom:10px;} to{opacity:1; bottom:30px;} }
 
         .sg-close-btn { width:100%; background: rgba(255,255,255,0.1); color:white; border:none; padding:12px; border-radius:10px; cursor:pointer; font-weight:600; margin-top:8px; font-size:0.9rem; transition:all 0.2s; }
-        .sg-close-btn:hover { background: rgba(255,255,255,0.15); }
-        .sg-close-btn:focus { background: rgba(255,255,255,0.2); outline:none; transform:scale(1.02); }
+        .sg-close-btn:hover { background: red; }
+        .sg-close-btn:focus { background: red; outline:none; transform:scale(1.02); }
 
         /* تحسينات للشاشات الصغيرة */
         @media(max-width:480px){ 
@@ -334,7 +334,7 @@
             <i class="fas fa-download" style="font-size:3rem; color:var(--primary-pink); margin-bottom:20px;"></i>
             <h3 style="font-weight:800;">المشغل غير مثبت</h3>
             <p style="font-size:0.9rem; color:#94a3b8; margin-bottom:25px;">لم نتمكن من فتح الفيلم. يبدو أن مشغل Wuffy Player غير مثبت على جهازك.</p>
-            <button class="sg-server-btn" onclick="goToInstallPage()" style="justify-content:center; background: linear-gradient(90deg, #3b82f6, #60a5fa);">
+            <button class="sg-server-btn" onclick="goToInstallPage()" style="justify-content:center; background: var(--primary-pink);">
                 <i class="fas fa-download"></i> صفحة التحميل
             </button>
             <button class="sg-close-btn" onclick="closeModal('install-modal')">تراجع</button>
@@ -364,7 +364,17 @@ const FALLBACK_IMG = "poster/logo.jpg";
 
 // بيانات الأفلام - عناوين إنجليزية فقط (بدون أسماء عربية)
 const movies = [
-  
+    {
+        id: 6,
+        title: "Sniper: No Nation",
+        year: 2026,
+        poster: "https://resizing.flixster.com/yxedkHlWgubPSJ6Kk8zyppOYCPs=/fit-in/705x460/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p32643263_v_v12_ab.jpg",
+        servers: [
+            {name: "SERVER 2", quality: "FHD", url: "intent://dl.dropbox.com/scl/fi/63nosqrakdy7qco07qb41/Sniper.No.Nation.2026.mp4?rlkey=5qe0lexyiq7qacc25v8fensbd&st=2v7qu26s&dl=1#Intent;scheme=https;package=co.wuffy.player;end"},
+            
+            {name: "SERVER 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/63nosqrakdy7qco07qb41/Sniper.No.Nation.2026.mp4?rlkey=5qe0lexyiq7qacc25v8fensbd&st=2v7qu26s&dl=1#Intent;scheme=https;package=co.wuffy.player;end"}
+        ]
+    },
     {
         id: 5,
         title: "War Machine",
