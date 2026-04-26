@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>مسلسل - جودر - ألف ليلة وليلة 2</title>
+    <link rel="icon" type="image/jpg" href="https://aminemk640.github.io/Labil-Tv-app/LABIL.TV.PRO/Ramadan-2026/Series/poster/logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#020617">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary-pink: #ed1b76;
+            --gold: #FFD700;
+            --card-bg: rgba(255, 255, 255, 0.08);
+            --focus-glow: 0 0 0 3px rgba(237, 27, 118, 0.7), 0 0 0 6px rgba(255, 215, 0, 0.4);
+            --last-ep-glow: 0 0 15px 3px rgba(255, 215, 0, 0.8);
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(145deg, #020617 0%, #0a0f2a 100%);
+            color: white;
+            min-height: 100vh;
+            padding-bottom: 70px;
+        }
+
+        .sg-app-header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 65px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(15px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 4%;
+            z-index: 1000;
+            border-bottom: 2px solid var(--primary-pink);
+        }
+
+        .sg-nav-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .sg-nav-icon:focus-visible, .sg-nav-icon:hover {
+            background: var(--primary-pink);
+            transform: scale(1.05);
+            outline: 2px solid var(--gold);
+        }
+
+        #search-container {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: #0f172a;
+            display: none;
+            align-items: center;
+            padding: 0 4%;
+            gap: 12px;
+            z-index: 1100;
+        }
+
+        #search-container.active {
+            display: flex;
+        }
+
+        #search-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            padding: 12px 18px;
+            border-radius: 60px;
+            color: white;
+            font-size: 1rem;
+            font-family: 'Tajawal';
+        }
+
+        .section-header {
+            margin-top: 85px;
+            padding: 15px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.3rem;
+            font-weight: 800;
+        }
+
+        .reset-history-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 40px;
+            color: #ccc;
+            font-family: 'Tajawal';
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .reset-history-btn:focus-visible, .reset-history-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border-color: var(--gold);
+        }
+
+        .sg-episodes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 18px;
+            padding: 10px 5% 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .sg-card-item {
+            background: var(--card-bg);
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+            outline: none;
+        }
+
+        .sg-card-item:focus-visible {
+            transform: scale(1.05);
+            border: 2px solid var(--gold);
+            box-shadow: var(--focus-glow);
+        }
+
+        .sg-card-item:hover {
+            transform: scale(1.03) translateY(-5px);
+            border-color: var(--primary-pink);
+            box-shadow: 0 15px 35px rgba(237, 27, 118, 0.3);
+        }
+
+        .sg-card-item:hover .sg-poster-box img {
+            transform: scale(1.05);
+            transition: transform 0.4s ease;
+        }
+
+        .sg-card-item.last-episode {
+            border: 2px solid var(--gold);
+            background: linear-gradient(145deg, rgba(255, 215, 0, 0.15), rgba(237, 27, 118, 0.1));
+            box-shadow: var(--last-ep-glow);
+        }
+
+        .sg-card-item.last-episode .sg-episode-label {
+            color: var(--gold);
+            font-weight: 900;
+        }
+
+        .last-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: var(--gold);
+            color: #000;
+            padding: 4px 8px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .sg-poster-box {
+            position: relative;
+            aspect-ratio: 2 / 2.8;
+            background: #0f172a;
+            overflow: hidden;
+        }
+
+        .sg-poster-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .is-watched .sg-poster-box img {
+            opacity: 0.5;
+        }
+
+        .sg-watched-eye {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--primary-pink);
+            width: 32px;
+            height: 32px;
+            border-radius: 30px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 15;
+            backdrop-filter: blur(4px);
+        }
+
+        .is-watched .sg-watched-eye {
+            display: flex;
+        }
+
+        .sg-card-meta {
+            padding: 12px 6px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .sg-episode-label {
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        .sg-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(12px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+        }
+
+        .sg-modal-overlay.active {
+            display: flex;
+        }
+
+        .sg-server-panel {
+            background: #0f172a;
+            padding: 28px 20px;
+            border-radius: 32px;
+            max-width: 380px;
+            width: 85%;
+            border: 1px solid var(--primary-pink);
+            text-align: center;
+            animation: fadeUp 0.3s;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .sg-server-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.08);
+            width: 100%;
+            padding: 12px 18px;
+            margin-bottom: 12px;
+            border-radius: 60px;
+            border: 1px solid transparent;
+            color: white;
+            font-family: 'Tajawal';
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .sg-server-btn:focus-visible, .sg-server-btn:hover {
+            border-color: var(--gold);
+            background: rgba(237, 27, 118, 0.2);
+            transform: translateX(5px);
+        }
+
+        .sg-quality {
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 0.75rem;
+        }
+
+        .q-fhd { background: #7c3aed; }
+        .q-hd { background: #249f9c; }
+        .q-sd { background: #fbbf24; color: #000; }
+
+        .sg-close-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            padding: 12px;
+            border-radius: 60px;
+            color: white;
+            width: 100%;
+            margin-top: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .sg-close-btn:hover, .sg-close-btn:focus-visible {
+            background: #ef4444;
+            transform: scale(1.02);
+        }
+
+        .btn-confirm-delete {
+            background: #dc2626;
+        }
+
+        #toast {
+            position: fixed;
+            bottom: 85px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            backdrop-filter: blur(16px);
+            padding: 12px 24px;
+            border-radius: 60px;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            z-index: 4000;
+            border: 1px solid var(--primary-pink);
+            font-weight: bold;
+            white-space: nowrap;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .no-results { 
+        grid-column:1/-1; 
+        text-align:center;
+        padding:60px 20px;
+        display:flex; flex-direction:column;
+        align-items:center; gap:20px; }
+        
+        .no-results i { font-size:4rem; 
+        color:rgba(255,255,255,0.1); }
+        
+        .back-home-btn {
+        border: 2px solid var(--primary-pink);
+        color:white; 
+        border:none;
+        padding:12px 30px; 
+        border-radius:12px; 
+        font-weight:700; 
+        cursor:pointer;
+        transition:0.3s; }
+        .back-home-btn:focus,.back-home-btn:hover { transform:scale(1.1); box-shadow:var(--focus-glow); background:red;}
+
+        @media (max-width: 600px) {
+            .sg-episodes-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<iframe id="android14-fix-frame" style="position:absolute; width:1px; height:1px; opacity:0.01;"></iframe>
+
+<header class="sg-app-header">
+    <button class="sg-nav-icon" id="exitBtn" tabindex="0"><i class="fas fa-chevron-right"></i></button>
+    <div style="font-weight:800;">🎬 جودر الجزء 2<span style="color:var(--primary-pink)"> </span></div>
+    <button class="sg-nav-icon" id="searchBtn" tabindex="0"><i class="fas fa-search"></i></button>
+    <div id="search-container">
+        <button class="sg-nav-icon" id="closeSearchBtn"><i class="fas fa-times"></i></button>
+        <input type="text" id="search-input" placeholder="رقم الحلقة...">
+        <button class="sg-nav-icon" id="clearSearchBtn"><i class="fas fa-eraser"></i></button>
+    </div>
+</header>
+
+<div class="section-header">
+    <div class="section-title"><i class="fas fa-bolt" style="color:var(--primary-pink)"></i> <span>قائمة الحلقات</span></div>
+    <button class="reset-history-btn" id="resetHistoryBtn" tabindex="0"><i class="fas fa-eye-slash"></i> حذف علامات المشاهدة</button>
+</div>
+
+<main class="sg-episodes-grid" id="episodesGrid"></main>
+<div id="toast">📢 تم التحميل</div>
+
+<!-- Modal السيرفرات -->
+<div class="sg-modal-overlay" id="serversModal">
+    <div class="sg-server-panel">
+        <h3 id="modalTitle" style="margin-bottom:20px; color: var(--primary-pink);"></h3>
+        <div id="serversList"></div>
+        <button class="sg-close-btn" id="closeModalBtn">إلغاء</button>
+    </div>
+</div>
+
+<!-- Modal تثبيت المشغل -->
+<div class="sg-modal-overlay" id="installModal">
+    <div class="sg-server-panel">
+        <i class="fas fa-download" style="font-size:3rem; color:var(--primary-pink);"></i>
+        <h3>المشغل غير مثبت</h3>
+        <p style="margin:15px 0;">تحتاج إلى تثبيت Wuffy Player لتشغيل الحلقات</p>
+        <button class="sg-server-btn" id="installAppBtn" style="justify-content:center; background:#ed1b76;"><i class="fas fa-download"></i> تثبيت المشغل</button>
+        <button class="sg-close-btn" id="closeInstallBtn">تراجع</button>
+    </div>
+</div>
+
+<!-- Modal حذف المشاهدة -->
+<div class="sg-modal-overlay" id="resetModal">
+    <div class="sg-server-panel">
+        <i class="fas fa-trash-alt" style="font-size:2.5rem; color:#ed1b76;"></i>
+        <h3>حذف سجل المشاهدة؟</h3>
+        <p style="margin:15px 0;">سيتم إخفاء أيقونات العين من جميع الحلقات</p>
+        <button class="sg-server-btn btn-confirm-delete" id="confirmResetBtn" style="justify-content:center;">تأكيد الحذف</button>
+        <button class="sg-close-btn" id="cancelResetBtn">تراجع</button>
+    </div>
+</div>
+
+<script>
+// ==================== بيانات مسلسل "جوهرة 2" (Gawdar S02) ====================
+const STORAGE_KEY = "Gawdar_S02_Watched";
+const POSTER_URL = "poster/Gawdar.S02.jpg";
+const FALLBACK_IMG = "poster/logo.jpg";
+
+// روابط الحلقات (الرابط الرئيسي لكل حلقة - الحلقة 1 إلى 15)
+const episodeLinks = {
+    1: "intent://dl.dropbox.com/scl/fi/m9xr6dpxrygszutifl9bt/Gawdar.S02.Ep01.mp4?rlkey=78hl7cf1gr4iih3oyc7e10vj1&st=lf62nu2g&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    2: "intent://dl.dropbox.com/scl/fi/o5sw0t71rwyrv950k92l5/Gawdar.S02.Ep02..mp4?rlkey=8j0mqihqflbx9dvupwr6cwoab&st=unwte1s7&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    3: "intent://dl.dropbox.com/scl/fi/ytrcsoevvhcuke9sa14hn/Gawdar.S02.Ep03.mp4?rlkey=0cna7xk9l2249gz3njk91vnkw&st=823izuqv&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    4: "intent://dl.dropbox.com/scl/fi/5pr3m0svi6l8ogyfbuqsw/Gawdar.S02.Ep04.mp4?rlkey=sbaxnjqz27zvewwlpyqd7hfam&st=ivurcra7&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    5: "intent://dl.dropbox.com/scl/fi/76y332qw6sez8y5xodkrc/arabseed-.Gawdar.S02.Ep05.720p.mp4?rlkey=geypyok3bl3ek8elj8pzq1f7j&st=1f7y3owh&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    6: "intent://dl.dropbox.com/scl/fi/o0vc3nv6n2df0q0l1ost7/Cimawbas-Juder.S02E06.mp4?rlkey=22g2x0emovhj56t29sr8roa55&st=5azkcjpy&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    7: "intent://dl.dropbox.com/scl/fi/9qyue9qqqgwgczl460xfe/Cimawbas-Juder.S02E07.mp4?rlkey=qbrbs4ci4828kmsw3oj0t2or0&st=b73cqs35&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    8: "intent://dl.dropbox.com/scl/fi/kg5m82kzyo2odmwlw40nr/Juder.S02E08_2.mp4?rlkey=nlrsm51bd35d7hvquven9x9dw&st=rfxyovzz&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    9: "intent://dl.dropbox.com/scl/fi/47g13qvyadl0s0ntjkc95/Gawdar.S02.Ep09.mp4?rlkey=vw6hy9i91ry2kowhpx4ti5v6p&st=u0fj9ekh&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    10: "intent://dl.dropbox.com/scl/fi/r2hitsk87bmvpsv5a60on/Gawdar.S02.Ep10..mp4?rlkey=wyvxrqc5tpj86pb13upea0uyk&st=tx8vfb7k&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    11: "intent://dl.dropbox.com/scl/fi/jm870rc8zkw8qut3obxvw/Gawdar.S02.Ep11.mp4?rlkey=ktg8s3yya85l7wgs4wb2naw5o&st=vdztkjta&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    12: "intent://dl.dropbox.com/scl/fi/u356cpx5m1cs7wjjqjohv/Gawdar.S02.Ep12.mp4?rlkey=0aq7e3ukdb5ekn3sa5ewvb5z3&st=bj8xrira&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    13: "intent://dl.dropbox.com/scl/fi/cjqkdq193362x9gugfjit/Juder.S02E13.mp4?rlkey=azax4k0rmsg4qqn0skz2r5tu4&st=qfx1xpji&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    14: "intent://dl.dropbox.com/scl/fi/cneum90mz8nmm9es4xaar/Juder.S0E14.mp4?rlkey=x2gil0adhdgtyxpsauvu9mkti&st=gz8sfdgt&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    15: "intent://dl.dropbox.com/scl/fi/apklbstyjztyi1eo0c0tt/Gawdar.S02.Ep15.mp4?rlkey=920qo1wb4e83y0bzt6ph51yoc&st=e4naeg5k&dl=1#Intent;scheme=https;package=co.wuffy.player;end"
+};
+
+// بناء بيانات الحلقات - تبسيط للحلقات 1-9 (سيرفر واحد فقط)
+const episodesData = [];
+
+// الحلقات 1 إلى 9: سيرفر واحد فقط
+for (let i = 1; i <= 9; i++) {
+    episodesData.push({
+        id: i,
+        title: `الحلقة ${i}`,
+        servers: [
+            { name: "تشغيل", quality: "HD", url: episodeLinks[i] }
+        ]
+    });
+}
+
+// الحلقة 10: سيرفرات متعددة (لأن السيرفر 3 مختلف)
+episodesData.push({
+    id: 10,
+    title: "الحلقة 10",
+    servers: [
+        { name: "سيرفر 1", quality: "HD", url: episodeLinks[10] },
+        { name: "سيرفر 2", quality: "HD", url: episodeLinks[10] },
+        { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/joder-2-10_muxed.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+    ]
+});
+
+// الحلقة 11: سيرفرات متعددة
+episodesData.push({
+    id: 11,
+    title: "الحلقة 11",
+    servers: [
+        { name: "سيرفر 1", quality: "HD", url: episodeLinks[11] },
+        { name: "سيرفر 2", quality: "HD", url: episodeLinks[11] },
+        { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/joder-2-11_muxed.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+    ]
+});
+
+// الحلقة 12: سيرفرات متعددة
+episodesData.push({
+    id: 12,
+    title: "الحلقة 12",
+    servers: [
+        { name: "سيرفر 1", quality: "HD", url: episodeLinks[12] },
+        { name: "سيرفر 2", quality: "HD", url: episodeLinks[12] },
+        { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/joder-2-12_muxed.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+    ]
+});
+
+// الحلقة 13: سيرفرات متعددة
+episodesData.push({
+    id: 13,
+    title: "الحلقة 13",
+    servers: [
+        { name: "سيرفر 1", quality: "HD", url: episodeLinks[13] },
+        { name: "سيرفر 2", quality: "HD", url: "intent://vid4.ar-safas88fafad2.site/Gawdar-Alf-Leyla-w-Leyla-2/13.mp4#Intent;scheme=https;package=co.wuffy.player;end" },
+        { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/joder-2-13_muxed.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+    ]
+});
+
+// الحلقة 14: سيرفرات متعددة
+episodesData.push({
+    id: 14,
+    title: "الحلقة 14",
+    servers: [
+        { name: "سيرفر 1", quality: "HD", url: episodeLinks[14] },
+        { name: "سيرفر 2", quality: "HD", url: "intent://vid4.ar-safas88fafad2.site/Gawdar-Alf-Leyla-w-Leyla-2/14.mp4#Intent;scheme=https;package=co.wuffy.player;end" },
+        { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/joder-2-14_muxed.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+    ]
+});
+
+// الحلقة 15 (الأخيرة): سيرفرات متعددة
+episodesData.push({
+    id: 15,
+    title: "الحلقة 15 (الأخيرة)",
+    servers: [
+        { name: "سيرفر 1", quality: "HD", url: episodeLinks[15] },
+        { name: "سيرفر 2", quality: "HD", url: "intent://vid4.ar-safas88fafad2.site/Gawdar-Alf-Leyla-w-Leyla-2/15.mp4#Intent;scheme=https;package=co.wuffy.player;end" },
+        { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/joder-2-15-n_muxed.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+    ]
+});
+
+const LAST_EPISODE_NUMBER = 15;
+    let lastFocusedCardId = null;
+    let isAndroid14 = false;
+    
+    function detectAndroid14() {
+        const ua = navigator.userAgent;
+        if(ua.includes("Android 14") || ua.includes("Android14") || ua.includes("API 34")) isAndroid14 = true;
+    }
+    
+    function showToast(msg, icon = "fa-info-circle") {
+        const toast = document.getElementById("toast");
+        toast.innerHTML = `<i class="fas ${icon}"></i> ${msg}`;
+        toast.style.display = "flex";
+        setTimeout(() => {
+            toast.style.opacity = "0";
+            setTimeout(() => {
+                toast.style.display = "none";
+                toast.style.opacity = "1";
+            }, 300);
+        }, 2800);
+    }
+    
+    function closeModal(modalId) {
+        document.getElementById(modalId).classList.remove("active");
+        if(lastFocusedCardId) {
+            const prevCard = document.querySelector(`.sg-card-item[data-ep-id='${lastFocusedCardId}']`);
+            if(prevCard) prevCard.focus();
+            lastFocusedCardId = null;
+        }
+    }
+    
+    function renderEpisodes(filterText = "") {
+        const grid = document.getElementById("episodesGrid");
+        let watched = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+        let filtered = episodesData.filter(ep => 
+            filterText === "" || ep.title.includes(filterText) || ep.id.toString().includes(filterText)
+        );
+        
+        if(filtered.length === 0) {
+            grid.innerHTML = `<div class="no-results"><i class="fas fa-search-minus fa-3x"></i><h3>لاتوجد حلقة بهذا الرقم</h3><button class="reset-history-btn" id="backHomeBtn">العودة للقائمة</button></div>`;
+            const backBtn = document.getElementById("backHomeBtn");
+            if(backBtn) backBtn.onclick = () => { document.getElementById("search-input").value = ""; renderEpisodes(""); toggleSearchBar(false); };
+            return;
+        }
+        
+        grid.innerHTML = filtered.map(ep => {
+            const isWatched = watched.includes(ep.id);
+            const isLast = (ep.id === LAST_EPISODE_NUMBER);
+            return `
+                <div class="sg-card-item ${isWatched ? 'is-watched' : ''} ${isLast ? 'last-episode' : ''}" data-ep-id="${ep.id}" tabindex="0">
+                    ${isLast ? '<div class="last-badge"><i class="fas fa-star"></i> الأخيرة</div>' : ''}
+                    <div class="sg-poster-box">
+                        <div class="sg-watched-eye"><i class="fas fa-check-circle"></i></div>
+                        <img src="${POSTER_URL}" onerror="this.onerror=null; this.src='${FALLBACK_IMG}';">
+                    </div>
+                    <div class="sg-card-meta">
+                        <div class="sg-episode-label">${ep.title}</div>
+                    </div>
+                </div>
+            `;
+        }).join("");
+        
+        document.querySelectorAll(".sg-card-item").forEach(card => {
+            const epId = parseInt(card.getAttribute("data-ep-id"));
+            card.addEventListener("click", () => openServersMenu(epId));
+            card.addEventListener("keydown", (e) => {
+                if(e.key === "Enter") openServersMenu(epId);
+                if(e.key === "ArrowRight" || e.key === "ArrowLeft" || e.key === "ArrowDown" || e.key === "ArrowUp") {
+                    e.preventDefault();
+                    navigateGrid(e.key, card);
+                }
+            });
+        });
+        
+        if(lastFocusedCardId) {
+            const restoreCard = document.querySelector(`.sg-card-item[data-ep-id='${lastFocusedCardId}']`);
+            if(restoreCard) restoreCard.focus();
+            else if(document.querySelector(".sg-card-item")) document.querySelector(".sg-card-item").focus();
+        } else if(document.querySelector(".sg-card-item")) {
+            document.querySelector(".sg-card-item").focus();
+        }
+    }
+    
+    function navigateGrid(direction, currentCard) {
+        let cards = Array.from(document.querySelectorAll(".sg-card-item"));
+        let currentIdx = cards.indexOf(currentCard);
+        if(currentIdx === -1) return;
+        let nextIdx = currentIdx;
+        if(direction === "ArrowRight") nextIdx = (currentIdx + 1) % cards.length;
+        if(direction === "ArrowLeft") nextIdx = (currentIdx - 1 + cards.length) % cards.length;
+        if(direction === "ArrowDown") {
+            let cols = window.innerWidth > 600 ? 4 : 3;
+            nextIdx = Math.min(currentIdx + cols, cards.length - 1);
+        }
+        if(direction === "ArrowUp") {
+            let cols = window.innerWidth > 600 ? 4 : 3;
+            nextIdx = Math.max(currentIdx - cols, 0);
+        }
+        if(cards[nextIdx]) cards[nextIdx].focus();
+    }
+    
+    function openServersMenu(epId) {
+        lastFocusedCardId = epId;
+        const ep = episodesData.find(e => e.id === epId);
+        if(!ep) return;
+        document.getElementById("modalTitle").innerHTML = `<i class="fas fa-play-circle"></i> ${ep.title}`;
+        const serversDiv = document.getElementById("serversList");
+        serversDiv.innerHTML = ep.servers.map(server => `
+            <button class="sg-server-btn" data-url="${server.url}" data-quality="${server.quality}" tabindex="0">
+                <span><i class="fas fa-server"></i> ${server.name}</span>
+                <span class="sg-quality q-${server.quality.toLowerCase()}">${server.quality}</span>
+            </button>
+        `).join("");
+        
+        document.getElementById("serversModal").classList.add("active");
+        
+        document.querySelectorAll("#serversList .sg-server-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                let url = btn.getAttribute("data-url");
+                playVideo(url, epId);
+            });
+            btn.addEventListener("keydown", (e) => {
+                if(e.key === "Enter") {
+                    let url = btn.getAttribute("data-url");
+                    playVideo(url, epId);
+                }
+                if(e.key === "Escape") closeModal("serversModal");
+            });
+        });
+        setTimeout(() => {
+            const firstServer = document.querySelector("#serversList .sg-server-btn");
+            if(firstServer) firstServer.focus();
+        }, 100);
+    }
+    
+    function playVideo(url, epId) {
+        if(!url || url === "#") {
+            showToast("⚠️ هذه الحلقة قيد التجهيز حالياً", "fa-hourglass-half");
+            closeModal("serversModal");
+            return;
+        }
+        
+        let watched = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+        if(!watched.includes(epId)) {
+            watched.push(epId);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(watched));
+            renderEpisodes(document.getElementById("search-input").value);
+        }
+        
+        closeModal("serversModal");
+        
+        if(isAndroid14) {
+            const fixFrame = document.getElementById("android14-fix-frame");
+            if(fixFrame) {
+                fixFrame.src = "about:blank";
+                setTimeout(() => { fixFrame.src = url; }, 50);
+            }
+            setTimeout(() => window.open(url, "_system"), 100);
+        } else {
+            const iframe = document.createElement("iframe");
+            iframe.style.display = "none";
+            iframe.src = url;
+            document.body.appendChild(iframe);
+            setTimeout(() => document.body.removeChild(iframe), 2000);
+        }
+        
+        showToast(`🎬 جاري تشغيل ${episodesData.find(e=>e.id===epId).title}`, "fa-play");
+        
+        setTimeout(() => {
+            if(document.visibilityState === "visible") {
+                document.getElementById("installModal").classList.add("active");
+            }
+        }, 2500);
+    }
+    
+    function toggleSearchBar(show) {
+        const container = document.getElementById("search-container");
+        if(show) {
+            container.classList.add("active");
+            document.getElementById("search-input").focus();
+        } else {
+            container.classList.remove("active");
+            renderEpisodes("");
+        }
+    }
+    
+    function openResetModal() {
+        document.getElementById("resetModal").classList.add("active");
+    }
+    
+    function executeReset() {
+        localStorage.removeItem(STORAGE_KEY);
+        renderEpisodes(document.getElementById("search-input").value);
+        closeModal("resetModal");
+        showToast("🗑️ تم حذف علامات المشاهدة بنجاح", "fa-trash-alt");
+    }
+    
+    function handleExit() {
+        if(window.history.length > 1) window.history.back();
+        else window.location.href = "/";
+    }
+    
+    window.addEventListener("load", () => {
+        detectAndroid14();
+        renderEpisodes();
+        
+        document.getElementById("exitBtn").addEventListener("click", handleExit);
+        document.getElementById("searchBtn").addEventListener("click", () => toggleSearchBar(true));
+        document.getElementById("closeSearchBtn").addEventListener("click", () => toggleSearchBar(false));
+        document.getElementById("clearSearchBtn").addEventListener("click", () => {
+            document.getElementById("search-input").value = "";
+            renderEpisodes("");
+            toggleSearchBar(false);
+        });
+        document.getElementById("search-input").addEventListener("input", (e) => renderEpisodes(e.target.value));
+        document.getElementById("resetHistoryBtn").addEventListener("click", openResetModal);
+        document.getElementById("confirmResetBtn").addEventListener("click", executeReset);
+        document.getElementById("cancelResetBtn").addEventListener("click", () => closeModal("resetModal"));
+        document.getElementById("closeModalBtn").addEventListener("click", () => closeModal("serversModal"));
+        document.getElementById("installAppBtn").addEventListener("click", () => window.location.href = INSTALL_PAGE_URL);
+        document.getElementById("closeInstallBtn").addEventListener("click", () => closeModal("installModal"));
+        
+        document.addEventListener("keydown", (e) => {
+            if(e.key === "Escape") {
+                if(document.getElementById("serversModal").classList.contains("active")) closeModal("serversModal");
+                else if(document.getElementById("installModal").classList.contains("active")) closeModal("installModal");
+                else if(document.getElementById("resetModal").classList.contains("active")) closeModal("resetModal");
+                else if(document.getElementById("search-container").classList.contains("active")) toggleSearchBar(false);
+            }
+        });
+        
+        showToast("✨ مرحباً بك في مسلسل جودر الجزء 2 - 15 حلقة كاملة", "fa-tv");
+    });
+</script>
+</body>
+</html>

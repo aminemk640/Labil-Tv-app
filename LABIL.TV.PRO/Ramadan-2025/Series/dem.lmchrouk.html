@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>مسلسل الدم المشروك</title>
+    <link rel="icon" type="image/png" href="https://raw.githack.com/ahmadmk2023/ramadan-2025/main/logo/chaki.w.gharbi.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#020617">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary-pink: #ed1b76;
+            --gold: #FFD700;
+            --card-bg: rgba(255, 255, 255, 0.08);
+            --focus-glow: 0 0 0 3px rgba(237, 27, 118, 0.7), 0 0 0 6px rgba(255, 215, 0, 0.4);
+            --last-ep-glow: 0 0 15px 3px rgba(255, 215, 0, 0.8);
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(145deg, #020617 0%, #0a0f2a 100%);
+            color: white;
+            min-height: 100vh;
+            padding-bottom: 70px;
+        }
+
+        .sg-app-header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 65px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(15px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 4%;
+            z-index: 1000;
+            border-bottom: 2px solid var(--primary-pink);
+        }
+
+        .sg-nav-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .sg-nav-icon:focus-visible, .sg-nav-icon:hover {
+            background: var(--primary-pink);
+            transform: scale(1.05);
+            outline: 2px solid var(--gold);
+        }
+
+        #search-container {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: #0f172a;
+            display: none;
+            align-items: center;
+            padding: 0 4%;
+            gap: 12px;
+            z-index: 1100;
+        }
+
+        #search-container.active {
+            display: flex;
+        }
+
+        #search-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            padding: 12px 18px;
+            border-radius: 60px;
+            color: white;
+            font-size: 1rem;
+            font-family: 'Tajawal';
+        }
+
+        .section-header {
+            margin-top: 85px;
+            padding: 15px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.3rem;
+            font-weight: 800;
+        }
+
+        .reset-history-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 40px;
+            color: #ccc;
+            font-family: 'Tajawal';
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .reset-history-btn:focus-visible, .reset-history-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border-color: var(--gold);
+        }
+
+        .sg-episodes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 18px;
+            padding: 10px 5% 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .sg-card-item {
+            background: var(--card-bg);
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+            outline: none;
+        }
+
+        .sg-card-item:focus-visible {
+            transform: scale(1.05);
+            border: 2px solid var(--gold);
+            box-shadow: var(--focus-glow);
+        }
+
+        .sg-card-item:hover {
+            transform: scale(1.03) translateY(-5px);
+            border-color: var(--primary-pink);
+            box-shadow: 0 15px 35px rgba(237, 27, 118, 0.3);
+        }
+
+        .sg-card-item:hover .sg-poster-box img {
+            transform: scale(1.05);
+            transition: transform 0.4s ease;
+        }
+
+        .sg-card-item.last-episode {
+            border: 2px solid var(--gold);
+            background: linear-gradient(145deg, rgba(255, 215, 0, 0.15), rgba(237, 27, 118, 0.1));
+            box-shadow: var(--last-ep-glow);
+        }
+
+        .sg-card-item.last-episode .sg-episode-label {
+            color: var(--gold);
+            font-weight: 900;
+        }
+
+        .last-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: var(--gold);
+            color: #000;
+            padding: 4px 8px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .sg-poster-box {
+            position: relative;
+            aspect-ratio: 2 / 2.8;
+            background: #0f172a;
+            overflow: hidden;
+        }
+
+        .sg-poster-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .is-watched .sg-poster-box img {
+            opacity: 0.5;
+        }
+
+        .sg-watched-eye {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--primary-pink);
+            width: 32px;
+            height: 32px;
+            border-radius: 30px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 15;
+            backdrop-filter: blur(4px);
+        }
+
+        .is-watched .sg-watched-eye {
+            display: flex;
+        }
+
+        .sg-card-meta {
+            padding: 12px 6px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .sg-episode-label {
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        .sg-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(12px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+        }
+
+        .sg-modal-overlay.active {
+            display: flex;
+        }
+
+        .sg-server-panel {
+            background: #0f172a;
+            padding: 28px 20px;
+            border-radius: 32px;
+            max-width: 380px;
+            width: 85%;
+            border: 1px solid var(--primary-pink);
+            text-align: center;
+            animation: fadeUp 0.3s;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .sg-server-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.08);
+            width: 100%;
+            padding: 12px 18px;
+            margin-bottom: 12px;
+            border-radius: 60px;
+            border: 1px solid transparent;
+            color: white;
+            font-family: 'Tajawal';
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .sg-server-btn:focus-visible, .sg-server-btn:hover {
+            border-color: var(--gold);
+            background: rgba(237, 27, 118, 0.2);
+            transform: translateX(5px);
+        }
+
+        .sg-quality {
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 0.75rem;
+        }
+
+        .q-fhd { background: #7c3aed; }
+        .q-hd { background: #249f9c; }
+        .q-sd { background: #fbbf24; color: #000; }
+
+        .sg-close-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            padding: 12px;
+            border-radius: 60px;
+            color: white;
+            width: 100%;
+            margin-top: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .sg-close-btn:hover, .sg-close-btn:focus-visible {
+            background: #ef4444;
+            transform: scale(1.02);
+        }
+
+        .btn-confirm-delete {
+            background: #dc2626;
+        }
+
+        #toast {
+            position: fixed;
+            bottom: 85px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            backdrop-filter: blur(16px);
+            padding: 12px 24px;
+            border-radius: 60px;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            z-index: 4000;
+            border: 1px solid var(--primary-pink);
+            font-weight: bold;
+            white-space: nowrap;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+         .no-results { 
+        grid-column:1/-1; 
+        text-align:center;
+        padding:60px 20px;
+        display:flex; flex-direction:column;
+        align-items:center; gap:20px; }
+        
+        .no-results i { font-size:4rem; 
+        color:rgba(255,255,255,0.1); }
+        
+
+        @media (max-width: 600px) {
+            .sg-episodes-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<iframe id="android14-fix-frame" style="position:absolute; width:1px; height:1px; opacity:0.01;"></iframe>
+
+<header class="sg-app-header">
+    <button class="sg-nav-icon" id="exitBtn" tabindex="0"><i class="fas fa-chevron-right"></i></button>
+    <div style="font-weight:800;">🎬 الدم المشروك <span style="color:var(--primary-pink)"></span></div>
+    <button class="sg-nav-icon" id="searchBtn" tabindex="0"><i class="fas fa-search"></i></button>
+    <div id="search-container">
+        <button class="sg-nav-icon" id="closeSearchBtn"><i class="fas fa-times"></i></button>
+        <input type="text" id="search-input" placeholder="رقم الحلقة...">
+        <button class="sg-nav-icon" id="clearSearchBtn"><i class="fas fa-eraser"></i></button>
+    </div>
+</header>
+
+<div class="section-header">
+    <div class="section-title"><i class="fas fa-bolt" style="color:var(--primary-pink)"></i> <span>قائمة الحلقات</span></div>
+    <button class="reset-history-btn" id="resetHistoryBtn" tabindex="0"><i class="fas fa-eye-slash"></i> حذف علامات المشاهدة</button>
+</div>
+
+<main class="sg-episodes-grid" id="episodesGrid"></main>
+<div id="toast">📢 تم التحميل</div>
+
+<!-- Modal السيرفرات -->
+<div class="sg-modal-overlay" id="serversModal">
+    <div class="sg-server-panel">
+        <h3 id="modalTitle" style="margin-bottom:20px; color: var(--primary-pink);"></h3>
+        <div id="serversList"></div>
+        <button class="sg-close-btn" id="closeModalBtn">إلغاء</button>
+    </div>
+</div>
+
+<!-- Modal تثبيت المشغل -->
+<div class="sg-modal-overlay" id="installModal">
+    <div class="sg-server-panel">
+        <i class="fas fa-download" style="font-size:3rem; color:var(--primary-pink);"></i>
+        <h3>المشغل غير مثبت</h3>
+        <p style="margin:15px 0;">تحتاج إلى تثبيت Wuffy Player لتشغيل الحلقات</p>
+        <button class="sg-server-btn" id="installAppBtn" style="justify-content:center; background:#ed1b76;"><i class="fas fa-download"></i> تثبيت المشغل</button>
+        <button class="sg-close-btn" id="closeInstallBtn">تراجع</button>
+    </div>
+</div>
+
+<!-- Modal حذف المشاهدة -->
+<div class="sg-modal-overlay" id="resetModal">
+    <div class="sg-server-panel">
+        <i class="fas fa-trash-alt" style="font-size:2.5rem; color:#ed1b76;"></i>
+        <h3>حذف سجل المشاهدة؟</h3>
+        <p style="margin:15px 0;">سيتم إخفاء أيقونات العين من جميع الحلقات</p>
+        <button class="sg-server-btn btn-confirm-delete" id="confirmResetBtn" style="justify-content:center;">تأكيد الحذف</button>
+        <button class="sg-close-btn" id="cancelResetBtn">تراجع</button>
+    </div>
+</div>
+
+<script>
+    /* -------------------- بيانات مسلسل الشرقي والغربي -------------------- */
+// ==================== بيانات مسلسل "دم مشروك" ====================
+const STORAGE_KEY = "Dem_Lmchrouk_Watched";
+const POSTER_URL = "poster/dem.lmchrouk.jpg";
+const FALLBACK_IMG = "poster/logo.jpg";
+
+// روابط الحلقات (30 حلقة)
+const episodeLinks = {
+    1: "intent://2msoread-ww.amagi.tv/mediasfiles/videos/2025/03/02/1740947227dem%20lmchrouk.mp4#Intent;scheme=https;package=co.wuffy.player;end",
+    2: "intent://2msoread-ww.amagi.tv/mediasfiles/videos/2025/03/03/1741033605dem%20lmachrouk%20bo.mp4#Intent;scheme=https;package=co.wuffy.player;end",
+    3: "intent://2msoread-ww.amagi.tv/mediasfiles/videos/2025/03/04/1741119865dem%20mechrouk%20BO.mp4#Intent;scheme=https;package=co.wuffy.player;end",
+    4: "intent://2msoread-ww.amagi.tv/mediasfiles/videos/2025/03/05/1741196777dem%20lmechrouk%20bo.mp4#Intent;scheme=https;package=co.wuffy.player;end",
+    5: "intent://2msoread-ww.amagi.tv/mediasfiles/videos/2025/03/06/1741282080DEM%20LMACHROUK%2005%20%20BO.mp4#Intent;scheme=https;package=co.wuffy.player;end",
+    6: "intent://2msoread-ww.amagi.tv/mediasfiles/videos/2025/03/07/1741368756Dem%20elmechrouk%20Ep%206%20BO.mp4#Intent;scheme=https;package=co.wuffy.player;end",
+    7: "intent://2msoread-ww.amagi.tv/mediasfiles/videos/2025/03/07/1741368756Dem%20elmechrouk%20Ep%206%20BO.mp4#Intent;scheme=https;package=co.wuffy.player;end",
+    8: "intent://2msoread-ww.amagi.tv/mediasfiles/videos/2025/03/09/1741542467DEM%20LMACHROUK%20EP%208%20BO.mp4#Intent;scheme=https;package=co.wuffy.player;end",
+    9: "intent://2msoread-ww.amagi.tv/mediasfiles/videos/2025/03/10/1741628393DEM%20LMACHROUK%20EP%209%20BO.mp4#Intent;scheme=https;package=co.wuffy.player;end",
+    10: "intent://2msoread-ww.amagi.tv/mediasfiles/videos/2025/03/11/1741714198DEM%20LMECHROUK%2010%20BO.mp4#Intent;scheme=https;package=co.wuffy.player;end",
+    11: "intent://2msoread-ww.amagi.tv/mediasfiles/videos/2025/03/12/1741801140DEM%20LMECHROUK%2011%20BO.mp4#Intent;scheme=https;package=co.wuffy.player;end",
+    12: "intent://2msoread-ww.amagi.tv/mediasfiles/videos/2025/03/13/1741884969DAM%20LMACHROUK%20EP%2012%20BO.mp4#Intent;scheme=https;package=co.wuffy.player;end",
+    13: "intent://2msoread-ww.amagi.tv/mediasfiles/videos/2025/03/14/1741969505DAM%20LMACHROUK%20EP%2013%20BO.mp4#Intent;scheme=https;package=co.wuffy.player;end",
+    14: "intent://2msoread-ww.amagi.tv/mediasfiles/videos/2025/03/15/1742058475DAM%20LMACHROUK%20EP%2014%20BO.mp4#Intent;scheme=https;package=co.wuffy.player;end",
+    15: "intent://2msoread-ww.amagi.tv/mediasfiles/videos/2025/03/16/1742144457DAM%20LMACHROUK%20EP%2015%20BO.mp4#Intent;scheme=https;package=co.wuffy.player;end",
+    16: "intent://2msoread-ww.amagi.tv/mediasfiles/videos/2025/03/17/1742230146DAM%20LMACHROUK%20EP%2016%20BO.mp4#Intent;scheme=https;package=co.wuffy.player;end",
+    17: "intent://2msoread-ww.amagi.tv/mediasfiles/videos/2025/03/18/1742316440DAM%20LMACHROUK%20EP%2017%20BO.mp4#Intent;scheme=https;package=co.wuffy.player;end",
+    18: "intent://2msoread-ww.amagi.tv/mediasfiles/videos/2025/03/19/1742401707DAM%20LMACHROUK%20EP%2018%20BO.mp4#Intent;scheme=https;package=co.wuffy.player;end",
+    19: "intent://2msoread-ww.amagi.tv/mediasfiles/videos/2025/03/20/1742486798DAM%20LMACHROUK%20EP%2019%20BO.mp4#Intent;scheme=https;package=co.wuffy.player;end",
+    20: "intent://2msoread-ww.amagi.tv/mediasfiles/videos/2025/03/21/1742577938DAM%20LMACHROUK%20EP%2020%20BO.mp4#Intent;scheme=https;package=co.wuffy.player;end",
+    21: "intent://2msoread-ww.amagi.tv/mediasfiles/videos/2025/03/22/1742661780DEM%20LMECHROUK%20EP%2021%20BO.mp4#Intent;scheme=https;package=co.wuffy.player;end",
+    22: "intent://2msoread-ww.amagi.tv/mediasfiles/videos/2025/03/23/1742747969DEM%20LMECHROUK%20EP%2022%20BO.mp4#Intent;scheme=https;package=co.wuffy.player;end",
+    23: "intent://2msoread-ww.amagi.tv/mediasfiles/videos/2025/03/24/1742831891DEM%20LMECHROUK%20EP%2023%20BO.mp4#Intent;scheme=https;package=co.wuffy.player;end",
+    24: "intent://2msoread-ww.amagi.tv/mediasfiles/videos/2025/03/25/1742919275DEM%20LMECHROUK%20EP%2024%20BO.mp4#Intent;scheme=https;package=co.wuffy.player;end",
+    25: "intent://2msoread-ww.amagi.tv/mediasfiles/videos/2025/03/26/1743005314DEM%20LMECHROUK%20EP%2025%20BO.mp4#Intent;scheme=https;package=co.wuffy.player;end",
+    26: "intent://2msoread-ww.amagi.tv/mediasfiles/videos/2025/03/27/1743093304DEM%20LMECHROUK%20EP%2026%20BO.mp4#Intent;scheme=https;package=co.wuffy.player;end",
+    27: "intent://2msoread-ww.amagi.tv/mediasfiles/videos/2025/03/28/1743176350DEM%20LMECHROUK%20EP%2027%20%20BO.mp4#Intent;scheme=https;package=co.wuffy.player;end",
+    28: "intent://2msoread-ww.amagi.tv/mediasfiles/videos/2025/03/29/1743264650DEM%20LMECHROUK%20EP%2028%20%20BO.mp4#Intent;scheme=https;package=co.wuffy.player;end",
+    29: "intent://2msoread-ww.amagi.tv/mediasfiles/videos/2025/03/30/1743353124DEM%20LMECHROUK%20EP%2029%20%20BO.mp4#Intent;scheme=https;package=co.wuffy.player;end",
+    30: "intent://2msoread-ww.amagi.tv/mediasfiles/videos/2025/03/31/1743427221DEM%20LMECHROUK%20EP%2030%20%20BO.mp4#Intent;scheme=https;package=co.wuffy.player;end"
+};
+
+// بناء بيانات الحلقات (كل حلقة 3 سيرفرات بنفس الرابط)
+const episodesData = [];
+for (let i = 1; i <= 30; i++) {
+    const link = episodeLinks[i];
+    episodesData.push({
+        id: i,
+        title: `الحلقة ${i}`,
+        servers: [
+            { name: "سيرفر FHD", quality: "FHD", url: link },
+            { name: "سيرفر HD", quality: "HD", url: link },
+            { name: "سيرفر SD", quality: "SD", url: link }
+        ]
+    });
+}
+
+const LAST_EPISODE_NUMBER = 30;
+    let lastFocusedCardId = null;
+    let isAndroid14 = false;
+    
+    function detectAndroid14() {
+        const ua = navigator.userAgent;
+        if(ua.includes("Android 14") || ua.includes("Android14") || ua.includes("API 34")) isAndroid14 = true;
+    }
+    
+    function showToast(msg, icon = "fa-info-circle") {
+        const toast = document.getElementById("toast");
+        toast.innerHTML = `<i class="fas ${icon}"></i> ${msg}`;
+        toast.style.display = "flex";
+        setTimeout(() => {
+            toast.style.opacity = "0";
+            setTimeout(() => {
+                toast.style.display = "none";
+                toast.style.opacity = "1";
+            }, 300);
+        }, 2800);
+    }
+    
+    function closeModal(modalId) {
+        document.getElementById(modalId).classList.remove("active");
+        if(lastFocusedCardId) {
+            const prevCard = document.querySelector(`.sg-card-item[data-ep-id='${lastFocusedCardId}']`);
+            if(prevCard) prevCard.focus();
+            lastFocusedCardId = null;
+        }
+    }
+    
+    function renderEpisodes(filterText = "") {
+        const grid = document.getElementById("episodesGrid");
+        let watched = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+        let filtered = episodesData.filter(ep => 
+            filterText === "" || ep.title.includes(filterText) || ep.id.toString().includes(filterText)
+        );
+        
+        if(filtered.length === 0) {
+            grid.innerHTML = `<div class="no-results"><i class="fas fa-search-minus fa-3x"></i><h3>لاتوجد حلقة بهذا الرقم</h3><button class="reset-history-btn" id="backHomeBtn">العودة للقائمة</button></div>`;
+            const backBtn = document.getElementById("backHomeBtn");
+            if(backBtn) backBtn.onclick = () => { document.getElementById("search-input").value = ""; renderEpisodes(""); toggleSearchBar(false); };
+            return;
+        }
+        
+        grid.innerHTML = filtered.map(ep => {
+            const isWatched = watched.includes(ep.id);
+            const isLast = (ep.id === LAST_EPISODE_NUMBER);
+            return `
+                <div class="sg-card-item ${isWatched ? 'is-watched' : ''} ${isLast ? 'last-episode' : ''}" data-ep-id="${ep.id}" tabindex="0">
+                    ${isLast ? '<div class="last-badge"><i class="fas fa-star"></i> الأخيرة</div>' : ''}
+                    <div class="sg-poster-box">
+                        <div class="sg-watched-eye"><i class="fas fa-check-circle"></i></div>
+                        <img src="${POSTER_URL}" onerror="this.onerror=null; this.src='${FALLBACK_IMG}';">
+                    </div>
+                    <div class="sg-card-meta">
+                        <div class="sg-episode-label">${ep.title}</div>
+                    </div>
+                </div>
+            `;
+        }).join("");
+        
+        document.querySelectorAll(".sg-card-item").forEach(card => {
+            const epId = parseInt(card.getAttribute("data-ep-id"));
+            card.addEventListener("click", () => openServersMenu(epId));
+            card.addEventListener("keydown", (e) => {
+                if(e.key === "Enter") openServersMenu(epId);
+                if(e.key === "ArrowRight" || e.key === "ArrowLeft" || e.key === "ArrowDown" || e.key === "ArrowUp") {
+                    e.preventDefault();
+                    navigateGrid(e.key, card);
+                }
+            });
+        });
+        
+        if(lastFocusedCardId) {
+            const restoreCard = document.querySelector(`.sg-card-item[data-ep-id='${lastFocusedCardId}']`);
+            if(restoreCard) restoreCard.focus();
+            else if(document.querySelector(".sg-card-item")) document.querySelector(".sg-card-item").focus();
+        } else if(document.querySelector(".sg-card-item")) {
+            document.querySelector(".sg-card-item").focus();
+        }
+    }
+    
+    function navigateGrid(direction, currentCard) {
+        let cards = Array.from(document.querySelectorAll(".sg-card-item"));
+        let currentIdx = cards.indexOf(currentCard);
+        if(currentIdx === -1) return;
+        let nextIdx = currentIdx;
+        if(direction === "ArrowRight") nextIdx = (currentIdx + 1) % cards.length;
+        if(direction === "ArrowLeft") nextIdx = (currentIdx - 1 + cards.length) % cards.length;
+        if(direction === "ArrowDown") {
+            let cols = window.innerWidth > 600 ? 4 : 3;
+            nextIdx = Math.min(currentIdx + cols, cards.length - 1);
+        }
+        if(direction === "ArrowUp") {
+            let cols = window.innerWidth > 600 ? 4 : 3;
+            nextIdx = Math.max(currentIdx - cols, 0);
+        }
+        if(cards[nextIdx]) cards[nextIdx].focus();
+    }
+    
+    function openServersMenu(epId) {
+        lastFocusedCardId = epId;
+        const ep = episodesData.find(e => e.id === epId);
+        if(!ep) return;
+        document.getElementById("modalTitle").innerHTML = `<i class="fas fa-play-circle"></i> ${ep.title}`;
+        const serversDiv = document.getElementById("serversList");
+        serversDiv.innerHTML = ep.servers.map(server => `
+            <button class="sg-server-btn" data-url="${server.url}" data-quality="${server.quality}" tabindex="0">
+                <span><i class="fas fa-server"></i> ${server.name}</span>
+                <span class="sg-quality q-${server.quality.toLowerCase()}">${server.quality}</span>
+            </button>
+        `).join("");
+        
+        document.getElementById("serversModal").classList.add("active");
+        
+        document.querySelectorAll("#serversList .sg-server-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                let url = btn.getAttribute("data-url");
+                playVideo(url, epId);
+            });
+            btn.addEventListener("keydown", (e) => {
+                if(e.key === "Enter") {
+                    let url = btn.getAttribute("data-url");
+                    playVideo(url, epId);
+                }
+                if(e.key === "Escape") closeModal("serversModal");
+            });
+        });
+        setTimeout(() => {
+            const firstServer = document.querySelector("#serversList .sg-server-btn");
+            if(firstServer) firstServer.focus();
+        }, 100);
+    }
+    
+    function playVideo(url, epId) {
+        if(!url || url === "#") {
+            showToast("⚠️ هذه الحلقة قيد التجهيز حالياً", "fa-hourglass-half");
+            closeModal("serversModal");
+            return;
+        }
+        
+        let watched = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+        if(!watched.includes(epId)) {
+            watched.push(epId);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(watched));
+            renderEpisodes(document.getElementById("search-input").value);
+        }
+        
+        closeModal("serversModal");
+        
+        if(isAndroid14) {
+            const fixFrame = document.getElementById("android14-fix-frame");
+            if(fixFrame) {
+                fixFrame.src = "about:blank";
+                setTimeout(() => { fixFrame.src = url; }, 50);
+            }
+            setTimeout(() => window.open(url, "_system"), 100);
+        } else {
+            const iframe = document.createElement("iframe");
+            iframe.style.display = "none";
+            iframe.src = url;
+            document.body.appendChild(iframe);
+            setTimeout(() => document.body.removeChild(iframe), 2000);
+        }
+        
+        showToast(`🎬 جاري تشغيل ${episodesData.find(e=>e.id===epId).title}`, "fa-play");
+        
+        setTimeout(() => {
+            if(document.visibilityState === "visible") {
+                document.getElementById("installModal").classList.add("active");
+            }
+        }, 2500);
+    }
+    
+    function toggleSearchBar(show) {
+        const container = document.getElementById("search-container");
+        if(show) {
+            container.classList.add("active");
+            document.getElementById("search-input").focus();
+        } else {
+            container.classList.remove("active");
+            renderEpisodes("");
+        }
+    }
+    
+    function openResetModal() {
+        document.getElementById("resetModal").classList.add("active");
+    }
+    
+    function executeReset() {
+        localStorage.removeItem(STORAGE_KEY);
+        renderEpisodes(document.getElementById("search-input").value);
+        closeModal("resetModal");
+        showToast("🗑️ تم حذف علامات المشاهدة بنجاح", "fa-trash-alt");
+    }
+    
+    function handleExit() {
+        if(window.history.length > 1) window.history.back();
+        else window.location.href = "/";
+    }
+    
+    window.addEventListener("load", () => {
+        detectAndroid14();
+        renderEpisodes();
+        
+        document.getElementById("exitBtn").addEventListener("click", handleExit);
+        document.getElementById("searchBtn").addEventListener("click", () => toggleSearchBar(true));
+        document.getElementById("closeSearchBtn").addEventListener("click", () => toggleSearchBar(false));
+        document.getElementById("clearSearchBtn").addEventListener("click", () => {
+            document.getElementById("search-input").value = "";
+            renderEpisodes("");
+            toggleSearchBar(false);
+        });
+        document.getElementById("search-input").addEventListener("input", (e) => renderEpisodes(e.target.value));
+        document.getElementById("resetHistoryBtn").addEventListener("click", openResetModal);
+        document.getElementById("confirmResetBtn").addEventListener("click", executeReset);
+        document.getElementById("cancelResetBtn").addEventListener("click", () => closeModal("resetModal"));
+        document.getElementById("closeModalBtn").addEventListener("click", () => closeModal("serversModal"));
+        document.getElementById("installAppBtn").addEventListener("click", () => window.location.href = INSTALL_PAGE_URL);
+        document.getElementById("closeInstallBtn").addEventListener("click", () => closeModal("installModal"));
+        
+        document.addEventListener("keydown", (e) => {
+            if(e.key === "Escape") {
+                if(document.getElementById("serversModal").classList.contains("active")) closeModal("serversModal");
+                else if(document.getElementById("installModal").classList.contains("active")) closeModal("installModal");
+                else if(document.getElementById("resetModal").classList.contains("active")) closeModal("resetModal");
+                else if(document.getElementById("search-container").classList.contains("active")) toggleSearchBar(false);
+            }
+        });
+        
+        showToast("✨ مرحباً بك في مسلسالدم المشروك بي - 30 حلقة كاملة", "fa-tv");
+    });
+</script>
+</body>
+</html>

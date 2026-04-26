@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>مسلسل المداح الجزء 5</title>
+    <link rel="icon" type="image/jpg" href="https://aminemk640.github.io/Labil-Tv-app/LABIL.TV.PRO/Ramadan-2026/Series/poster/logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#020617">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary-pink: #ed1b76;
+            --gold: #FFD700;
+            --card-bg: rgba(255, 255, 255, 0.08);
+            --focus-glow: 0 0 0 3px rgba(237, 27, 118, 0.7), 0 0 0 6px rgba(255, 215, 0, 0.4);
+            --last-ep-glow: 0 0 15px 3px rgba(255, 215, 0, 0.8);
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(145deg, #020617 0%, #0a0f2a 100%);
+            color: white;
+            min-height: 100vh;
+            padding-bottom: 70px;
+        }
+
+        .sg-app-header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 65px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(15px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 4%;
+            z-index: 1000;
+            border-bottom: 2px solid var(--primary-pink);
+        }
+
+        .sg-nav-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .sg-nav-icon:focus-visible, .sg-nav-icon:hover {
+            background: var(--primary-pink);
+            transform: scale(1.05);
+            outline: 2px solid var(--gold);
+        }
+
+        #search-container {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: #0f172a;
+            display: none;
+            align-items: center;
+            padding: 0 4%;
+            gap: 12px;
+            z-index: 1100;
+        }
+
+        #search-container.active {
+            display: flex;
+        }
+
+        #search-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            padding: 12px 18px;
+            border-radius: 60px;
+            color: white;
+            font-size: 1rem;
+            font-family: 'Tajawal';
+        }
+
+        .section-header {
+            margin-top: 85px;
+            padding: 15px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.3rem;
+            font-weight: 800;
+        }
+
+        .reset-history-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 40px;
+            color: #ccc;
+            font-family: 'Tajawal';
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .reset-history-btn:focus-visible, .reset-history-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border-color: var(--gold);
+        }
+
+        .sg-episodes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 18px;
+            padding: 10px 5% 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .sg-card-item {
+            background: var(--card-bg);
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+            outline: none;
+        }
+
+        .sg-card-item:focus-visible {
+            transform: scale(1.05);
+            border: 2px solid var(--gold);
+            box-shadow: var(--focus-glow);
+        }
+
+        .sg-card-item:hover {
+            transform: scale(1.03) translateY(-5px);
+            border-color: var(--primary-pink);
+            box-shadow: 0 15px 35px rgba(237, 27, 118, 0.3);
+        }
+
+        .sg-card-item:hover .sg-poster-box img {
+            transform: scale(1.05);
+            transition: transform 0.4s ease;
+        }
+
+        .sg-card-item.last-episode {
+            border: 2px solid var(--gold);
+            background: linear-gradient(145deg, rgba(255, 215, 0, 0.15), rgba(237, 27, 118, 0.1));
+            box-shadow: var(--last-ep-glow);
+        }
+
+        .sg-card-item.last-episode .sg-episode-label {
+            color: var(--gold);
+            font-weight: 900;
+        }
+
+        .last-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: var(--gold);
+            color: #000;
+            padding: 4px 8px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .sg-poster-box {
+            position: relative;
+            aspect-ratio: 2 / 2.8;
+            background: #0f172a;
+            overflow: hidden;
+        }
+
+        .sg-poster-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .is-watched .sg-poster-box img {
+            opacity: 0.5;
+        }
+
+        .sg-watched-eye {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--primary-pink);
+            width: 32px;
+            height: 32px;
+            border-radius: 30px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 15;
+            backdrop-filter: blur(4px);
+        }
+
+        .is-watched .sg-watched-eye {
+            display: flex;
+        }
+
+        .sg-card-meta {
+            padding: 12px 6px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .sg-episode-label {
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        .sg-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(12px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+        }
+
+        .sg-modal-overlay.active {
+            display: flex;
+        }
+
+        .sg-server-panel {
+            background: #0f172a;
+            padding: 28px 20px;
+            border-radius: 32px;
+            max-width: 380px;
+            width: 85%;
+            border: 1px solid var(--primary-pink);
+            text-align: center;
+            animation: fadeUp 0.3s;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .sg-server-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.08);
+            width: 100%;
+            padding: 12px 18px;
+            margin-bottom: 12px;
+            border-radius: 60px;
+            border: 1px solid transparent;
+            color: white;
+            font-family: 'Tajawal';
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .sg-server-btn:focus-visible, .sg-server-btn:hover {
+            border-color: var(--gold);
+            background: rgba(237, 27, 118, 0.2);
+            transform: translateX(5px);
+        }
+
+        .sg-quality {
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 0.75rem;
+        }
+
+        .q-fhd { background: #7c3aed; }
+        .q-hd { background: #249f9c; }
+        .q-sd { background: #fbbf24; color: #000; }
+
+        .sg-close-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            padding: 12px;
+            border-radius: 60px;
+            color: white;
+            width: 100%;
+            margin-top: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .sg-close-btn:hover, .sg-close-btn:focus-visible {
+            background: #ef4444;
+            transform: scale(1.02);
+        }
+
+        .btn-confirm-delete {
+            background: #dc2626;
+        }
+
+        #toast {
+            position: fixed;
+            bottom: 85px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            backdrop-filter: blur(16px);
+            padding: 12px 24px;
+            border-radius: 60px;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            z-index: 4000;
+            border: 1px solid var(--primary-pink);
+            font-weight: bold;
+            white-space: nowrap;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .no-results { 
+        grid-column:1/-1; 
+        text-align:center;
+        padding:60px 20px;
+        display:flex; flex-direction:column;
+        align-items:center; gap:20px; }
+        
+        .no-results i { font-size:4rem; 
+        color:rgba(255,255,255,0.1); }
+        
+        .back-home-btn {
+        border: 2px solid var(--primary-pink);
+        color:white; 
+        border:none;
+        padding:12px 30px; 
+        border-radius:12px; 
+        font-weight:700; 
+        cursor:pointer;
+        transition:0.3s; }
+        .back-home-btn:focus,.back-home-btn:hover { transform:scale(1.1); box-shadow:var(--focus-glow); background:red;}
+
+        @media (max-width: 600px) {
+            .sg-episodes-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<iframe id="android14-fix-frame" style="position:absolute; width:1px; height:1px; opacity:0.01;"></iframe>
+
+<header class="sg-app-header">
+    <button class="sg-nav-icon" id="exitBtn" tabindex="0"><i class="fas fa-chevron-right"></i></button>
+    <div style="font-weight:800;">🎬  المداح الجزء 5<span style="color:var(--primary-pink)"> </span></div>
+    <button class="sg-nav-icon" id="searchBtn" tabindex="0"><i class="fas fa-search"></i></button>
+    <div id="search-container">
+        <button class="sg-nav-icon" id="closeSearchBtn"><i class="fas fa-times"></i></button>
+        <input type="text" id="search-input" placeholder="رقم الحلقة...">
+        <button class="sg-nav-icon" id="clearSearchBtn"><i class="fas fa-eraser"></i></button>
+    </div>
+</header>
+
+<div class="section-header">
+    <div class="section-title"><i class="fas fa-bolt" style="color:var(--primary-pink)"></i> <span>قائمة الحلقات</span></div>
+    <button class="reset-history-btn" id="resetHistoryBtn" tabindex="0"><i class="fas fa-eye-slash"></i> حذف علامات المشاهدة</button>
+</div>
+
+<main class="sg-episodes-grid" id="episodesGrid"></main>
+<div id="toast">📢 تم التحميل</div>
+
+<!-- Modal السيرفرات -->
+<div class="sg-modal-overlay" id="serversModal">
+    <div class="sg-server-panel">
+        <h3 id="modalTitle" style="margin-bottom:20px; color: var(--primary-pink);"></h3>
+        <div id="serversList"></div>
+        <button class="sg-close-btn" id="closeModalBtn">إلغاء</button>
+    </div>
+</div>
+
+<!-- Modal تثبيت المشغل -->
+<div class="sg-modal-overlay" id="installModal">
+    <div class="sg-server-panel">
+        <i class="fas fa-download" style="font-size:3rem; color:var(--primary-pink);"></i>
+        <h3>المشغل غير مثبت</h3>
+        <p style="margin:15px 0;">تحتاج إلى تثبيت Wuffy Player لتشغيل الحلقات</p>
+        <button class="sg-server-btn" id="installAppBtn" style="justify-content:center; background:#ed1b76;"><i class="fas fa-download"></i> تثبيت المشغل</button>
+        <button class="sg-close-btn" id="closeInstallBtn">تراجع</button>
+    </div>
+</div>
+
+<!-- Modal حذف المشاهدة -->
+<div class="sg-modal-overlay" id="resetModal">
+    <div class="sg-server-panel">
+        <i class="fas fa-trash-alt" style="font-size:2.5rem; color:#ed1b76;"></i>
+        <h3>حذف سجل المشاهدة؟</h3>
+        <p style="margin:15px 0;">سيتم إخفاء أيقونات العين من جميع الحلقات</p>
+        <button class="sg-server-btn btn-confirm-delete" id="confirmResetBtn" style="justify-content:center;">تأكيد الحذف</button>
+        <button class="sg-close-btn" id="cancelResetBtn">تراجع</button>
+    </div>
+</div>
+
+<script>
+// ==================== بيانات مسلسل "جوهرة 2" (Gawdar S02) ====================
+const STORAGE_KEY = "El.Maddah.S05_Watched";
+const POSTER_URL = "poster/El.Maddah.S05.jpg";
+const FALLBACK_IMG = "poster/logo.jpg";
+
+
+// روابط الحلقات الأساسية (للسيرفر الأول عادة Dropbox)
+const episodeLinks = {
+    1: "intent://dl.dropbox.com/scl/fi/lu1hmdayyh1vo8y00tm94/arabseed-.El.Maddah.Ostouret.El.A2.S05.Ep01.480p.mp4?rlkey=zdgqzy62a98sx7f73404y9xb4&st=9h5c0ufl&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    2: "intent://dl.dropbox.com/scl/fi/516yhgrzc72qvh8wgea7i/arabseed-.El.Maddah.Ostouret.El.A2.S05.Ep02.480p.mp4?rlkey=e5nfa4fiinm33hx725mq019oi&st=fgx5nr28&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    3: "intent://dl.dropbox.com/scl/fi/a7fm42ivfep159o7tkd1t/arabseed-.El.Maddah.Ostouret.El.A2.S05.Ep03.480p.mp4?rlkey=2n0jzyfed36pg79qe1yb58qnn&st=7ce14zzf&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    4: "intent://dl.dropbox.com/scl/fi/yw1ca0i2bxmahh88sipq3/arabseed-.El.Maddah.Ostouret.El.A2.S05.Ep04.480p.mp4?rlkey=zug33u1wmtsh436hxnigmdj6f&st=flk6oeu8&dl=1#Intent;scheme=https;package=co.wuffy.player;end",  // الحلقة 4 و 5 لهما نفس الرابط في الكود الأصلي (خطأ)
+    5: "intent://dl.dropbox.com/scl/fi/yw1ca0i2bxmahh88sipq3/arabseed-.El.Maddah.Ostouret.El.A2.S05.Ep04.480p.mp4?rlkey=zug33u1wmtsh436hxnigmdj6f&st=w98o2nmd&dl=1#Intent;scheme=https;package=co.wuffy.player;end", // مختلف قليلاً في st
+    6: "intent://dl.dropbox.com/scl/fi/loh18pie65zk6szemlci1/arabseed-.El.Maddah.Ostouret.El.A2.S05.Ep06.480p.mp4?rlkey=h1lywfn23kq4rj8xqp59t9qza&st=t7knn28b&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    7: "intent://dl.dropbox.com/scl/fi/85z0wjvuwc4wmjmh34be/arabseed-.El.Maddah.Ostouret.El.A2.S05.Ep07.720p.mp4?rlkey=7c3db9xfyqgdyhgasejn8jllg&st=ghr8pbep&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    8: "intent://dl.dropbox.com/scl/fi/ozav1s7z1cvjjv1rajjez/Cimawbas-ElMadah.S05E08.mp4?rlkey=8g0ibo7oouij01a6dq728fqyl&st=hofgiv5x&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    9: "intent://dl.dropbox.com/scl/fi/19l2i0sxjos65vlih3wdn/Cimawbas-Madah.S05E09.mp4?rlkey=c93cur8jmmw92pu8x9bldi9ch&st=6i4ju790&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    10: "intent://dl.dropbox.com/scl/fi/lquw5ftrwryd3lpna3tam/Madah.S05E10.mp4?rlkey=qc80yddsfxs47qtg42zr6ycv5&st=2g75j96h&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    11: "intent://dl.dropbox.com/scl/fi/buequixqnci17xaeienwe/Madah.S05E11.mp4?rlkey=69589kj7akhooz81mjbc7o83d&st=uylk93kv&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    12: "intent://dl.dropbox.com/scl/fi/0nxe67uqzpl4bcqb17vjz/Madah.S05E12.mp4?rlkey=ucs4gctmniwj2hb429r8u37s2&st=phh3anny&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    13: "intent://dl.dropbox.com/scl/fi/mqbmgy0d9h8ln6vjujuol/El.Maddah.S05.Ep13.mp4?rlkey=v0tc4afbfglnav5t2tgwluog0&st=qcf5nbk7&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    14: "intent://dl.dropbox.com/scl/fi/4nekstxsageqmh335j5b7/El.Maddah.S05.Ep14.mp4?rlkey=sfjdvqlt5g3y0gtsax00s1jqe&st=2wy06dyg&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    15: "intent://dl.dropbox.com/scl/fi/55tkpagayt0i7kfjlexbh/Madah.S05E15.mp4?rlkey=xqar0sadzcatalhaxjxt7nfvx&st=5fheubjq&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    16: "intent://dl.dropbox.com/scl/fi/yxleh3xhyp9b6i1prvxni/El.Madah.S05E16.mp4?rlkey=2qh5uwkq5m38kw8dt2rlvugl2&st=ivo4vyb3&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    17: "intent://dl.dropbox.com/scl/fi/76tnap7skyz17uvrkcilp/ElMadah.S05E17.mp4?rlkey=5mjpgfwwzqbe0z12eyfim2v34&st=frl5nemw&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    18: "intent://dl.dropbox.com/scl/fi/h7pe6fri0tltcxes6ojmc/Mahdah.S05E18.mp4?rlkey=3wl2opk4yj42au89u94zqx9sf&st=aqu8roi4&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    19: "intent://dl.dropbox.com/scl/fi/c96pwg7g2ex3yl1s8c7c0/Madah.S02.E19.mp4?rlkey=ha1xqdbhp8ltp140ul03qojfy&st=vl1quiva&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    20: "intent://dl.dropbox.com/scl/fi/lqnf2cjvuoebonlp36i8x/Madah.S05E20.mp4?rlkey=arlt2lopd4cfan1t2lfh2r215&st=tb6dz714&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    21: "intent://dl.dropbox.com/scl/fi/jf4si4z5ddo97lgcf5ct6/El.Maddah.S05.Ep21.mp4?rlkey=6d37emx2st1xcj1jm157v8yzw&st=ifpa2cjw&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    22: "intent://dl.dropbox.com/scl/fi/zvvdkdaoqzhffvj1wdev2/El.Maddah.S05.Ep22.mp4?rlkey=0lj7gu0i990ksk4ws0lx7jxge&st=2ujfkssf&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    23: "intent://dl.dropbox.com/scl/fi/mg3tylwxyayuu8u5z1kmh/El.Madah.S05E23.R.mp4?rlkey=vd533d3xyklfz91ee7cscsa1i&st=3sdgpua0&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    24: "intent://dl.dropbox.com/scl/fi/oy8ge25bf57h3lft300oi/El.Maddah.S05.Ep24.mp4?rlkey=sqcnw83gz3yghfaqje2ocuxm8&st=d7vwc8a3&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    25: "intent://dl.dropbox.com/scl/fi/rmjpp2f29f52rx6umtpzu/ElMadah.S05E25.R.mp4?rlkey=01qw9ntn9ci9tg1f24priwlz3&st=6en97ouu&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    26: "intent://dl.dropbox.com/scl/fi/5souoier5o3h3e851h6c3/El.Maddah.S05.Ep26.mp4?rlkey=341lwg5g3not1cnhqviaf5w0r&st=nfkhkpr3&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    27: "intent://dl.dropbox.com/scl/fi/5xcu1q545fwgu7f3g8osj/El.Madah.S05E27.R.mp4?rlkey=y1y7ohgd7vutrx87bq360sudv&st=t7pwltxb&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    28: "intent://dl.dropbox.com/scl/fi/jp6eoazc5jpehkxj8tcjv/El.Maddah.S05.Ep28.mp4?rlkey=fs7d7zx7h7f0ca33jjpj1exgi&st=8m5vvenk&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    29: "intent://dl.dropbox.com/scl/fi/zwsi4qmrvax46sajj6fad/El-Maddah.S05E29.mp4?rlkey=44a79s8l5vvkltlbda1y7emck&st=ygvhyhjs&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    30: "intent://dl.dropbox.com/scl/fi/9xskgjh5j6d5km448pnn7/El.Maddah.S05.Ep30.mp4?rlkey=na4jpzeyqsj9k7eodrt0z4rs1&st=mti1plrl&dl=1#Intent;scheme=https;package=co.wuffy.player;end"
+};
+
+// بناء بيانات الحلقات مع التبسيط
+const episodesData = [];
+
+// الحلقات 1 إلى 11: كلها سيرفر واحد (لأن الأزرار متطابقة)
+for (let i = 1; i <= 11; i++) {
+    episodesData.push({
+        id: i,
+        title: `الحلقة ${i}`,
+        servers: [{ name: "تشغيل", quality: "HD", url: episodeLinks[i] }]
+    });
+}
+
+// الحلقة 12 (سيرفر 2 مختلف)
+episodesData.push({
+    id: 12, title: "الحلقة 12",
+    servers: [
+        { name: "سيرفر 1", quality: "HD", url: episodeLinks[12] },
+        { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/mada7-2-12.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+        { name: "سيرفر 3", quality: "HD", url: episodeLinks[12] }
+    ]
+});
+
+// الحلقة 13 (سيرفر 2 مختلف)
+episodesData.push({
+    id: 13, title: "الحلقة 13",
+    servers: [
+        { name: "سيرفر 1", quality: "HD", url: episodeLinks[13] },
+        { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/mada7-5-13.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+        { name: "سيرفر 3", quality: "HD", url: episodeLinks[13] }
+    ]
+});
+
+// الحلقة 14 (سيرفر 2 مختلف)
+episodesData.push({
+    id: 14, title: "الحلقة 14",
+    servers: [
+        { name: "سيرفر 1", quality: "HD", url: episodeLinks[14] },
+        { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/mada7-5-14.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+        { name: "سيرفر 3", quality: "HD", url: episodeLinks[14] }
+    ]
+});
+
+// الحلقة 15 (سيرفر 2 مختلف)
+episodesData.push({
+    id: 15, title: "الحلقة 15",
+    servers: [
+        { name: "سيرفر 1", quality: "HD", url: episodeLinks[15] },
+        { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/mada7-5-15.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+        { name: "سيرفر 3", quality: "HD", url: episodeLinks[15] }
+    ]
+});
+
+// الحلقة 16 (ثلاثة سيرفرات مختلفة)
+episodesData.push({
+    id: 16, title: "الحلقة 16",
+    servers: [
+        { name: "سيرفر 1", quality: "HD", url: episodeLinks[16] },
+        { name: "سيرفر 2", quality: "HD", url: "intent://vid4.ar-safas88fafad2.site/Al-Maddah-5-Ostorat-Al-Aahd/16.mp4#Intent;scheme=https;package=co.wuffy.player;end" },
+        { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/mada7-5-16.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+    ]
+});
+
+// الحلقة 17 (ثلاثة سيرفرات مختلفة)
+episodesData.push({
+    id: 17, title: "الحلقة 17",
+    servers: [
+        { name: "سيرفر 1", quality: "HD", url: episodeLinks[17] },
+        { name: "سيرفر 2", quality: "HD", url: "intent://vid4.ar-safas88fafad2.site/Al-Maddah-5-Ostorat-Al-Aahd/17.mp4#Intent;scheme=https;package=co.wuffy.player;end" },
+        { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/mada7-5-17.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+    ]
+});
+
+// الحلقة 18 (ثلاثة سيرفرات مختلفة)
+episodesData.push({
+    id: 18, title: "الحلقة 18",
+    servers: [
+        { name: "سيرفر 1", quality: "HD", url: episodeLinks[18] },
+        { name: "سيرفر 2", quality: "HD", url: "intent://vid4.ar-safas88fafad2.site/Al-Maddah-5-Ostorat-Al-Aahd/18.mp4#Intent;scheme=https;package=co.wuffy.player;end" },
+        { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/mada7-5-18.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+    ]
+});
+
+// الحلقة 19 (سيرفر 2 و3 مختلفان)
+episodesData.push({
+    id: 19, title: "الحلقة 19",
+    servers: [
+        { name: "سيرفر 1", quality: "HD", url: episodeLinks[19] },
+        { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/mada7-5-19.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+        { name: "سيرفر 3", quality: "HD", url: "intent://vid2.ar-d11111111.site/Al-Maddah-5-Ostorat-Al-Aahd/19.mp4#Intent;scheme=https;package=co.wuffy.player;end" }
+    ]
+});
+
+// الحلقة 20 (سيرفر 2 و3 مختلفان)
+episodesData.push({
+    id: 20, title: "الحلقة 20",
+    servers: [
+        { name: "سيرفر 1", quality: "HD", url: episodeLinks[20] },
+        { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/mada7-5-20.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+        { name: "سيرفر 3", quality: "HD", url: "intent://vid2.ar-d11111111.site/Al-Maddah-5-Ostorat-Al-Aahd/20.mp4#Intent;scheme=https;package=co.wuffy.player;end" }
+    ]
+});
+
+// الحلقة 21 (سيرفر 2 و3 مختلفان)
+episodesData.push({
+    id: 21, title: "الحلقة 21",
+    servers: [
+        { name: "سيرفر 1", quality: "HD", url: episodeLinks[21] },
+        { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/mada7-5-21.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+        { name: "سيرفر 3", quality: "HD", url: "intent://vid2.ar-d11111111.site/Al-Maddah-5-Ostorat-Al-Aahd/21.mp4#Intent;scheme=https;package=co.wuffy.player;end" }
+    ]
+});
+
+// الحلقة 22 (سيرفر 2 مختلف، سيرفر 3 مثل 1)
+episodesData.push({
+    id: 22, title: "الحلقة 22",
+    servers: [
+        { name: "سيرفر 1", quality: "HD", url: episodeLinks[22] },
+        { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/mada7-5-22.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+        { name: "سيرفر 3", quality: "HD", url: episodeLinks[22] }
+    ]
+});
+
+// الحلقة 23 (سيرفر 2 و3 مختلفان)
+episodesData.push({
+    id: 23, title: "الحلقة 23",
+    servers: [
+        { name: "سيرفر 1", quality: "HD", url: episodeLinks[23] },
+        { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/mada7-5-23.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+        { name: "سيرفر 3", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/643t4e32vrhdgm6pun6g1/El.Maddah.E23.mp4?rlkey=8m2m110po9dnt75ln5itwcsmq&st=lnbyogu9&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+    ]
+});
+
+// الحلقة 24 (سيرفر 2 مختلف، سيرفر 3 مثل 1)
+episodesData.push({
+    id: 24, title: "الحلقة 24",
+    servers: [
+        { name: "سيرفر 1", quality: "HD", url: episodeLinks[24] },
+        { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/mada7-5-4.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+        { name: "سيرفر 3", quality: "HD", url: episodeLinks[24] }
+    ]
+});
+
+// الحلقة 25 (سيرفر 2 مختلف، سيرفر 3 مثل 1)
+episodesData.push({
+    id: 25, title: "الحلقة 25",
+    servers: [
+        { name: "سيرفر 1", quality: "HD", url: episodeLinks[25] },
+        { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/mada7-5-25.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+        { name: "سيرفر 3", quality: "HD", url: episodeLinks[25] }
+    ]
+});
+
+// الحلقة 26 (سيرفر 2 مختلف، سيرفر 3 مثل 1)
+episodesData.push({
+    id: 26, title: "الحلقة 26",
+    servers: [
+        { name: "سيرفر 1", quality: "HD", url: episodeLinks[26] },
+        { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/mada7-5-26.mp4/chunk.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+        { name: "سيرفر 3", quality: "HD", url: episodeLinks[26] }
+    ]
+});
+
+// الحلقة 27 (سيرفر 2 مختلف، سيرفر 3 مثل 1)
+episodesData.push({
+    id: 27, title: "الحلقة 27",
+    servers: [
+        { name: "سيرفر 1", quality: "HD", url: episodeLinks[27] },
+        { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/mada7-5-27.mp4/chunk.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+        { name: "سيرفر 3", quality: "HD", url: episodeLinks[27] }
+    ]
+});
+
+// الحلقة 28 (سيرفر 2 مختلف، سيرفر 3 مثل 1) - الرابط ناقص لكن سأستخدم ما ورد
+episodesData.push({
+    id: 28, title: "الحلقة 28",
+    servers: [
+        { name: "سيرفر 1", quality: "HD", url: episodeLinks[28] },
+        { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/mada7-5-28.mp4/chunk.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+        { name: "سيرفر 3", quality: "HD", url: episodeLinks[28] }
+    ]
+});
+
+// الحلقة 29 (سيرفر 2 و3 مختلفان)
+episodesData.push({
+    id: 29, title: "الحلقة 29",
+    servers: [
+        { name: "سيرفر 1", quality: "HD", url: episodeLinks[29] },
+        { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/mada7-5-29.mp4/chunk.m3u8?nimblesessionid=#Intent;scheme=https;package=co.wuffy.player;end" },
+        { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/mada7-5-29.mp4/chunk.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+    ]
+});
+
+// الحلقة 30 (سيرفر 2 و3 مختلفان)
+episodesData.push({
+    id: 30, title: "الحلقة 30 (الأخيرة)",
+    servers: [
+        { name: "سيرفر 1", quality: "HD", url: episodeLinks[30] },
+        { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/mada7-5-30.mp4/chunk.m3u8?nimblesessionid=#Intent;scheme=https;package=co.wuffy.player;end" },
+        { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/mada7-5-30.mp4/chunk.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+    ]
+});
+
+const LAST_EPISODE_NUMBER = 30;
+    let lastFocusedCardId = null;
+    let isAndroid14 = false;
+    
+    function detectAndroid14() {
+        const ua = navigator.userAgent;
+        if(ua.includes("Android 14") || ua.includes("Android14") || ua.includes("API 34")) isAndroid14 = true;
+    }
+    
+    function showToast(msg, icon = "fa-info-circle") {
+        const toast = document.getElementById("toast");
+        toast.innerHTML = `<i class="fas ${icon}"></i> ${msg}`;
+        toast.style.display = "flex";
+        setTimeout(() => {
+            toast.style.opacity = "0";
+            setTimeout(() => {
+                toast.style.display = "none";
+                toast.style.opacity = "1";
+            }, 300);
+        }, 2800);
+    }
+    
+    function closeModal(modalId) {
+        document.getElementById(modalId).classList.remove("active");
+        if(lastFocusedCardId) {
+            const prevCard = document.querySelector(`.sg-card-item[data-ep-id='${lastFocusedCardId}']`);
+            if(prevCard) prevCard.focus();
+            lastFocusedCardId = null;
+        }
+    }
+    
+    function renderEpisodes(filterText = "") {
+        const grid = document.getElementById("episodesGrid");
+        let watched = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+        let filtered = episodesData.filter(ep => 
+            filterText === "" || ep.title.includes(filterText) || ep.id.toString().includes(filterText)
+        );
+        
+        if(filtered.length === 0) {
+            grid.innerHTML = `<div class="no-results"><i class="fas fa-search-minus fa-3x"></i><h3>لاتوجد حلقة بهذا الرقم</h3><button class="reset-history-btn" id="backHomeBtn">العودة للقائمة</button></div>`;
+            const backBtn = document.getElementById("backHomeBtn");
+            if(backBtn) backBtn.onclick = () => { document.getElementById("search-input").value = ""; renderEpisodes(""); toggleSearchBar(false); };
+            return;
+        }
+        
+        grid.innerHTML = filtered.map(ep => {
+            const isWatched = watched.includes(ep.id);
+            const isLast = (ep.id === LAST_EPISODE_NUMBER);
+            return `
+                <div class="sg-card-item ${isWatched ? 'is-watched' : ''} ${isLast ? 'last-episode' : ''}" data-ep-id="${ep.id}" tabindex="0">
+                    ${isLast ? '<div class="last-badge"><i class="fas fa-star"></i> الأخيرة</div>' : ''}
+                    <div class="sg-poster-box">
+                        <div class="sg-watched-eye"><i class="fas fa-check-circle"></i></div>
+                        <img src="${POSTER_URL}" onerror="this.onerror=null; this.src='${FALLBACK_IMG}';">
+                    </div>
+                    <div class="sg-card-meta">
+                        <div class="sg-episode-label">${ep.title}</div>
+                    </div>
+                </div>
+            `;
+        }).join("");
+        
+        document.querySelectorAll(".sg-card-item").forEach(card => {
+            const epId = parseInt(card.getAttribute("data-ep-id"));
+            card.addEventListener("click", () => openServersMenu(epId));
+            card.addEventListener("keydown", (e) => {
+                if(e.key === "Enter") openServersMenu(epId);
+                if(e.key === "ArrowRight" || e.key === "ArrowLeft" || e.key === "ArrowDown" || e.key === "ArrowUp") {
+                    e.preventDefault();
+                    navigateGrid(e.key, card);
+                }
+            });
+        });
+        
+        if(lastFocusedCardId) {
+            const restoreCard = document.querySelector(`.sg-card-item[data-ep-id='${lastFocusedCardId}']`);
+            if(restoreCard) restoreCard.focus();
+            else if(document.querySelector(".sg-card-item")) document.querySelector(".sg-card-item").focus();
+        } else if(document.querySelector(".sg-card-item")) {
+            document.querySelector(".sg-card-item").focus();
+        }
+    }
+    
+    function navigateGrid(direction, currentCard) {
+        let cards = Array.from(document.querySelectorAll(".sg-card-item"));
+        let currentIdx = cards.indexOf(currentCard);
+        if(currentIdx === -1) return;
+        let nextIdx = currentIdx;
+        if(direction === "ArrowRight") nextIdx = (currentIdx + 1) % cards.length;
+        if(direction === "ArrowLeft") nextIdx = (currentIdx - 1 + cards.length) % cards.length;
+        if(direction === "ArrowDown") {
+            let cols = window.innerWidth > 600 ? 4 : 3;
+            nextIdx = Math.min(currentIdx + cols, cards.length - 1);
+        }
+        if(direction === "ArrowUp") {
+            let cols = window.innerWidth > 600 ? 4 : 3;
+            nextIdx = Math.max(currentIdx - cols, 0);
+        }
+        if(cards[nextIdx]) cards[nextIdx].focus();
+    }
+    
+    function openServersMenu(epId) {
+        lastFocusedCardId = epId;
+        const ep = episodesData.find(e => e.id === epId);
+        if(!ep) return;
+        document.getElementById("modalTitle").innerHTML = `<i class="fas fa-play-circle"></i> ${ep.title}`;
+        const serversDiv = document.getElementById("serversList");
+        serversDiv.innerHTML = ep.servers.map(server => `
+            <button class="sg-server-btn" data-url="${server.url}" data-quality="${server.quality}" tabindex="0">
+                <span><i class="fas fa-server"></i> ${server.name}</span>
+                <span class="sg-quality q-${server.quality.toLowerCase()}">${server.quality}</span>
+            </button>
+        `).join("");
+        
+        document.getElementById("serversModal").classList.add("active");
+        
+        document.querySelectorAll("#serversList .sg-server-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                let url = btn.getAttribute("data-url");
+                playVideo(url, epId);
+            });
+            btn.addEventListener("keydown", (e) => {
+                if(e.key === "Enter") {
+                    let url = btn.getAttribute("data-url");
+                    playVideo(url, epId);
+                }
+                if(e.key === "Escape") closeModal("serversModal");
+            });
+        });
+        setTimeout(() => {
+            const firstServer = document.querySelector("#serversList .sg-server-btn");
+            if(firstServer) firstServer.focus();
+        }, 100);
+    }
+    
+    function playVideo(url, epId) {
+        if(!url || url === "#") {
+            showToast("⚠️ هذه الحلقة قيد التجهيز حالياً", "fa-hourglass-half");
+            closeModal("serversModal");
+            return;
+        }
+        
+        let watched = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+        if(!watched.includes(epId)) {
+            watched.push(epId);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(watched));
+            renderEpisodes(document.getElementById("search-input").value);
+        }
+        
+        closeModal("serversModal");
+        
+        if(isAndroid14) {
+            const fixFrame = document.getElementById("android14-fix-frame");
+            if(fixFrame) {
+                fixFrame.src = "about:blank";
+                setTimeout(() => { fixFrame.src = url; }, 50);
+            }
+            setTimeout(() => window.open(url, "_system"), 100);
+        } else {
+            const iframe = document.createElement("iframe");
+            iframe.style.display = "none";
+            iframe.src = url;
+            document.body.appendChild(iframe);
+            setTimeout(() => document.body.removeChild(iframe), 2000);
+        }
+        
+        showToast(`🎬 جاري تشغيل ${episodesData.find(e=>e.id===epId).title}`, "fa-play");
+        
+        setTimeout(() => {
+            if(document.visibilityState === "visible") {
+                document.getElementById("installModal").classList.add("active");
+            }
+        }, 2500);
+    }
+    
+    function toggleSearchBar(show) {
+        const container = document.getElementById("search-container");
+        if(show) {
+            container.classList.add("active");
+            document.getElementById("search-input").focus();
+        } else {
+            container.classList.remove("active");
+            renderEpisodes("");
+        }
+    }
+    
+    function openResetModal() {
+        document.getElementById("resetModal").classList.add("active");
+    }
+    
+    function executeReset() {
+        localStorage.removeItem(STORAGE_KEY);
+        renderEpisodes(document.getElementById("search-input").value);
+        closeModal("resetModal");
+        showToast("🗑️ تم حذف علامات المشاهدة بنجاح", "fa-trash-alt");
+    }
+    
+    function handleExit() {
+        if(window.history.length > 1) window.history.back();
+        else window.location.href = "/";
+    }
+    
+    window.addEventListener("load", () => {
+        detectAndroid14();
+        renderEpisodes();
+        
+        document.getElementById("exitBtn").addEventListener("click", handleExit);
+        document.getElementById("searchBtn").addEventListener("click", () => toggleSearchBar(true));
+        document.getElementById("closeSearchBtn").addEventListener("click", () => toggleSearchBar(false));
+        document.getElementById("clearSearchBtn").addEventListener("click", () => {
+            document.getElementById("search-input").value = "";
+            renderEpisodes("");
+            toggleSearchBar(false);
+        });
+        document.getElementById("search-input").addEventListener("input", (e) => renderEpisodes(e.target.value));
+        document.getElementById("resetHistoryBtn").addEventListener("click", openResetModal);
+        document.getElementById("confirmResetBtn").addEventListener("click", executeReset);
+        document.getElementById("cancelResetBtn").addEventListener("click", () => closeModal("resetModal"));
+        document.getElementById("closeModalBtn").addEventListener("click", () => closeModal("serversModal"));
+        document.getElementById("installAppBtn").addEventListener("click", () => window.location.href = INSTALL_PAGE_URL);
+        document.getElementById("closeInstallBtn").addEventListener("click", () => closeModal("installModal"));
+        
+        document.addEventListener("keydown", (e) => {
+            if(e.key === "Escape") {
+                if(document.getElementById("serversModal").classList.contains("active")) closeModal("serversModal");
+                else if(document.getElementById("installModal").classList.contains("active")) closeModal("installModal");
+                else if(document.getElementById("resetModal").classList.contains("active")) closeModal("resetModal");
+                else if(document.getElementById("search-container").classList.contains("active")) toggleSearchBar(false);
+            }
+        });
+        
+        showToast("✨ مرحباً بك في مسلسل  المداح الجزء 5 - 30 حلقة كاملة", "fa-tv");
+    });
+</script>
+</body>
+</html>

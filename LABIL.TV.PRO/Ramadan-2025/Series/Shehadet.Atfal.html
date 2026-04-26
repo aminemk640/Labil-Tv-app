@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>مسلسل شهادة معاملة أطفال - قائمة الحلقات</title>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/ahmadmk2023/ramadan-2025/refs/heads/main/logo/Shehadet.Moaamlet.Atfa2.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#020617">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary-pink: #ed1b76;
+            --gold: #FFD700;
+            --card-bg: rgba(255, 255, 255, 0.08);
+            --focus-glow: 0 0 0 3px rgba(237, 27, 118, 0.7), 0 0 0 6px rgba(255, 215, 0, 0.4);
+            --last-ep-glow: 0 0 15px 3px rgba(255, 215, 0, 0.8);
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(145deg, #020617 0%, #0a0f2a 100%);
+            color: white;
+            min-height: 100vh;
+            padding-bottom: 70px;
+        }
+
+        .sg-app-header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 65px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(15px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 4%;
+            z-index: 1000;
+            border-bottom: 2px solid var(--primary-pink);
+        }
+
+        .sg-nav-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .sg-nav-icon:focus-visible, .sg-nav-icon:hover {
+            background: var(--primary-pink);
+            transform: scale(1.05);
+            outline: 2px solid var(--gold);
+        }
+
+        #search-container {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: #0f172a;
+            display: none;
+            align-items: center;
+            padding: 0 4%;
+            gap: 12px;
+            z-index: 1100;
+        }
+
+        #search-container.active {
+            display: flex;
+        }
+
+        #search-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            padding: 12px 18px;
+            border-radius: 60px;
+            color: white;
+            font-size: 1rem;
+            font-family: 'Tajawal';
+        }
+
+        .section-header {
+            margin-top: 85px;
+            padding: 15px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.3rem;
+            font-weight: 800;
+        }
+
+        .reset-history-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 40px;
+            color: #ccc;
+            font-family: 'Tajawal';
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .reset-history-btn:focus-visible, .reset-history-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border-color: var(--gold);
+        }
+
+        .sg-episodes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 18px;
+            padding: 10px 5% 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .sg-card-item {
+            background: var(--card-bg);
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+            outline: none;
+        }
+
+        .sg-card-item:focus-visible {
+            transform: scale(1.05);
+            border: 2px solid var(--gold);
+            box-shadow: var(--focus-glow);
+        }
+
+        .sg-card-item:hover {
+            transform: scale(1.03) translateY(-5px);
+            border-color: var(--primary-pink);
+            box-shadow: 0 15px 35px rgba(237, 27, 118, 0.3);
+        }
+
+        .sg-card-item:hover .sg-poster-box img {
+            transform: scale(1.05);
+            transition: transform 0.4s ease;
+        }
+
+        .sg-card-item.last-episode {
+            border: 2px solid var(--gold);
+            background: linear-gradient(145deg, rgba(255, 215, 0, 0.15), rgba(237, 27, 118, 0.1));
+            box-shadow: var(--last-ep-glow);
+        }
+
+        .sg-card-item.last-episode .sg-episode-label {
+            color: var(--gold);
+            font-weight: 900;
+        }
+
+        .last-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: var(--gold);
+            color: #000;
+            padding: 4px 8px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .sg-poster-box {
+            position: relative;
+            aspect-ratio: 2 / 2.8;
+            background: #0f172a;
+            overflow: hidden;
+        }
+
+        .sg-poster-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .is-watched .sg-poster-box img {
+            opacity: 0.5;
+        }
+
+        .sg-watched-eye {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--primary-pink);
+            width: 32px;
+            height: 32px;
+            border-radius: 30px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 15;
+            backdrop-filter: blur(4px);
+        }
+
+        .is-watched .sg-watched-eye {
+            display: flex;
+        }
+
+        .sg-card-meta {
+            padding: 12px 6px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .sg-episode-label {
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        .sg-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(12px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+        }
+
+        .sg-modal-overlay.active {
+            display: flex;
+        }
+
+        .sg-server-panel {
+            background: #0f172a;
+            padding: 28px 20px;
+            border-radius: 32px;
+            max-width: 380px;
+            width: 85%;
+            border: 1px solid var(--primary-pink);
+            text-align: center;
+            animation: fadeUp 0.3s;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .sg-server-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.08);
+            width: 100%;
+            padding: 12px 18px;
+            margin-bottom: 12px;
+            border-radius: 60px;
+            border: 1px solid transparent;
+            color: white;
+            font-family: 'Tajawal';
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .sg-server-btn:focus-visible, .sg-server-btn:hover {
+            border-color: var(--gold);
+            background: rgba(237, 27, 118, 0.2);
+            transform: translateX(5px);
+        }
+
+        .sg-quality {
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 0.75rem;
+        }
+
+        .q-hd { background: #249f9c; }
+        .q-sd { background: #fbbf24; color: #000; }
+
+        .sg-close-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            padding: 12px;
+            border-radius: 60px;
+            color: white;
+            width: 100%;
+            margin-top: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .sg-close-btn:hover, .sg-close-btn:focus-visible {
+            background: #ef4444;
+            transform: scale(1.02);
+        }
+
+        .btn-confirm-delete {
+            background: #dc2626;
+        }
+
+        #toast {
+            position: fixed;
+            bottom: 85px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            backdrop-filter: blur(16px);
+            padding: 12px 24px;
+            border-radius: 60px;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            z-index: 4000;
+            border: 1px solid var(--primary-pink);
+            font-weight: bold;
+            white-space: nowrap;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+       .no-results { 
+        grid-column:1/-1; 
+        text-align:center;
+        padding:60px 20px;
+        display:flex; flex-direction:column;
+        align-items:center; gap:20px; }
+        
+        .no-results i { font-size:4rem; 
+        color:rgba(255,255,255,0.1); }
+        
+
+        @media (max-width: 600px) {
+            .sg-episodes-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<iframe id="android14-fix-frame" style="position:absolute; width:1px; height:1px; opacity:0.01;"></iframe>
+
+<header class="sg-app-header">
+    <button class="sg-nav-icon" id="exitBtn" tabindex="0"><i class="fas fa-chevron-right"></i></button>
+    <div style="font-weight:800;">📺 شهادة معاملة أطفال <span style="color:var(--primary-pink)"></span></div>
+    <button class="sg-nav-icon" id="searchBtn" tabindex="0"><i class="fas fa-search"></i></button>
+    <div id="search-container">
+        <button class="sg-nav-icon" id="closeSearchBtn"><i class="fas fa-times"></i></button>
+        <input type="text" id="search-input" placeholder="رقم الحلقة...">
+        <button class="sg-nav-icon" id="clearSearchBtn"><i class="fas fa-eraser"></i></button>
+    </div>
+</header>
+
+<div class="section-header">
+    <div class="section-title"><i class="fas fa-bolt" style="color:var(--primary-pink)"></i> <span>قائمة الحلقات</span></div>
+    <button class="reset-history-btn" id="resetHistoryBtn" tabindex="0"><i class="fas fa-eye-slash"></i> حذف علامات المشاهدة</button>
+</div>
+
+<main class="sg-episodes-grid" id="episodesGrid"></main>
+<div id="toast">📢 تم التحميل</div>
+
+<!-- Modal السيرفرات -->
+<div class="sg-modal-overlay" id="serversModal">
+    <div class="sg-server-panel">
+        <h3 id="modalTitle" style="margin-bottom:20px; color: var(--primary-pink);"></h3>
+        <div id="serversList"></div>
+        <button class="sg-close-btn" id="closeModalBtn">إلغاء</button>
+    </div>
+</div>
+
+<!-- Modal تثبيت المشغل -->
+<div class="sg-modal-overlay" id="installModal">
+    <div class="sg-server-panel">
+        <i class="fas fa-download" style="font-size:3rem; color:var(--primary-pink);"></i>
+        <h3>المشغل غير مثبت</h3>
+        <p style="margin:15px 0;">تحتاج إلى تثبيت Wuffy Player لتشغيل الحلقات</p>
+        <button class="sg-server-btn" id="installAppBtn" style="justify-content:center; background:#ed1b76;"><i class="fas fa-download"></i> تثبيت المشغل</button>
+        <button class="sg-close-btn" id="closeInstallBtn">تراجع</button>
+    </div>
+</div>
+
+<!-- Modal حذف المشاهدة -->
+<div class="sg-modal-overlay" id="resetModal">
+    <div class="sg-server-panel">
+        <i class="fas fa-trash-alt" style="font-size:2.5rem; color:#ed1b76;"></i>
+        <h3>حذف سجل المشاهدة؟</h3>
+        <p style="margin:15px 0;">سيتم إخفاء أيقونات العين من جميع الحلقات</p>
+        <button class="sg-server-btn btn-confirm-delete" id="confirmResetBtn" style="justify-content:center;">تأكيد الحذف</button>
+        <button class="sg-close-btn" id="cancelResetBtn">تراجع</button>
+    </div>
+</div>
+
+<script>
+    /* -------------------- بيانات المسلسل (شهادة معاملة أطفال) -------------------- */
+    const STORAGE_KEY = "Shehadet_Moaamlet_Atfal_Watched";
+    const INSTALL_PAGE_URL = "https://aminemk640.github.io/Labil-Tv-app/LABIL.TV.PRO/install.html";
+    const FALLBACK_IMG = "poster/logo.jpg";
+    const POSTER_URL = "poster/Shehadet.Atfal.jpg";
+    
+    // جميع الحلقات من 1 إلى 30 مع روابط السيرفرات (تم استخراجها من الكود الأصلي)
+    const episodesData = [
+        { id: 1, title: "الحلقة 1", servers: [
+            { name: "سيرفر 1", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/l5oza9pcekxp0kn5ahufq/arabseed-.Shehadet.Moaamlet.Atfal.Ep01.480p.mp4?rlkey=bhj6ouxe56pii48tyg4pmif0s&st=a2hx3ah7&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 2", quality: "HD", url: "intent://vid4.ar-safas88fafad2.site/Shehadat-Moamlaet-Atfal/01.mp4#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/l5oza9pcekxp0kn5ahufq/arabseed-.Shehadet.Moaamlet.Atfal.Ep01.480p.mp4?rlkey=bhj6ouxe56pii48tyg4pmif0s&st=a2hx3ah7&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+        ] },
+        { id: 2, title: "الحلقة 2", servers: [
+            { name: "سيرفر 1", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/1nx32cvnmdtmzjxpurvf0/arabseed-.Shehadet.Moaamlet.Atfal.Ep02.480p.mp4?rlkey=67vmichjlkpvsy5f4z6bm3w49&st=t951bjr1&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 2", quality: "HD", url: "intent://vid4.ar-safas88fafad2.site/Shehadat-Moamlaet-Atfal/02.mp4#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/1nx32cvnmdtmzjxpurvf0/arabseed-.Shehadet.Moaamlet.Atfal.Ep02.480p.mp4?rlkey=67vmichjlkpvsy5f4z6bm3w49&st=t951bjr1&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+        ] },
+        { id: 3, title: "الحلقة 3", servers: [
+            { name: "سيرفر 1", quality: "HD", url: "intent://vid4.ar-safas88fafad2.site/Shehadat-Moamlaet-Atfal/03.mp4#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 2", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/tccc96v668vsmonv2gjji/arabseed-.Shehadet.Moaamlet.Atfal.Ep03.480p.mp4?rlkey=8w0ykiz3m50rvteyqg5v4mnpz&st=oerijw71&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/tccc96v668vsmonv2gjji/arabseed-.Shehadet.Moaamlet.Atfal.Ep03.480p.mp4?rlkey=8w0ykiz3m50rvteyqg5v4mnpz&st=oerijw71&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+        ] },
+        { id: 4, title: "الحلقة 4", servers: [
+            { name: "سيرفر 1", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/wizdgztbs90g7y37tvs7n/arabseed-.Shehadet.Moaamlet.Atfal.Ep04.480p.mp4?rlkey=p7tak9rgg7pk4mpkbl0ibimfy&st=unk6j3g2&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 2", quality: "HD", url: "intent://vid4.ar-safas88fafad2.site/Shehadat-Moamlaet-Atfal/04.mp4#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/wizdgztbs90g7y37tvs7n/arabseed-.Shehadet.Moaamlet.Atfal.Ep04.480p.mp4?rlkey=p7tak9rgg7pk4mpkbl0ibimfy&st=unk6j3g2&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+        ] },
+        { id: 5, title: "الحلقة 5", servers: [
+            { name: "سيرفر 1", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/4ubmpmfxdmo7rmu0w168p/arabseed-.Shehadet.Moaamlet.Atfal.Ep05.480p.mp4?rlkey=y7gexwly2faq277j6gxf5rnos&st=j4mnpp06&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 2", quality: "HD", url: "intent://vid4.ar-safas88fafad2.site/Shehadat-Moamlaet-Atfal/05.mp4#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 3", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/4ubmpmfxdmo7rmu0w168p/arabseed-.Shehadet.Moaamlet.Atfal.Ep05.480p.mp4?rlkey=y7gexwly2faq277j6gxf5rnos&st=j4mnpp06&dl=1#Intent;scheme=https;package=co.wuffy.player;end" }
+        ] },
+        { id: 6, title: "الحلقة 6", servers: [
+            { name: "سيرفر 1", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/ig70jmo44vfokf6lo7mfr/arabseed-.Shehadet.Moaamlet.Atfal.Ep06.480p.mp4?rlkey=rarybv8u3eu6aza2z1jnyeqzo&st=p13f3t2g&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 2", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/ig70jmo44vfokf6lo7mfr/arabseed-.Shehadet.Moaamlet.Atfal.Ep06.480p.mp4?rlkey=rarybv8u3eu6aza2z1jnyeqzo&st=p13f3t2g&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 3", quality: "HD", url: "intent://vid4.ar-safas88fafad2.site/Shehadat-Moamlaet-Atfal/06.mp4#Intent;scheme=https;package=co.wuffy.player;end" }
+        ] },
+        { id: 7, title: "الحلقة 7", servers: [
+            { name: "سيرفر 1", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/3ho06s5qegewc6apyv3x3/Sha2et.Mo3amlt.Atfal.E07.mp4?rlkey=62m764qygt84dl2p52szsv2f0&st=14wo39o4&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/3ho06s5qegewc6apyv3x3/Sha2et.Mo3amlt.Atfal.E07.mp4?rlkey=62m764qygt84dl2p52szsv2f0&st=14wo39o4&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 3", quality: "HD", url: "intent://vid4.ar-safas88fafad2.site/Shehadat-Moamlaet-Atfal/07.mp4#Intent;scheme=https;package=co.wuffy.player;end" }
+        ] },
+        { id: 8, title: "الحلقة 8", servers: [
+            { name: "سيرفر 1", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/ryujc4ftoy7udargjlgjw/Sha2et.Mo3amlt.Atfal.E08.mp4?rlkey=vea09od4uaawslz3kqfjnofwg&st=gjfdjy9m&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/ryujc4ftoy7udargjlgjw/Sha2et.Mo3amlt.Atfal.E08.mp4?rlkey=vea09od4uaawslz3kqfjnofwg&st=gjfdjy9m&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 3", quality: "HD", url: "intent://vid4.ar-safas88fafad2.site/Shehadat-Moamlaet-Atfal/08.mp4#Intent;scheme=https;package=co.wuffy.player;end" }
+        ] },
+        { id: 9, title: "الحلقة 9", servers: [
+            { name: "سيرفر 1", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/j7280tm2uu3fvl3tt6tqj/Shehadet.Moaamlet.Atfa-E9.mp4?rlkey=b010w10iwwy36x3g3k2ykbkf4&st=4mfvdowc&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 2", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/j7280tm2uu3fvl3tt6tqj/Shehadet.Moaamlet.Atfa-E9.mp4?rlkey=b010w10iwwy36x3g3k2ykbkf4&st=4mfvdowc&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 3", quality: "HD", url: "intent://vid4.ar-safas88fafad2.site/Shehadat-Moamlaet-Atfal/09.mp4#Intent;scheme=https;package=co.wuffy.player;end" }
+        ] },
+        { id: 10, title: "الحلقة 10", servers: [
+            { name: "سيرفر 1", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/njukrxmlenaf8nw1p3k3h/Shehadet.Moaamlet.Atfa-10.mp4?rlkey=tx4dt33y47fd5e5usgufk1m3c&st=fwqq0ilz&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 2", quality: "SD", url: "intent://dl.dropbox.com/scl/fi/njukrxmlenaf8nw1p3k3h/Shehadet.Moaamlet.Atfa-10.mp4?rlkey=tx4dt33y47fd5e5usgufk1m3c&st=fwqq0ilz&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 3", quality: "HD", url: "intent://vid4.ar-safas88fafad2.site/Shehadat-Moamlaet-Atfal/10.mp4#Intent;scheme=https;package=co.wuffy.player;end" }
+        ] },
+        { id: 11, title: "الحلقة 11", servers: [
+            { name: "سيرفر 1", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/chqfusgiiklobgjpz4a1t/Sha2et.Mo3amlt.Atfal.E11.mp4?rlkey=g1aamtnl42wjx7klr9k5ufuq1&st=87ayeb4w&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/shhadet-mo3amale-11_muxed.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 3", quality: "HD", url: "intent://vid4.ar-safas88fafad2.site/Shehadat-Moamlaet-Atfal/11.mp4#Intent;scheme=https;package=co.wuffy.player;end" }
+        ] },
+        { id: 12, title: "الحلقة 12", servers: [
+            { name: "سيرفر 1", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/kq95qgwwpqihqudeqk2wa/Shahdet.Mo3amlt.Atfal.E12.mp4?rlkey=vl5qivy7qj630wwikupc3libo&st=mbrqqkvl&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/shhadet-mo3amale-12_muxed.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 3", quality: "HD", url: "intent://vid4.ar-safas88fafad2.site/Shehadat-Moamlaet-Atfal/12.mp4#Intent;scheme=https;package=co.wuffy.player;end" }
+        ] },
+        { id: 13, title: "الحلقة 13", servers: [
+            { name: "سيرفر 1", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/xx68qoog022mlq8gflss2/Shehadet.Moaamlet.Atfal.Ep13.mp4?rlkey=sgelz896d5jys20xxt4lrhvas&st=m3nmznr5&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/shhadet-mo3amale-13_muxed.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 3", quality: "HD", url: "intent://vid4.ar-safas88fafad2.site/Shehadat-Moamlaet-Atfal/13.mp4#Intent;scheme=https;package=co.wuffy.player;end" }
+        ] },
+        { id: 14, title: "الحلقة 14", servers: [
+            { name: "سيرفر 1", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/s0kqdf0mee8d3ly9xe2rv/Shehadet.Moaamlet.Atfal.Ep14.mp4?rlkey=9538pyvlvmdwrsf6plqctszu9&st=sty807gm&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/shhadet-mo3amale-14_muxed.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 3", quality: "HD", url: "intent://vid4.ar-safas88fafad2.site/Shehadat-Moamlaet-Atfal/14.mp4#Intent;scheme=https;package=co.wuffy.player;end" }
+        ] },
+        { id: 15, title: "الحلقة 15", servers: [
+            { name: "سيرفر 1", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/13yk87e20j55iegp5m89h/Shehadet.Moaamlet.Atfal.Ep15.mp4?rlkey=guz700e9i1mle88lzjt7ptzv7&st=mti11b01&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 2", quality: "HD", url: "intent://vid4.ar-safas88fafad2.site/Shehadat-Moamlaet-Atfal/15.mp4#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/shhadet-mo3amale-15_muxed.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ] },
+        { id: 16, title: "الحلقة 16", servers: [
+            { name: "سيرفر 1", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/84bogozinvh7h29xvbb0v/Shehadet.Moaamlet.Atfal.Ep16.mp4?rlkey=qpak4bh45ex2oc7cl2e75oida&st=qkvo291p&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 2", quality: "HD", url: "intent://vid4.ar-safas88fafad2.site/Shehadat-Moamlaet-Atfal/16.mp4#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/shhadet-mo3amale-16_muxed.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ] },
+        { id: 17, title: "الحلقة 17", servers: [
+            { name: "سيرفر 1", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/ilyhs8m9a6hbe2equesb7/Shehadet.Moaamlet.Atfal.Ep17.mp4?rlkey=bq5e6725vco1usqeb2eolxyaa&st=smsp7u02&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 2", quality: "HD", url: "intent://vid4.ar-safas88fafad2.site/Shehadat-Moamlaet-Atfal/17.mp4#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/shhadet-mo3amale-17_muxed.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ] },
+        { id: 18, title: "الحلقة 18", servers: [
+            { name: "سيرفر 1", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/nb6ls5skc93yflxpeio25/Shahdet.Mo3amlt.Atfal.E18.mp4?rlkey=3uujlz3f311nu8wmpc7telj8y&st=d5orc981&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/shhadet-mo3amale-18_muxed.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/shhadet-mo3amale-18_muxed.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ] },
+        { id: 19, title: "الحلقة 19", servers: [
+            { name: "سيرفر 1", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/qlo5zlby0xuzeiw25ipcc/Shehadet.Moaamlet.Atfal.Ep19.mp4?rlkey=22m75kw2t2mls5brclc7cvamh&st=pz8iu3m4&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/mo3amlet-atfal-19_muxed.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/mo3amlet-atfal-19_muxed.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ] },
+        { id: 20, title: "الحلقة 20", servers: [
+            { name: "سيرفر 1", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/97hw3pogupb3u9r2d9d0d/Shahdet.Mo3amlt.Atfal.E20.mp4?rlkey=f6im8tnevyrw08csd7r8ikhu3&st=9bl9occ2&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 2", quality: "HD", url: "intent://vid2.ar-d11111111.site/Shehadat-Moamlaet-Atfal/20.mp4#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/shhada-20_muxed.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ] },
+        { id: 21, title: "الحلقة 21", servers: [
+            { name: "سيرفر 1", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/94tlhxod7jg2d8hyxe2zf/Shahdet.Mo3amlt.Atfal.E21.mp4?rlkey=cymhsemd8sxzvqlvj3e2z1baz&st=s3ubb91m&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 2", quality: "HD", url: "intent://vid2.ar-d11111111.site/Shehadat-Moamlaet-Atfal/21.mp4#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/shhadet-mo3amale-21_muxed.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ] },
+        { id: 22, title: "الحلقة 22", servers: [
+            { name: "سيرفر 1", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/8rlb1nqsko53m3ybkdyo4/Shehadet.Moaamlet.Atfal.Ep22.mp4?rlkey=1pk8ornl13lil3hn6xybhyi63&st=v0yy6n1b&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 2", quality: "HD", url: "intent://vid2.ar-d11111111.site/Shehadat-Moamlaet-Atfal/22.mp4#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/shhadet-mo3amae-22_muxed.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ] },
+        { id: 23, title: "الحلقة 23", servers: [
+            { name: "سيرفر 1", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/hxziyqpw1ji595wfy5nld/Shehadet.Moaamlet.Atfal.Ep23.mp4?rlkey=lnb4b6rih8sqwrmvf0vfoihkl&st=km0fzrjz&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/hxziyqpw1ji595wfy5nld/Shehadet.Moaamlet.Atfal.Ep23.mp4?rlkey=lnb4b6rih8sqwrmvf0vfoihkl&st=km0fzrjz&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/shhadet-mo3amale-23_muxed.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ] },
+        { id: 24, title: "الحلقة 24", servers: [
+            { name: "سيرفر 1", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/r5w83ap2ej8bh2nzj3bnq/Shehadet.Moaamlet.Atfal.Ep24.mp4?rlkey=9mpq9ijfyv97pxonddhb5e175&st=x9ealhwf&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/r5w83ap2ej8bh2nzj3bnq/Shehadet.Moaamlet.Atfal.Ep24.mp4?rlkey=9mpq9ijfyv97pxonddhb5e175&st=x9ealhwf&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/shhadet-mo3amale-24_muxed.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ] },
+        { id: 25, title: "الحلقة 25", servers: [
+            { name: "سيرفر 1", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/8ylx16exs0ycg7qzga7hw/Shahdet.Mo3amlt.Atfal.E25.mp4?rlkey=48fi5y9vr685xbtsple5gh73i&st=cu3jkg4y&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/8ylx16exs0ycg7qzga7hw/Shahdet.Mo3amlt.Atfal.E25.mp4?rlkey=48fi5y9vr685xbtsple5gh73i&st=cu3jkg4y&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/shhadet-mo3amale-25_muxed.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ] },
+        { id: 26, title: "الحلقة 26", servers: [
+            { name: "سيرفر 1", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/fawjb5g1kcjwew8a5v2pr/Shahdet.Mo3amlt.Atfal.E26.mp4?rlkey=gpso6rz8j2jyvvyd8tiiwp37t&st=76tmyxwc&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/fawjb5g1kcjwew8a5v2pr/Shahdet.Mo3amlt.Atfal.E26.mp4?rlkey=gpso6rz8j2jyvvyd8tiiwp37t&st=76tmyxwc&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/shhadet-mo3amale-26_muxed.mp4/chunk.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ] },
+        { id: 27, title: "الحلقة 27", servers: [
+            { name: "سيرفر 1", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/zh4xu0stw1j5se5j73n1l/Shahdet.Mo3amlt.Atfal.E27.mp4?rlkey=hpow6wzyctt02mnzos6x46loh&st=q25x3jaj&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/zh4xu0stw1j5se5j73n1l/Shahdet.Mo3amlt.Atfal.E27.mp4?rlkey=hpow6wzyctt02mnzos6x46loh&st=q25x3jaj&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/shhadet-mo3amale-27_muxed.mp4/chunk.m3u8#Intent;scheme=https;package=co.wuffy.player;end" }
+        ] },
+        { id: 28, title: "الحلقة 28", servers: [
+            { name: "سيرفر 1", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/sj705qyhm66irwfpvs7lv/Shehadet.Moaamlet.Atfal.Ep28.mp4?rlkey=jf2gldlq7xps08s7aodaxuita&st=s6v9do7p&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/shhadet-mo3amale-28_muxed.mp4/chunk.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/shhadet-mo3amale-28_muxed.mp4/chunk.m3u8?nimblesessionid=#Intent;scheme=https;package=co.wuffy.player;end" }
+        ] },
+        { id: 29, title: "الحلقة 29", servers: [
+            { name: "سيرفر 1", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/2udut8aajnegga1jtefio/Shehadet.Moaamlet.Atfal.Ep29.mp4?rlkey=gtr2703mi2bmwi5qyu9ip7x5c&st=uozz547l&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/shhadet-mo3amale-29_muxed.mp4/chunk.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/shhadet-mo3amale-29_muxed.mp4/chunk.m3u8?nimblesessionid=#Intent;scheme=https;package=co.wuffy.player;end" }
+        ] },
+        { id: 30, title: "الحلقة 30 (الأخيرة)", servers: [
+            { name: "سيرفر 1", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/rhdht78bny2t5xd58p99p/Shehadet.Moaamlet.Atfal.Ep30.mp4?rlkey=ldogiou0k9zcaf8j55kkbsg96&st=973r8t8r&dl=1#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/shhadetmo3amale-30_muxed.mp4/chunk.m3u8#Intent;scheme=https;package=co.wuffy.player;end" },
+            { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/shhadetmo3amale-30_muxed.mp4/chunk.m3u8?nimblesessionid=#Intent;scheme=https;package=co.wuffy.player;end" }
+        ] }
+    ];
+    
+    const LAST_EPISODE_NUMBER = 30;
+    let lastFocusedCardId = null;
+    let isAndroid14 = false;
+    
+    function detectAndroid14() {
+        const ua = navigator.userAgent;
+        if(ua.includes("Android 14") || ua.includes("Android14") || ua.includes("API 34")) isAndroid14 = true;
+    }
+    
+    function showToast(msg, icon = "fa-info-circle") {
+        const toast = document.getElementById("toast");
+        toast.innerHTML = `<i class="fas ${icon}"></i> ${msg}`;
+        toast.style.display = "flex";
+        setTimeout(() => {
+            toast.style.opacity = "0";
+            setTimeout(() => {
+                toast.style.display = "none";
+                toast.style.opacity = "1";
+            }, 300);
+        }, 2800);
+    }
+    
+    function closeModal(modalId) {
+        document.getElementById(modalId).classList.remove("active");
+        if(lastFocusedCardId) {
+            const prevCard = document.querySelector(`.sg-card-item[data-ep-id='${lastFocusedCardId}']`);
+            if(prevCard) prevCard.focus();
+            lastFocusedCardId = null;
+        }
+    }
+    
+    function renderEpisodes(filterText = "") {
+        const grid = document.getElementById("episodesGrid");
+        let watched = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+        let filtered = episodesData.filter(ep => 
+            filterText === "" || ep.title.includes(filterText) || ep.id.toString().includes(filterText)
+        );
+        
+        if(filtered.length === 0) {
+            grid.innerHTML = `<div class="no-results"><i class="fas fa-search-minus fa-3x"></i><h3>لاتوجد حلقة بهذا الرقم</h3><button class="reset-history-btn" id="backHomeBtn">العودة للقائمة</button></div>`;
+            const backBtn = document.getElementById("backHomeBtn");
+            if(backBtn) backBtn.onclick = () => { document.getElementById("search-input").value = ""; renderEpisodes(""); toggleSearchBar(false); };
+            return;
+        }
+        
+        grid.innerHTML = filtered.map(ep => {
+            const isWatched = watched.includes(ep.id);
+            const isLast = (ep.id === LAST_EPISODE_NUMBER);
+            return `
+                <div class="sg-card-item ${isWatched ? 'is-watched' : ''} ${isLast ? 'last-episode' : ''}" data-ep-id="${ep.id}" tabindex="0">
+                    ${isLast ? '<div class="last-badge"><i class="fas fa-star"></i> الأخيرة</div>' : ''}
+                    <div class="sg-poster-box">
+                        <div class="sg-watched-eye"><i class="fas fa-check-circle"></i></div>
+                        <img src="${POSTER_URL}" onerror="this.onerror=null; this.src='${FALLBACK_IMG}';">
+                    </div>
+                    <div class="sg-card-meta">
+                        <div class="sg-episode-label">${ep.title}</div>
+                    </div>
+                </div>
+            `;
+        }).join("");
+        
+        document.querySelectorAll(".sg-card-item").forEach(card => {
+            const epId = parseInt(card.getAttribute("data-ep-id"));
+            card.addEventListener("click", () => openServersMenu(epId));
+            card.addEventListener("keydown", (e) => {
+                if(e.key === "Enter") openServersMenu(epId);
+                if(e.key === "ArrowRight" || e.key === "ArrowLeft" || e.key === "ArrowDown" || e.key === "ArrowUp") {
+                    e.preventDefault();
+                    navigateGrid(e.key, card);
+                }
+            });
+        });
+        
+        if(lastFocusedCardId) {
+            const restoreCard = document.querySelector(`.sg-card-item[data-ep-id='${lastFocusedCardId}']`);
+            if(restoreCard) restoreCard.focus();
+            else if(document.querySelector(".sg-card-item")) document.querySelector(".sg-card-item").focus();
+        } else if(document.querySelector(".sg-card-item")) {
+            document.querySelector(".sg-card-item").focus();
+        }
+    }
+    
+    function navigateGrid(direction, currentCard) {
+        let cards = Array.from(document.querySelectorAll(".sg-card-item"));
+        let currentIdx = cards.indexOf(currentCard);
+        if(currentIdx === -1) return;
+        let nextIdx = currentIdx;
+        if(direction === "ArrowRight") nextIdx = (currentIdx + 1) % cards.length;
+        if(direction === "ArrowLeft") nextIdx = (currentIdx - 1 + cards.length) % cards.length;
+        if(direction === "ArrowDown") {
+            let cols = window.innerWidth > 600 ? 4 : 3;
+            nextIdx = Math.min(currentIdx + cols, cards.length - 1);
+        }
+        if(direction === "ArrowUp") {
+            let cols = window.innerWidth > 600 ? 4 : 3;
+            nextIdx = Math.max(currentIdx - cols, 0);
+        }
+        if(cards[nextIdx]) cards[nextIdx].focus();
+    }
+    
+    function openServersMenu(epId) {
+        lastFocusedCardId = epId;
+        const ep = episodesData.find(e => e.id === epId);
+        if(!ep) return;
+        document.getElementById("modalTitle").innerHTML = `<i class="fas fa-play-circle"></i> ${ep.title}`;
+        const serversDiv = document.getElementById("serversList");
+        serversDiv.innerHTML = ep.servers.map(server => `
+            <button class="sg-server-btn" data-url="${server.url}" data-quality="${server.quality}" tabindex="0">
+                <span><i class="fas fa-server"></i> ${server.name}</span>
+                <span class="sg-quality q-${server.quality.toLowerCase()}">${server.quality}</span>
+            </button>
+        `).join("");
+        
+        document.getElementById("serversModal").classList.add("active");
+        
+        document.querySelectorAll("#serversList .sg-server-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                let url = btn.getAttribute("data-url");
+                playVideo(url, epId);
+            });
+            btn.addEventListener("keydown", (e) => {
+                if(e.key === "Enter") {
+                    let url = btn.getAttribute("data-url");
+                    playVideo(url, epId);
+                }
+                if(e.key === "Escape") closeModal("serversModal");
+            });
+        });
+        setTimeout(() => {
+            const firstServer = document.querySelector("#serversList .sg-server-btn");
+            if(firstServer) firstServer.focus();
+        }, 100);
+    }
+    
+    function playVideo(url, epId) {
+        if(!url || url === "#") {
+            showToast("⚠️ هذه الحلقة قيد التجهيز حالياً", "fa-hourglass-half");
+            closeModal("serversModal");
+            return;
+        }
+        
+        let watched = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+        if(!watched.includes(epId)) {
+            watched.push(epId);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(watched));
+            renderEpisodes(document.getElementById("search-input").value);
+        }
+        
+        closeModal("serversModal");
+        
+        if(isAndroid14) {
+            const fixFrame = document.getElementById("android14-fix-frame");
+            if(fixFrame) {
+                fixFrame.src = "about:blank";
+                setTimeout(() => { fixFrame.src = url; }, 50);
+            }
+            setTimeout(() => window.open(url, "_system"), 100);
+        } else {
+            const iframe = document.createElement("iframe");
+            iframe.style.display = "none";
+            iframe.src = url;
+            document.body.appendChild(iframe);
+            setTimeout(() => document.body.removeChild(iframe), 2000);
+        }
+        
+        showToast(`🎬 جاري تشغيل ${episodesData.find(e=>e.id===epId).title}`, "fa-play");
+        
+        setTimeout(() => {
+            if(document.visibilityState === "visible") {
+                document.getElementById("installModal").classList.add("active");
+            }
+        }, 2500);
+    }
+    
+    function toggleSearchBar(show) {
+        const container = document.getElementById("search-container");
+        if(show) {
+            container.classList.add("active");
+            document.getElementById("search-input").focus();
+        } else {
+            container.classList.remove("active");
+            renderEpisodes("");
+        }
+    }
+    
+    function openResetModal() {
+        document.getElementById("resetModal").classList.add("active");
+    }
+    
+    function executeReset() {
+        localStorage.removeItem(STORAGE_KEY);
+        renderEpisodes(document.getElementById("search-input").value);
+        closeModal("resetModal");
+        showToast("🗑️ تم حذف علامات المشاهدة بنجاح", "fa-trash-alt");
+    }
+    
+    function handleExit() {
+        if(window.history.length > 1) window.history.back();
+        else window.location.href = "/";
+    }
+    
+    window.addEventListener("load", () => {
+        detectAndroid14();
+        renderEpisodes();
+        
+        document.getElementById("exitBtn").addEventListener("click", handleExit);
+        document.getElementById("searchBtn").addEventListener("click", () => toggleSearchBar(true));
+        document.getElementById("closeSearchBtn").addEventListener("click", () => toggleSearchBar(false));
+        document.getElementById("clearSearchBtn").addEventListener("click", () => {
+            document.getElementById("search-input").value = "";
+            renderEpisodes("");
+            toggleSearchBar(false);
+        });
+        document.getElementById("search-input").addEventListener("input", (e) => renderEpisodes(e.target.value));
+        document.getElementById("resetHistoryBtn").addEventListener("click", openResetModal);
+        document.getElementById("confirmResetBtn").addEventListener("click", executeReset);
+        document.getElementById("cancelResetBtn").addEventListener("click", () => closeModal("resetModal"));
+        document.getElementById("closeModalBtn").addEventListener("click", () => closeModal("serversModal"));
+        document.getElementById("installAppBtn").addEventListener("click", () => window.location.href = INSTALL_PAGE_URL);
+        document.getElementById("closeInstallBtn").addEventListener("click", () => closeModal("installModal"));
+        
+        document.addEventListener("keydown", (e) => {
+            if(e.key === "Escape") {
+                if(document.getElementById("serversModal").classList.contains("active")) closeModal("serversModal");
+                else if(document.getElementById("installModal").classList.contains("active")) closeModal("installModal");
+                else if(document.getElementById("resetModal").classList.contains("active")) closeModal("resetModal");
+                else if(document.getElementById("search-container").classList.contains("active")) toggleSearchBar(false);
+            }
+        });
+        
+        showToast("✨ مرحباً بك في مسلسل شهادة معاملة أطفال - 30 حلقة كاملة", "fa-tv");
+    });
+</script>
+</body>
+</html>

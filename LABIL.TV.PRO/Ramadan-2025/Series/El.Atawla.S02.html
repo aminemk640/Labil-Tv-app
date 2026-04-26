@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>مسلسل العتاولة 2</title>
+    <link rel="icon" type="image/png" href="https://raw.githack.com/ahmadmk2023/ramadan-2025/main/logo/chaki.w.gharbi.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#020617">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary-pink: #ed1b76;
+            --gold: #FFD700;
+            --card-bg: rgba(255, 255, 255, 0.08);
+            --focus-glow: 0 0 0 3px rgba(237, 27, 118, 0.7), 0 0 0 6px rgba(255, 215, 0, 0.4);
+            --last-ep-glow: 0 0 15px 3px rgba(255, 215, 0, 0.8);
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(145deg, #020617 0%, #0a0f2a 100%);
+            color: white;
+            min-height: 100vh;
+            padding-bottom: 70px;
+        }
+
+        .sg-app-header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 65px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(15px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 4%;
+            z-index: 1000;
+            border-bottom: 2px solid var(--primary-pink);
+        }
+
+        .sg-nav-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .sg-nav-icon:focus-visible, .sg-nav-icon:hover {
+            background: var(--primary-pink);
+            transform: scale(1.05);
+            outline: 2px solid var(--gold);
+        }
+
+        #search-container {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: #0f172a;
+            display: none;
+            align-items: center;
+            padding: 0 4%;
+            gap: 12px;
+            z-index: 1100;
+        }
+
+        #search-container.active {
+            display: flex;
+        }
+
+        #search-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            padding: 12px 18px;
+            border-radius: 60px;
+            color: white;
+            font-size: 1rem;
+            font-family: 'Tajawal';
+        }
+
+        .section-header {
+            margin-top: 85px;
+            padding: 15px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.3rem;
+            font-weight: 800;
+        }
+
+        .reset-history-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 40px;
+            color: #ccc;
+            font-family: 'Tajawal';
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .reset-history-btn:focus-visible, .reset-history-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border-color: var(--gold);
+        }
+
+        .sg-episodes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 18px;
+            padding: 10px 5% 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .sg-card-item {
+            background: var(--card-bg);
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+            outline: none;
+        }
+
+        .sg-card-item:focus-visible {
+            transform: scale(1.05);
+            border: 2px solid var(--gold);
+            box-shadow: var(--focus-glow);
+        }
+
+        .sg-card-item:hover {
+            transform: scale(1.03) translateY(-5px);
+            border-color: var(--primary-pink);
+            box-shadow: 0 15px 35px rgba(237, 27, 118, 0.3);
+        }
+
+        .sg-card-item:hover .sg-poster-box img {
+            transform: scale(1.05);
+            transition: transform 0.4s ease;
+        }
+
+        .sg-card-item.last-episode {
+            border: 2px solid var(--gold);
+            background: linear-gradient(145deg, rgba(255, 215, 0, 0.15), rgba(237, 27, 118, 0.1));
+            box-shadow: var(--last-ep-glow);
+        }
+
+        .sg-card-item.last-episode .sg-episode-label {
+            color: var(--gold);
+            font-weight: 900;
+        }
+
+        .last-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: var(--gold);
+            color: #000;
+            padding: 4px 8px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .sg-poster-box {
+            position: relative;
+            aspect-ratio: 2 / 2.8;
+            background: #0f172a;
+            overflow: hidden;
+        }
+
+        .sg-poster-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .is-watched .sg-poster-box img {
+            opacity: 0.5;
+        }
+
+        .sg-watched-eye {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--primary-pink);
+            width: 32px;
+            height: 32px;
+            border-radius: 30px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 15;
+            backdrop-filter: blur(4px);
+        }
+
+        .is-watched .sg-watched-eye {
+            display: flex;
+        }
+
+        .sg-card-meta {
+            padding: 12px 6px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .sg-episode-label {
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        .sg-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(12px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+        }
+
+        .sg-modal-overlay.active {
+            display: flex;
+        }
+
+        .sg-server-panel {
+            background: #0f172a;
+            padding: 28px 20px;
+            border-radius: 32px;
+            max-width: 380px;
+            width: 85%;
+            border: 1px solid var(--primary-pink);
+            text-align: center;
+            animation: fadeUp 0.3s;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .sg-server-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.08);
+            width: 100%;
+            padding: 12px 18px;
+            margin-bottom: 12px;
+            border-radius: 60px;
+            border: 1px solid transparent;
+            color: white;
+            font-family: 'Tajawal';
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .sg-server-btn:focus-visible, .sg-server-btn:hover {
+            border-color: var(--gold);
+            background: rgba(237, 27, 118, 0.2);
+            transform: translateX(5px);
+        }
+
+        .sg-quality {
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 0.75rem;
+        }
+
+        .q-fhd { background: #7c3aed; }
+        .q-hd { background: #249f9c; }
+        .q-sd { background: #fbbf24; color: #000; }
+
+        .sg-close-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            padding: 12px;
+            border-radius: 60px;
+            color: white;
+            width: 100%;
+            margin-top: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .sg-close-btn:hover, .sg-close-btn:focus-visible {
+            background: #ef4444;
+            transform: scale(1.02);
+        }
+
+        .btn-confirm-delete {
+            background: #dc2626;
+        }
+
+        #toast {
+            position: fixed;
+            bottom: 85px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            backdrop-filter: blur(16px);
+            padding: 12px 24px;
+            border-radius: 60px;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            z-index: 4000;
+            border: 1px solid var(--primary-pink);
+            font-weight: bold;
+            white-space: nowrap;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+       .no-results { 
+        grid-column:1/-1; 
+        text-align:center;
+        padding:60px 20px;
+        display:flex; flex-direction:column;
+        align-items:center; gap:20px; }
+        
+        .no-results i { font-size:4rem; 
+        color:rgba(255,255,255,0.1); }
+        
+
+        @media (max-width: 600px) {
+            .sg-episodes-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<iframe id="android14-fix-frame" style="position:absolute; width:1px; height:1px; opacity:0.01;"></iframe>
+
+<header class="sg-app-header">
+    <button class="sg-nav-icon" id="exitBtn" tabindex="0"><i class="fas fa-chevron-right"></i></button>
+    <div style="font-weight:800;">🎬 <span style="color:var(--primary-pink)"> العتاولة 2</span></div>
+    <button class="sg-nav-icon" id="searchBtn" tabindex="0"><i class="fas fa-search"></i></button>
+    <div id="search-container">
+        <button class="sg-nav-icon" id="closeSearchBtn"><i class="fas fa-times"></i></button>
+        <input type="text" id="search-input" placeholder="رقم الحلقة...">
+        <button class="sg-nav-icon" id="clearSearchBtn"><i class="fas fa-eraser"></i></button>
+    </div>
+</header>
+
+<div class="section-header">
+    <div class="section-title"><i class="fas fa-bolt" style="color:var(--primary-pink)"></i> <span>قائمة الحلقات</span></div>
+    <button class="reset-history-btn" id="resetHistoryBtn" tabindex="0"><i class="fas fa-eye-slash"></i> حذف علامات المشاهدة</button>
+</div>
+
+<main class="sg-episodes-grid" id="episodesGrid"></main>
+<div id="toast">📢 تم التحميل</div>
+
+<!-- Modal السيرفرات -->
+<div class="sg-modal-overlay" id="serversModal">
+    <div class="sg-server-panel">
+        <h3 id="modalTitle" style="margin-bottom:20px; color: var(--primary-pink);"></h3>
+        <div id="serversList"></div>
+        <button class="sg-close-btn" id="closeModalBtn">إلغاء</button>
+    </div>
+</div>
+
+<!-- Modal تثبيت المشغل -->
+<div class="sg-modal-overlay" id="installModal">
+    <div class="sg-server-panel">
+        <i class="fas fa-download" style="font-size:3rem; color:var(--primary-pink);"></i>
+        <h3>المشغل غير مثبت</h3>
+        <p style="margin:15px 0;">تحتاج إلى تثبيت Wuffy Player لتشغيل الحلقات</p>
+        <button class="sg-server-btn" id="installAppBtn" style="justify-content:center; background:#ed1b76;"><i class="fas fa-download"></i> تثبيت المشغل</button>
+        <button class="sg-close-btn" id="closeInstallBtn">تراجع</button>
+    </div>
+</div>
+
+<!-- Modal حذف المشاهدة -->
+<div class="sg-modal-overlay" id="resetModal">
+    <div class="sg-server-panel">
+        <i class="fas fa-trash-alt" style="font-size:2.5rem; color:#ed1b76;"></i>
+        <h3>حذف سجل المشاهدة؟</h3>
+        <p style="margin:15px 0;">سيتم إخفاء أيقونات العين من جميع الحلقات</p>
+        <button class="sg-server-btn btn-confirm-delete" id="confirmResetBtn" style="justify-content:center;">تأكيد الحذف</button>
+        <button class="sg-close-btn" id="cancelResetBtn">تراجع</button>
+    </div>
+</div>
+
+<script>
+    /* -------------------- بيانات مسلسل الشرقي والغربي -------------------- */
+// ==================== بيانات مسلسل "دم مشروك" ====================
+const STORAGE_KEY = "El.Atawla.S02";
+const POSTER_URL = "poster/El.Atawla.S02.jpg";
+const FALLBACK_IMG = "poster/logo.jpg";
+// روابط الحلقات (30 حلقة) - تم استخراج الروابط الأساسية لكل حلقة
+const episodeLinks = {
+    1: "intent://dl.dropbox.com/scl/fi/wg7rr9qkugxdwqk4cc7kq/arabseed-.El.Atawla.S02.Ep01.480p.mp4?rlkey=f9qc2btrz5szgz73n7lqcpuc2&st=c94psh74&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    2: "intent://dl.dropbox.com/scl/fi/8o6vrvd7jbamh80rkg19d/arabseed-.El.Atawla.S02.Ep02.480p.mp4?rlkey=4t6uo6z9dnl1m37360e98o288&st=cm14hl71&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    3: "intent://dl.dropbox.com/scl/fi/6wkr1he3qy5i4ybya94rm/arabseed-.El.Atawla.S02.Ep03.480p.mp4?rlkey=m6t0tmvdgfmurr53c79nhg621&st=lm849hx2&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    4: "intent://dl.dropbox.com/scl/fi/0l3ovimuxd4tzbfl9peen/arabseed-.El.Atawla.S02.Ep04.480p.mp4?rlkey=c1hfnphgqy3q8cdp3f8xg43j1&st=r299je2a&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    5: "intent://dl.dropbox.com/scl/fi/0mlhjda8mt6vw660y0pke/arabseed-.El.Atawla.S02.Ep05.480p.mp4?rlkey=2z33lckfxctsh0ov26rrrodr0&st=frwgvsv5&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    6: "intent://dl.dropbox.com/scl/fi/nakt62vpv2ul9yzo656vv/arabseed-.El.Atawla.S02.Ep06.480p.mp4?rlkey=i3hg002z3sg82rlv3en3u7js&st=07l2rq5b&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    7: "intent://dl.dropbox.com/scl/fi/0r4dpwhjyxsavgpshkyx3/atwla-S2-e07.mp4?rlkey=r4gsr3fwgb5dzvxr7o244kw9e&st=1eijo8ro&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    8: "intent://dl.dropbox.com/scl/fi/lbbnt5dlezev48bmvxjej/El.Atawla.S02.Ep08.mp4?rlkey=k74v7srd0h5yqa8a9xv44j5wc&st=vr2y41s5&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    9: "intent://dl.dropbox.com/scl/fi/dtzvjo4ika3tvsba1tu8t/El.Atawla.S02.Ep09.mp4?rlkey=4komddplb85ko03qx8j8iw8ke&st=ra0stezp&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    10: "intent://dl.dropbox.com/scl/fi/i8e88tj5ej32zw94wcwd1/El.Atawla.S02.Ep10.mp4?rlkey=2tx88rpu5sup5iwm5wbsr52a1&st=uorhxnqu&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    11: "intent://dl.dropbox.com/scl/fi/o4en3ghuig3h53n3s53re/El.Atawla.S02.Ep11.mp4?rlkey=4kjf6jwe4phcm0ncwbht423u5&st=pwnl3cpx&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    12: "intent://dl.dropbox.com/scl/fi/qvvocgtxajnmifc11sugf/El_Atawla.S02E12.mp4?rlkey=7obbic5bbbyvlubsaa870eved&st=vu68gjw5&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    13: "intent://dl.dropbox.com/scl/fi/9ijtnnpwqjcsfog7muj96/El.Atawla.S02.Ep13.mp4?rlkey=hmfoqietl5uzl1u8yxjuqqs3m&st=q1i5ebf6&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    14: "intent://dl.dropbox.com/scl/fi/rs9e1x07l34i1or5m8i1q/El_Atawla.S02E14.mp4?rlkey=f1kvbc206jut5x2580kz2z92x&st=6opvhe32&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    15: "intent://dl.dropbox.com/scl/fi/x4eiffzt3nibw86fvihby/El_Atawla.S02E15.mp4?rlkey=mw6nsyb6xt7162j23844abtjn&st=6j9emkak&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    16: "intent://dl.dropbox.com/scl/fi/ds7j9kwdapf75tsx2v8lj/El_Atawla.S02E16.mp4?rlkey=go5hth9xpz5ncpiezgbhduxsy&st=mgoclxqg&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    17: "intent://dl.dropbox.com/scl/fi/6aoxo8847tu7luhdrnrpx/El_Atawla.S02E17.mp4?rlkey=jg5rotfmnfjnoq6ylqihk5z4k&st=gj8yd30o&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    18: "intent://dl.dropbox.com/scl/fi/cidljycop1tj02niplklq/El.Atawla.S02E18.mp4?rlkey=5egu1reked9tcv9qdthm3eu06&st=hm8vs8p9&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    19: "intent://dl.dropbox.com/scl/fi/m08k5fecno7et01v0k3g0/El_Atawla.S02E19.mp4?rlkey=gbxn596ftdv1shudy2c2q05gy&st=z5qmdfxo&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    20: "intent://dl.dropbox.com/scl/fi/0nxgtzeo38zwyv4qaked1/El_Atawla.S02E20.mp4?rlkey=auwpv2yhde18qlcg6f0yvri9q&st=y6imf76d&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    21: "intent://dl.dropbox.com/scl/fi/c9mhut5r3fyghlql92kkl/El_Atawla.S02E21.mp4?rlkey=wrnrolyecczouoptch7oc93ll&st=142hh38a&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    22: "intent://dl.dropbox.com/scl/fi/mmd2awfecsauafnt5azwj/El_Atawla.S02E22.mp4?rlkey=mgksek39fpwxquj8xtfjszdi7&st=6fkvkior&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    23: "intent://dl.dropbox.com/scl/fi/z6n4mxq5icob27suwix4r/El_Atawla.S02E23.R.mp4?rlkey=ve43wsnqw06cjc48osrpwmtst&st=tafp3rui&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    24: "intent://dl.dropbox.com/scl/fi/e6l5ch10l79bb6qe55m4y/El_Atawla.S02E24.R.mp4?rlkey=ez6dipxpn6jt8b0jxpdv7xoyb&st=7e2ta3q1&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    25: "intent://dl.dropbox.com/scl/fi/xg0e55k3yi4xls4z46cya/El.Atawla.S02.E25.R.mp4?rlkey=04537owuh09gmr4sxiu53qoev&st=o1x4dt0i&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    26: "intent://dl.dropbox.com/scl/fi/oxr6zogov5t68v8kq3qo1/El_Atawla.S02E26.R.mp4?rlkey=dxejotl0qkk1ipexxsfwo010f&st=mrp1c0hd&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    27: "intent://dl.dropbox.com/scl/fi/tb3167ff8oix2egr1z3wh/El_3tawla.S02E27.R.mp4?rlkey=hnuh594mci3hxugqqdnetmj9z&st=xiex3os6&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    28: "intent://dl.dropbox.com/scl/fi/1wlr3923qzuzvn68oz9sv/El-Atawla.E28.R.mp4?rlkey=zktordp04w4bmpdf2bwghkjbn&st=o14cscjv&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    29: "intent://dl.dropbox.com/scl/fi/uoki7cxdypn2pfjjyysja/El_Atawla.S02E29.R.mp4?rlkey=ifp1pav4rxix82f5g899b5bx7&st=5hpniny3&dl=1#Intent;scheme=https;package=co.wuffy.player;end",
+    30: "intent://dl.dropbox.com/scl/fi/ybsgs3emg45n0stxm5sbz/El_Atawla.S02E30.Last.R.mp4?rlkey=rlsnvd8tg3aw05w8soj7w9otk&st=oj8qe4rg&dl=1#Intent;scheme=https;package=co.wuffy.player;end"
+};
+
+// بناء بيانات الحلقات (كل حلقة 3 سيرفرات - الأول فقط هو الرابط الأساسي، الباقي نكرره)
+const episodesData = [];
+for (let i = 1; i <= 30; i++) {
+    const mainLink = episodeLinks[i];
+    // في حال وجود روابط بديلة مختلفة للبعض، يمكن توسيعه لكن معظم الحلقات لها نفس الرابط لجميع الأزرار
+    episodesData.push({
+        id: i,
+        title: `الحلقة ${i}`,
+        servers: [
+            { name: "سيرفر 1", quality: "SD", url: mainLink },
+            { name: "سيرفر 2", quality: "SD", url: mainLink },
+            { name: "سيرفر 3", quality: "SD", url: mainLink }
+        ]
+    });
+}
+
+// تعديل السيرفرات للحلقات التي لها روابط مختلفة (مثلاً 11,12,13,... فيها رابط m3u8 بديل)
+// الحلقة 11
+episodesData[10].servers[2] = { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/3atawle-2-11.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" };
+// الحلقة 12
+episodesData[11].servers[2] = { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/3atawle-2-12.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" };
+// الحلقة 13
+episodesData[12].servers[1] = { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/3atawle-2-13.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" };
+// الحلقة 14
+episodesData[13].servers[1] = { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/3atawle-2-14.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" };
+// الحلقة 15
+episodesData[14].servers[1] = { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/3atawle-2-15.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" };
+episodesData[14].servers[2] = { name: "سيرفر 3", quality: "HD", url: "intent://vid1.ar-safas88fafad2.site/El-Atawla-2/15.mp4#Intent;scheme=https;package=co.wuffy.player;end" };
+// الحلقة 16
+episodesData[15].servers[1] = { name: "سيرفر 2", quality: "HD", url: "intent://vid1.ar-safas88fafad2.site/El-Atawla-2/16.mp4#Intent;scheme=https;package=co.wuffy.player;end" };
+episodesData[15].servers[2] = { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/3atawle-2-16.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" };
+// الحلقة 17
+episodesData[16].servers[1] = { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/3atawle-2-17.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" };
+episodesData[16].servers[2] = { name: "سيرفر 3", quality: "HD", url: "intent://vid1.ar-safas88fafad2.site/El-Atawla-2/17.mp4#Intent;scheme=https;package=co.wuffy.player;end" };
+// الحلقة 18
+episodesData[17].servers[1] = { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/3atawle-2-18.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" };
+episodesData[17].servers[2] = { name: "سيرفر 3", quality: "HD", url: "intent://vid2.ar-d11111111.site/El-Atawla-2/18.mp4#Intent;scheme=https;package=co.wuffy.player;end" };
+// الحلقة 19
+episodesData[18].servers[1] = { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/3atawle-2-19.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" };
+episodesData[18].servers[2] = { name: "سيرفر 3", quality: "HD", url: "intent://vid2.ar-d11111111.site/El-Atawla-2/19.mp4#Intent;scheme=https;package=co.wuffy.player;end" };
+// الحلقة 20
+episodesData[19].servers[1] = { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/3atawle-2-20.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" };
+episodesData[19].servers[2] = { name: "سيرفر 3", quality: "HD", url: "intent://vid2.ar-d11111111.site/El-Atawla-2/20.mp4#Intent;scheme=https;package=co.wuffy.player;end" };
+// الحلقة 21
+episodesData[20].servers[1] = { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/3atawle-2-21.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" };
+episodesData[20].servers[2] = { name: "سيرفر 3", quality: "HD", url: "intent://vid2.ar-d11111111.site/El-Atawla-2/21.mp4#Intent;scheme=https;package=co.wuffy.player;end" };
+// الحلقة 22
+episodesData[21].servers[1] = { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/3atawla-2-22.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" };
+episodesData[21].servers[2] = { name: "سيرفر 3", quality: "HD", url: "intent://vid2.ar-d11111111.site/El-Atawla-2/22.mp4#Intent;scheme=https;package=co.wuffy.player;end" };
+// الحلقة 23
+episodesData[22].servers[1] = { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/3atawle-2-23.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" };
+episodesData[22].servers[2] = { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/3atawle-2-23.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" };
+// الحلقة 24
+episodesData[23].servers[1] = { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/3atawle-2-24.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" };
+// الحلقة 25
+episodesData[24].servers[1] = { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/3atawle-2-25.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" };
+episodesData[24].servers[2] = { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/3atawle-2-25.mp4/chunk.m3u8#Intent;scheme=https;package=co.wuffy.player;end" };
+// الحلقة 26
+episodesData[25].servers[1] = { name: "سيرفر 2", quality: "HD", url: "intent://dl.dropbox.com/scl/fi/oxr6zogov5t68v8kq3qo1/El_Atawla.S02E26.R.mp4?rlkey=dxejotl0qkk1ipexxsfwo010f&st=aeezfvoz&dl=1#Intent;scheme=https;package=co.wuffy.player;end" };
+episodesData[25].servers[2] = { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/3atawle-2-26.mp4/chunk.m3u8#Intent;scheme=https;package=co.wuffy.player;end" };
+// الحلقة 27
+episodesData[26].servers[1] = { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/3atawle-2-27.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" };
+episodesData[26].servers[2] = { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/3atawle-2-27.mp4/chunk.m3u8#Intent;scheme=https;package=co.wuffy.player;end" };
+// الحلقة 28
+episodesData[27].servers[1] = { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/3atawle-2-28.mp4/playlist.m3u8#Intent;scheme=https;package=co.wuffy.player;end" };
+episodesData[27].servers[2] = { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/3atawle-2-28.mp4/chunk.m3u8#Intent;scheme=https;package=co.wuffy.player;end" };
+// الحلقة 29
+episodesData[28].servers[1] = { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/3atawle-2-29.mp4/chunk.m3u8?nimblesessionid=#Intent;scheme=https;package=co.wuffy.player;end" };
+episodesData[28].servers[2] = { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6.ddns.me/2vod5n/3atawle-2-29.mp4/chunk.m3u8?nimblesessionid=#Intent;scheme=https;package=co.wuffy.player;end" };
+// الحلقة 30
+episodesData[29].servers[1] = { name: "سيرفر 2", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/3atawle-2-30-f.mp4/chunk.m3u8?nimblesessionid=#Intent;scheme=https;package=co.wuffy.player;end" };
+episodesData[29].servers[2] = { name: "سيرفر 3", quality: "HD", url: "intent://fvideo6b.ddns.me/2vod5n/3atawle-2-30-f.mp4/chunk.m3u8#Intent;scheme=https;package=co.wuffy.player;end" };
+
+const LAST_EPISODE_NUMBER = 30;
+    let lastFocusedCardId = null;
+    let isAndroid14 = false;
+    
+    function detectAndroid14() {
+        const ua = navigator.userAgent;
+        if(ua.includes("Android 14") || ua.includes("Android14") || ua.includes("API 34")) isAndroid14 = true;
+    }
+    
+    function showToast(msg, icon = "fa-info-circle") {
+        const toast = document.getElementById("toast");
+        toast.innerHTML = `<i class="fas ${icon}"></i> ${msg}`;
+        toast.style.display = "flex";
+        setTimeout(() => {
+            toast.style.opacity = "0";
+            setTimeout(() => {
+                toast.style.display = "none";
+                toast.style.opacity = "1";
+            }, 300);
+        }, 2800);
+    }
+    
+    function closeModal(modalId) {
+        document.getElementById(modalId).classList.remove("active");
+        if(lastFocusedCardId) {
+            const prevCard = document.querySelector(`.sg-card-item[data-ep-id='${lastFocusedCardId}']`);
+            if(prevCard) prevCard.focus();
+            lastFocusedCardId = null;
+        }
+    }
+    
+    function renderEpisodes(filterText = "") {
+        const grid = document.getElementById("episodesGrid");
+        let watched = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+        let filtered = episodesData.filter(ep => 
+            filterText === "" || ep.title.includes(filterText) || ep.id.toString().includes(filterText)
+        );
+        
+        if(filtered.length === 0) {
+            grid.innerHTML = `<div class="no-results"><i class="fas fa-search-minus fa-3x"></i><h3>لاتوجد حلقة بهذا الرقم</h3><button class="reset-history-btn" id="backHomeBtn">العودة للقائمة</button></div>`;
+            const backBtn = document.getElementById("backHomeBtn");
+            if(backBtn) backBtn.onclick = () => { document.getElementById("search-input").value = ""; renderEpisodes(""); toggleSearchBar(false); };
+            return;
+        }
+        
+        grid.innerHTML = filtered.map(ep => {
+            const isWatched = watched.includes(ep.id);
+            const isLast = (ep.id === LAST_EPISODE_NUMBER);
+            return `
+                <div class="sg-card-item ${isWatched ? 'is-watched' : ''} ${isLast ? 'last-episode' : ''}" data-ep-id="${ep.id}" tabindex="0">
+                    ${isLast ? '<div class="last-badge"><i class="fas fa-star"></i> الأخيرة</div>' : ''}
+                    <div class="sg-poster-box">
+                        <div class="sg-watched-eye"><i class="fas fa-check-circle"></i></div>
+                        <img src="${POSTER_URL}" onerror="this.onerror=null; this.src='${FALLBACK_IMG}';">
+                    </div>
+                    <div class="sg-card-meta">
+                        <div class="sg-episode-label">${ep.title}</div>
+                    </div>
+                </div>
+            `;
+        }).join("");
+        
+        document.querySelectorAll(".sg-card-item").forEach(card => {
+            const epId = parseInt(card.getAttribute("data-ep-id"));
+            card.addEventListener("click", () => openServersMenu(epId));
+            card.addEventListener("keydown", (e) => {
+                if(e.key === "Enter") openServersMenu(epId);
+                if(e.key === "ArrowRight" || e.key === "ArrowLeft" || e.key === "ArrowDown" || e.key === "ArrowUp") {
+                    e.preventDefault();
+                    navigateGrid(e.key, card);
+                }
+            });
+        });
+        
+        if(lastFocusedCardId) {
+            const restoreCard = document.querySelector(`.sg-card-item[data-ep-id='${lastFocusedCardId}']`);
+            if(restoreCard) restoreCard.focus();
+            else if(document.querySelector(".sg-card-item")) document.querySelector(".sg-card-item").focus();
+        } else if(document.querySelector(".sg-card-item")) {
+            document.querySelector(".sg-card-item").focus();
+        }
+    }
+    
+    function navigateGrid(direction, currentCard) {
+        let cards = Array.from(document.querySelectorAll(".sg-card-item"));
+        let currentIdx = cards.indexOf(currentCard);
+        if(currentIdx === -1) return;
+        let nextIdx = currentIdx;
+        if(direction === "ArrowRight") nextIdx = (currentIdx + 1) % cards.length;
+        if(direction === "ArrowLeft") nextIdx = (currentIdx - 1 + cards.length) % cards.length;
+        if(direction === "ArrowDown") {
+            let cols = window.innerWidth > 600 ? 4 : 3;
+            nextIdx = Math.min(currentIdx + cols, cards.length - 1);
+        }
+        if(direction === "ArrowUp") {
+            let cols = window.innerWidth > 600 ? 4 : 3;
+            nextIdx = Math.max(currentIdx - cols, 0);
+        }
+        if(cards[nextIdx]) cards[nextIdx].focus();
+    }
+    
+    function openServersMenu(epId) {
+        lastFocusedCardId = epId;
+        const ep = episodesData.find(e => e.id === epId);
+        if(!ep) return;
+        document.getElementById("modalTitle").innerHTML = `<i class="fas fa-play-circle"></i> ${ep.title}`;
+        const serversDiv = document.getElementById("serversList");
+        serversDiv.innerHTML = ep.servers.map(server => `
+            <button class="sg-server-btn" data-url="${server.url}" data-quality="${server.quality}" tabindex="0">
+                <span><i class="fas fa-server"></i> ${server.name}</span>
+                <span class="sg-quality q-${server.quality.toLowerCase()}">${server.quality}</span>
+            </button>
+        `).join("");
+        
+        document.getElementById("serversModal").classList.add("active");
+        
+        document.querySelectorAll("#serversList .sg-server-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                let url = btn.getAttribute("data-url");
+                playVideo(url, epId);
+            });
+            btn.addEventListener("keydown", (e) => {
+                if(e.key === "Enter") {
+                    let url = btn.getAttribute("data-url");
+                    playVideo(url, epId);
+                }
+                if(e.key === "Escape") closeModal("serversModal");
+            });
+        });
+        setTimeout(() => {
+            const firstServer = document.querySelector("#serversList .sg-server-btn");
+            if(firstServer) firstServer.focus();
+        }, 100);
+    }
+    
+    function playVideo(url, epId) {
+        if(!url || url === "#") {
+            showToast("⚠️ هذه الحلقة قيد التجهيز حالياً", "fa-hourglass-half");
+            closeModal("serversModal");
+            return;
+        }
+        
+        let watched = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+        if(!watched.includes(epId)) {
+            watched.push(epId);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(watched));
+            renderEpisodes(document.getElementById("search-input").value);
+        }
+        
+        closeModal("serversModal");
+        
+        if(isAndroid14) {
+            const fixFrame = document.getElementById("android14-fix-frame");
+            if(fixFrame) {
+                fixFrame.src = "about:blank";
+                setTimeout(() => { fixFrame.src = url; }, 50);
+            }
+            setTimeout(() => window.open(url, "_system"), 100);
+        } else {
+            const iframe = document.createElement("iframe");
+            iframe.style.display = "none";
+            iframe.src = url;
+            document.body.appendChild(iframe);
+            setTimeout(() => document.body.removeChild(iframe), 2000);
+        }
+        
+        showToast(`🎬 جاري تشغيل ${episodesData.find(e=>e.id===epId).title}`, "fa-play");
+        
+        setTimeout(() => {
+            if(document.visibilityState === "visible") {
+                document.getElementById("installModal").classList.add("active");
+            }
+        }, 2500);
+    }
+    
+    function toggleSearchBar(show) {
+        const container = document.getElementById("search-container");
+        if(show) {
+            container.classList.add("active");
+            document.getElementById("search-input").focus();
+        } else {
+            container.classList.remove("active");
+            renderEpisodes("");
+        }
+    }
+    
+    function openResetModal() {
+        document.getElementById("resetModal").classList.add("active");
+    }
+    
+    function executeReset() {
+        localStorage.removeItem(STORAGE_KEY);
+        renderEpisodes(document.getElementById("search-input").value);
+        closeModal("resetModal");
+        showToast("🗑️ تم حذف علامات المشاهدة بنجاح", "fa-trash-alt");
+    }
+    
+    function handleExit() {
+        if(window.history.length > 1) window.history.back();
+        else window.location.href = "/";
+    }
+    
+    window.addEventListener("load", () => {
+        detectAndroid14();
+        renderEpisodes();
+        
+        document.getElementById("exitBtn").addEventListener("click", handleExit);
+        document.getElementById("searchBtn").addEventListener("click", () => toggleSearchBar(true));
+        document.getElementById("closeSearchBtn").addEventListener("click", () => toggleSearchBar(false));
+        document.getElementById("clearSearchBtn").addEventListener("click", () => {
+            document.getElementById("search-input").value = "";
+            renderEpisodes("");
+            toggleSearchBar(false);
+        });
+        document.getElementById("search-input").addEventListener("input", (e) => renderEpisodes(e.target.value));
+        document.getElementById("resetHistoryBtn").addEventListener("click", openResetModal);
+        document.getElementById("confirmResetBtn").addEventListener("click", executeReset);
+        document.getElementById("cancelResetBtn").addEventListener("click", () => closeModal("resetModal"));
+        document.getElementById("closeModalBtn").addEventListener("click", () => closeModal("serversModal"));
+        document.getElementById("installAppBtn").addEventListener("click", () => window.location.href = INSTALL_PAGE_URL);
+        document.getElementById("closeInstallBtn").addEventListener("click", () => closeModal("installModal"));
+        
+        document.addEventListener("keydown", (e) => {
+            if(e.key === "Escape") {
+                if(document.getElementById("serversModal").classList.contains("active")) closeModal("serversModal");
+                else if(document.getElementById("installModal").classList.contains("active")) closeModal("installModal");
+                else if(document.getElementById("resetModal").classList.contains("active")) closeModal("resetModal");
+                else if(document.getElementById("search-container").classList.contains("active")) toggleSearchBar(false);
+            }
+        });
+        
+        showToast("✨ مرحباً بك في مسلسل العتاولة 2 - 30 حلقة كاملة", "fa-tv");
+    });
+</script>
+</body>
+</html>
